@@ -87,7 +87,7 @@ class DecisionTree:
             if vote not in labels_count.keys():
                 labels_count[vote] = 0
             labels_count[vote] += 1
-        sorted_labels_count = sorted(labels_count.iteritems(), key=operator.itemgetter(1), reverse=True)  # 排序，True为升序
+        sorted_labels_count = sorted(labels_count.items(), key=operator.itemgetter(1), reverse=True)  # 排序，True为升序
         print(sorted_labels_count)
         return sorted_labels_count[0][0]
 
