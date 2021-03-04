@@ -17,15 +17,15 @@ class DataProcessing:
 
     def process_user_data(self, file='data/ml-1m/users.dat'):
         fp = pd.read_table(file, sep='::', engine='python', names=['UserID', 'Gender', 'Age', 'Occupation', 'Zip-code'])
-        fp.to_csv('data/users.csv', index=False)
+        fp.to_csv('data/ml-1m/users.csv', index=False)
 
     def process_movies_data(self, file='data/ml-1m/movies.dat'):
         fp = pd.read_table(file, sep='::', engine='python', names=['MovieID', 'Title', 'Genres'])
-        fp.to_csv('data/movies.csv', index=False)
+        fp.to_csv('data/ml-1m/movies.csv', index=False)
 
     def process_ratings_data(self, file='data/ml-1m/ratings.dat'):
         fp = pd.read_table(file, sep='::', engine='python', names=['UserID', 'MovieID', 'Rating', 'Timestamp'])
-        fp.to_csv('data/ratings.csv', index=False)
+        fp.to_csv('data/ml-1m/ratings.csv', index=False)
 
     # 电影的特征信息矩阵
     def prepare_item_profile(self, file='data/ml-1m/movies.csv'):
@@ -93,6 +93,6 @@ class DataProcessing:
 
 if __name__ == '__main__':
     dp = DataProcessing()
-    # dp.process()
+    dp.process()
     dp.prepare_item_profile()
     dp.prepare_user_profile()
