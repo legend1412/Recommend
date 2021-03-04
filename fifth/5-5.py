@@ -75,7 +75,7 @@ class ItemCF:
                     if self.user_score_dict[user][i] > 0.0 and self.user_score_dict[user][j] > 0.0 and i != j:
                         count[i][j] += 1
 
-        # 同现矩阵=》相似度菊展
+        # 同现矩阵=》相似度矩阵
         for i, related_items in count.items():
             item_sim.setdefault(i, dict())
             for j, cuv in related_items.items():
