@@ -15,8 +15,8 @@ class CBRecommend:
 
     # 获取用户未评分的item列表
     def get_none_score_item(self, user):
-        items = pd.read_csv('data/ml-1m/movies.csv')['MovieID'].values
-        ratings = pd.read_csv('data/ml-1m/ratings.csv')
+        items = pd.read_csv('data/movies.csv')['MovieID'].values
+        ratings = pd.read_csv('data/ratings.csv')
         have_score_items = ratings[ratings['UserID'] == user]['MovieID'].values
         none_score_item = set(items) - set(have_score_items)
         return none_score_item
@@ -43,11 +43,11 @@ class CBRecommend:
     # 推荐系统的效果评估
     def evaluate(self):
         evas = []
-        data = pd.read_csv('data/ml-1m/ratings.csv')
+        data = pd.read_csv('data/ratings.csv')
         # 随机选取20个用户进行效果评估
         for user in random.sample([one for one in range(1, 6041)], 20):
             have_score_items = data[data['UserID'] == user]['MovieID'].values
-            items = pd.read_csv('data/ml-1m/movies.csv')['MovieID'].values
+            items = pd.read_csv('data/movies.csv')['MovieID'].values
             user_result = {}
             for item in items:
                 user_result[item] = self.cos_ui(user, item)

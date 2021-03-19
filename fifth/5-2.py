@@ -17,18 +17,18 @@ class DataProcessing:
 
     def process_user_data(self, file='data/ml-1m/users.dat'):
         fp = pd.read_table(file, sep='::', engine='python', names=['UserID', 'Gender', 'Age', 'Occupation', 'Zip-code'])
-        fp.to_csv('data/ml-1m/users.csv', index=False)
+        fp.to_csv('data/users.csv', index=False)
 
     def process_movies_data(self, file='data/ml-1m/movies.dat'):
         fp = pd.read_table(file, sep='::', engine='python', names=['MovieID', 'Title', 'Genres'])
-        fp.to_csv('data/ml-1m/movies.csv', index=False)
+        fp.to_csv('data/movies.csv', index=False)
 
     def process_ratings_data(self, file='data/ml-1m/ratings.dat'):
         fp = pd.read_table(file, sep='::', engine='python', names=['UserID', 'MovieID', 'Rating', 'Timestamp'])
-        fp.to_csv('data/ml-1m/ratings.csv', index=False)
+        fp.to_csv('data/ratings.csv', index=False)
 
     # 电影的特征信息矩阵
-    def prepare_item_profile(self, file='data/ml-1m/movies.csv'):
+    def prepare_item_profile(self, file='data/movies.csv'):
         items = pd.read_csv(file)
         item_ids = set(items['MovieID'].values)
         self.item_dict = {}
@@ -51,7 +51,7 @@ class DataProcessing:
         print('item信息计算完成,保存路径为:{}'.format('data/item_profile.json'))
 
     # 计算用户的偏好矩阵
-    def prepare_user_profile(self, file='data/ml-1m/ratings.csv'):
+    def prepare_user_profile(self, file='data/ratings.csv'):
         users = pd.read_csv(file)
         user_ids = set(users['UserID'].values)
         # 将users信息转换成dict

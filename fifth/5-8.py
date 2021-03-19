@@ -17,25 +17,25 @@ class DataProcessing:
         print('Over!')
 
     def process_user_data(self, file='data/ml-1m/users.dat'):
-        if not os.path.exists('data/ml-1m/users.csv'):
+        if not os.path.exists('data/users.csv'):
             fp = pd.read_table(file, sep='::', engine='python',
                                names=['UserID', 'Gender', 'Age', 'Occupation', 'Zip-code'])
-            fp.to_csv('data/ml-1m/users.csv', index=False)
+            fp.to_csv('data/users.csv', index=False)
 
     def process_movies_data(self, file='data/ml-1m/movies.dat'):
-        if not os.path.exists('data/ml-1m/movies.csv'):
+        if not os.path.exists('data/movies.csv'):
             fp = pd.read_table(file, sep='::', engine='python', names=['MovieID', 'Title', 'Genres'])
-            fp.to_csv('data/ml-1m/movies.csv', index=False)
+            fp.to_csv('data/movies.csv', index=False)
 
     def process_ratings_data(self, file='data/ml-1m/ratings.dat'):
-        if not os.path.exists('data/ml-1m/ratings.csv'):
+        if not os.path.exists('data/ratings.csv'):
             fp = pd.read_table(file, sep='::', engine='python', names=['UserID', 'MovieID', 'Rating', 'Timestamp'])
-            fp.to_csv('data/ml-1m/ratings.csv', index=False)
+            fp.to_csv('data/ratings.csv', index=False)
 
     # 对用户进行有行为电影和无行为电影数据标记
-    def get_pos_neg_item(self, file_path='data/ml-1m/ratings.csv'):
-        if not os.path.exists('data/1fm_items.dict'):
-            self.item_dict_path = 'data/1fm_items.dict'
+    def get_pos_neg_item(self, file_path='data/ratings.csv'):
+        if not os.path.exists('data/lfm_items.dict'):
+            self.item_dict_path = 'data/lfm_items.dict'
             self.uiscores = pd.read_csv(file_path)
             self.user_ids = set(self.uiscores['UserID'].values)
             self.item_ids = set(self.uiscores['MovieID'].values)
