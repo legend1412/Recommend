@@ -62,8 +62,8 @@ class LFM:
     derivation(E,q)=-matrix_p*(y-predict)
     derivation(12_square,p)=lam*p
     derivation(12_square,q)=lam*q
-    delta_p=lr*(derivation(E,p)+derivation(12_square,p))
-    delta_q=lr*(derivation(E,q)+derivation(12_square,q))
+    delta_p=lr*(derivation(E,p)+derivation(l2_square,p))
+    delta_q=lr*(derivation(E,q)+derivation(l2_square,q))
     """
 
     def _optimize(self, user_id, item_id, e):
@@ -111,6 +111,7 @@ class LFM:
     def load(self):
         f = open('data/lfm.model', 'rb')
         self.p, self.q = pickle.load(f)
+        print(self.p)
         f.close()
 
     """
@@ -148,8 +149,8 @@ class LFM:
 
 if __name__ == '__main__':
     lfm = LFM()
-    lfm.train()
+    # lfm.train()
     # 给用户推荐
-    # print(lfm.predict(6027, 10))
+    print(lfm.predict(6027, 10))
     # 效果评估
-    # print(lfm.evaluate())
+    #print(lfm.evaluate())

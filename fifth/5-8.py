@@ -61,5 +61,5 @@ class DataProcessing:
 
 if __name__ == '__main__':
     dp = DataProcessing()
-    #    dp.process()
+    # dp.process()
     dp.get_pos_neg_item()
