@@ -27,10 +27,10 @@ class RecBaseTag:
         fr = open(self.user_rate_file, 'r', encoding='utf-8')
         for line in fr.readlines():
             if not line.startswith('userID'):
-                userID, artistID, weight = line.split('\t')
-                user_rate_dict.setdefault(int(userID), {})
+                user_id, artist_id, weight = line.split('\t')
+                user_rate_dict.setdefault(int(user_id), {})
                 # 对听歌次数进行适当比例的缩放，避免计算结果过大
-                user_rate_dict[int(userID)][int(artistID)] = float(weight) / 10000
+                user_rate_dict[int(user_id)][int(artist_id)] = float(weight) / 10000
         return user_rate_dict
 
     # 获取艺术家对应的标签基因，这里的相关度全部为1
@@ -40,9 +40,9 @@ class RecBaseTag:
         artists_tags_dict = dict()
         for line in open(self.user_tag_file, 'r', encoding='utf-8'):
             if not line.startswith('userID'):
-                artistID, tagID = line.split('\t')[1:3]
-                artists_tags_dict.setdefault(int(artistID), {})
-                artists_tags_dict[int(artistID)][int(tagID)] = 1
+                artist_id, tag_id = line.split('\t')[1:3]
+                artists_tags_dict.setdefault(int(artist_id), {})
+                artists_tags_dict[int(artist_id)][int(tag_id)] = 1
         return artists_tags_dict
 
     # 获取每个用户打标的标签和每个标签被所有用户打标的次数
@@ -51,18 +51,18 @@ class RecBaseTag:
         tag_user_dict = dict()
         for line in open(self.user_tag_file, 'r', encoding='utf-8'):
             if not line.startswith('userID'):
-                userID, artistID, tagID = line.strip().split('\t')[:3]
+                user_id, artist_id, tag_id = line.strip().split('\t')[:3]
                 # 统计每个标签被打标的次数
-                if int(tagID) in tag_user_dict.keys():
-                    tag_user_dict[int(tagID)] += 1
+                if int(tag_id) in tag_user_dict.keys():
+                    tag_user_dict[int(tag_id)] += 1
                 else:
-                    tag_user_dict[int(tagID)] = 1
+                    tag_user_dict[int(tag_id)] = 1
                 # 统计每个用户对每个标签的打标次数
-                user_tag_dict.setdefault(int(userID), {})
-                if int(tagID) in user_tag_dict[int(userID)].keys():
-                    user_tag_dict[int(userID)][int(tagID)] += 1
+                user_tag_dict.setdefault(int(user_id), {})
+                if int(tag_id) in user_tag_dict[int(user_id)].keys():
+                    user_tag_dict[int(user_id)][int(tag_id)] += 1
                 else:
-                    user_tag_dict[int(userID)][int(tagID)] = 1
+                    user_tag_dict[int(user_id)][int(tag_id)] = 1
         return user_tag_dict, tag_user_dict
 
     # 获取用户对标签的最终兴趣度
@@ -73,29 +73,29 @@ class RecBaseTag:
         num = len(open(self.user_tag_file, 'r', encoding='utf-8').readlines())
         for line in open(self.user_tag_file, 'r', encoding='utf-8').readlines():
             if not line.startswith('userID'):
-                userID, artistID, tagID = line.split('\t')[:3]
-                user_tag_pre.setdefault(int(userID), {})
-                user_tag_count.setdefault(int(userID), {})
-                rate_ui = (self.user_rate_dict[int(userID)][int(artistID)]
-                           if int(artistID) in self.user_rate_dict[int(userID)].keys()
+                user_id, artist_id, tag_id = line.split('\t')[:3]
+                user_tag_pre.setdefault(int(user_id), {})
+                user_tag_count.setdefault(int(user_id), {})
+                rate_ui = (self.user_rate_dict[int(user_id)][int(artist_id)]
+                           if int(artist_id) in self.user_rate_dict[int(user_id)].keys()
                            else 0)
-                if int(tagID) not in user_tag_pre[int(userID)].keys():
-                    user_tag_pre[int(userID)][int(tagID)] = (
-                            rate_ui * self.artists_tag_dict[int(artistID)][int(tagID)]
+                if int(tag_id) not in user_tag_pre[int(user_id)].keys():
+                    user_tag_pre[int(user_id)][int(tag_id)] = (
+                            rate_ui * self.artists_tag_dict[int(artist_id)][int(tag_id)]
                     )
-                    user_tag_count[int(userID)][int(tagID)] = 1
+                    user_tag_count[int(user_id)][int(tag_id)] = 1
                 else:
-                    user_tag_pre[int(userID)][int(tagID)] += (
-                            rate_ui * self.artists_tag_dict[int(artistID)][int(tagID)]
+                    user_tag_pre[int(user_id)][int(tag_id)] += (
+                            rate_ui * self.artists_tag_dict[int(artist_id)][int(tag_id)]
                     )
-                    user_tag_count[int(userID)][int(tagID)] += 1
+                    user_tag_count[int(user_id)][int(tag_id)] += 1
 
-        for userID in user_tag_pre.keys():
-            for tagID in user_tag_pre[userID].keys():
-                tf_ut = self.user_tag_dict[int(userID)][int(tagID)] / sum(self.user_tag_dict[int(userID)].values())
-                idf_ut = math.log(num * 1.0 / (self.tag_user_dict[int(tagID)] + 1))
-                user_tag_pre[userID][tagID] = (
-                        user_tag_pre[userID][tagID] / user_tag_count[userID][tagID] * tf_ut * idf_ut)
+        for user_id in user_tag_pre.keys():
+            for tag_id in user_tag_pre[user_id].keys():
+                tf_ut = self.user_tag_dict[int(user_id)][int(tag_id)] / sum(self.user_tag_dict[int(user_id)].values())
+                idf_ut = math.log(num * 1.0 / (self.tag_user_dict[int(tag_id)] + 1))
+                user_tag_pre[user_id][tag_id] = (
+                        user_tag_pre[user_id][tag_id] / user_tag_count[user_id][tag_id] * tf_ut * idf_ut)
         return user_tag_pre
 
     # 对用户进行艺术家推荐
