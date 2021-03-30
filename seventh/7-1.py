@@ -74,6 +74,28 @@ class Demo:
             print('item_rate message save OK !')
         return item_rate
 
+    # 查看社会群体兴趣度变化趋势
+    def show_group(self):
+        group_rate = dict()
+        if os.path.exists('data/group_rate.json'):
+            group_rate = json.load(open('data/group_rate.json', 'r'))
+            print('group_rate load ok!')
+        else:
+            # 遍历文件夹下的每一个文件
+            for file in os.listdir(self.data_path):
+                one_path = '{}/{}'.format(self.data_path, file)
+                print(one_path)
+                for line in open(one_path, 'r').readlines():
+                    if not line.strip().endswith(":"):
+                        _, rate, date = line.strip().split(",")
+                        new_date = "".join(date.split("-")[:2])
+                        group_rate.setdefault(new_date, []).append(int(rate))
+            # 计算每个月份对应的平均分
+            for date in group_rate.keys():
+                group_rate[date] = round(sum(group_rate[date]) / len(group_rate[date]), 2)
+            json.dump(group_rate, open('data/group_date.json', 'w'))
+        return group_rate
+
     # 作图展示
     def show_picture(self, _dict, label, title, save_file):
         print(self.data_path)
@@ -95,9 +117,12 @@ class Demo:
 if __name__ == '__main__':
     init_file_path = 'data/netflix/training_set'
     demo = Demo(init_file_path)
-    ur = demo.show_personla()
-    print(ur)
-    demo.show_picture(ur[demo.users[0]], 'user_id=1086960', '个人兴趣度平均评分随时间的变化', 'user_rate')
-    ir = demo.show_item()
-    print(ir)
-    demo.show_picture(ir[demo.items[0]], 'item_id=2', '物品流程度平均评分随时间的变化', 'item_rate')
+    # ur = demo.show_personla()
+    # print(ur)
+    # demo.show_picture(ur[demo.users[0]], 'user_id=1086960', '个人兴趣度平均评分随时间的变化', 'user_rate')
+    # ir = demo.show_item()
+    # print(ir)
+    # demo.show_picture(ir[demo.items[0]], 'item_id=2', '物品流程度平均评分随时间的变化', 'item_rate')
+    gr = demo.show_group()
+    print(gr)
+    demo.show_picture(gr, None, '社会群体兴趣度变化趋势', 'group_rate')
