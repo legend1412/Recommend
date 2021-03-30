@@ -1,12 +1,11 @@
 # -*- coding:utf-8 -*-
-import random
 import math
 import json
 import os
 from sklearn.model_selection import train_test_split
 
 
-class UserCFRec:
+class NewUserCFRec:
     def __init__(self, datafile):
         self.alpha = 0.5
         self.beta = 0.8
@@ -14,7 +13,7 @@ class UserCFRec:
         self.train_data, self.test_data, self.max_data = self.load_data()
         self.users_sim = self.user_similarity_best()
 
-    # 加载评分数据到data
+    # 加载数据集，并拆分成训练集和测试集
     def load_data(self):
         print("加载数据...")
         data = list()
@@ -50,6 +49,7 @@ class UserCFRec:
             # 得到每个item被哪些user评价过
             item_eval_by_users = dict()
             for u, items in self.train_data.items():
+                print("user is {}".format(u))
                 for i in items.keys():
                     item_eval_by_users.setdefault(i, set())
                     if self.train_data[u][i]['rate'] > 0:
@@ -123,7 +123,7 @@ class UserCFRec:
 
 
 if __name__ == '__main__':
-    cf = UserCFRec("../fifth/data/ml-1m/ratings.dat")
+    cf = NewUserCFRec("../fifth/data/ml-1m/ratings.dat")
     result_rec = cf.recommend("1")
     print("用户'1' 推荐结果为:{}".format(result_rec))
     result_pre = cf.precision()
