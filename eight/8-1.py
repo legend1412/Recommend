@@ -88,6 +88,7 @@ class ChurnpPredWithGBDT:
 
     # 将数据集拆分为训练集和测试集
     def split_data(self):
+        print("拆分数据集")
         train, test = train_test_split(self.data, test_size=0.1, random_state=40)
         return train, test
 
@@ -105,6 +106,7 @@ class ChurnpPredWithGBDT:
 
     # 模型评估
     def evaluate(self, gbdt):
+        print("模型评估")
         lable = "Churn"
         customer_id = "customerID"
         x_columns = [x for x in self.test.columns if x not in [lable, customer_id]]
