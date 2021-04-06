@@ -11,7 +11,7 @@ from sklearn.metrics import mean_squared_error
 class ChurnpPredWithGBDT:
     def __init__(self):
         self.file = 'data/telecom-churn/telecom-churn-prediction-data.csv'
-        self.data = self.feature_transform()
+        self.data = self.feature_transform
         self.train, self.test = self.split_data()
 
     # 空缺以0填充
@@ -22,6 +22,7 @@ class ChurnpPredWithGBDT:
             return value
 
     # 特征转换
+    @property
     def feature_transform(self):
         if not os.path.exists('data/new_churn.csv'):
             print('开始特征转换')
@@ -47,39 +48,39 @@ class ChurnpPredWithGBDT:
             }
             fw = open('data/new_churn.csv', 'w')
             fw.write(
-                "customerID,gender,SeniorCitizen,Partner,Dependents,tenure,PhoneService,MultipleLines,InternetService,"
-                "OnlineSecurity,OnlineBackup,DevuceOritection,TechSupport,StreamingTV,StreamingMovies,Contract,"
-                "PaperlessBilling,PaymentMethod,MonthlyCharges,TotalCharges,Churn\n"
+                "customer_id, gender, senior_citizen, partner, dependents, tenure, phone_service, multiple_lines,"
+                "internet_service, online_security, online_backup, device_protection, teach_support, streaming_tv,"
+                "streaming_movies, contract, paperless_billing, payment_method, monthly_charges, total_charges,churn\n"
             )
             for line in open(self.file, 'r').readlines():
                 if line.startswith('customerID'):
                     continue
-                customerID, gender, SeniorCitizen, Partner, Dependents, tenure, PhoneService, MultipleLines, \
-                InternetService, OnlineSecurity, OnlineBackup, DeviceProtection, TeachSupport, StreamingTV, \
-                StreamingMovies, Contract, PaperlessBilling, PaymentMethod, MonthlCharges, TotalCharges, \
-                Churn = line.strip().split(",")
+                customer_id, gender, senior_citizen, partner, dependents, tenure, phone_service, multiple_lines, \
+                    internet_service, online_security, online_backup, device_protection, teach_support, streaming_tv, \
+                    streaming_movies, contract, paperless_billing, payment_method, monthly_charges, total_charges, \
+                    churn = line.strip().split(",")
                 _list = list()
-                _list.append(customerID)
+                _list.append(customer_id)
                 _list.append(self.isNone(feature_dict["gender"][gender]))
-                _list.append(self.isNone(SeniorCitizen))
-                _list.append(self.isNone(feature_dict["Partner"][Partner]))
-                _list.append(self.isNone(feature_dict["Dependents"][Dependents]))
+                _list.append(self.isNone(senior_citizen))
+                _list.append(self.isNone(feature_dict["Partner"][partner]))
+                _list.append(self.isNone(feature_dict["Dependents"][dependents]))
                 _list.append(self.isNone(tenure))
-                _list.append(self.isNone(feature_dict["PhoneService"][PhoneService]))
-                _list.append(self.isNone(feature_dict["MultipleLines"][MultipleLines]))
-                _list.append(self.isNone(feature_dict["InternetService"][InternetService]))
-                _list.append(self.isNone(feature_dict["OnlineSecurity"][OnlineSecurity]))
-                _list.append(self.isNone(feature_dict["OnlineBackup"][OnlineBackup]))
-                _list.append(self.isNone(feature_dict["DeviceProtection"][DeviceProtection]))
-                _list.append(self.isNone(feature_dict["TechSupport"][TeachSupport]))
-                _list.append(self.isNone(feature_dict["StreamingTV"][StreamingTV]))
-                _list.append(self.isNone(feature_dict["StreamingMovies"][StreamingMovies]))
-                _list.append(self.isNone(feature_dict["Contract"][Contract]))
-                _list.append(self.isNone(feature_dict["PaperlessBilling"][PaperlessBilling]))
-                _list.append(self.isNone(feature_dict["PaymentMethod"][PaymentMethod]))
-                _list.append(self.isNone(MonthlCharges))
-                _list.append(self.isNone(TotalCharges))
-                _list.append(self.isNone(feature_dict["Churn"][Churn]))
+                _list.append(self.isNone(feature_dict["PhoneService"][phone_service]))
+                _list.append(self.isNone(feature_dict["MultipleLines"][multiple_lines]))
+                _list.append(self.isNone(feature_dict["InternetService"][internet_service]))
+                _list.append(self.isNone(feature_dict["OnlineSecurity"][online_security]))
+                _list.append(self.isNone(feature_dict["OnlineBackup"][online_backup]))
+                _list.append(self.isNone(feature_dict["DeviceProtection"][device_protection]))
+                _list.append(self.isNone(feature_dict["TechSupport"][teach_support]))
+                _list.append(self.isNone(feature_dict["StreamingTV"][streaming_tv]))
+                _list.append(self.isNone(feature_dict["StreamingMovies"][streaming_movies]))
+                _list.append(self.isNone(feature_dict["Contract"][contract]))
+                _list.append(self.isNone(feature_dict["PaperlessBilling"][paperless_billing]))
+                _list.append(self.isNone(feature_dict["PaymentMethod"][payment_method]))
+                _list.append(self.isNone(monthly_charges))
+                _list.append(self.isNone(total_charges))
+                _list.append(self.isNone(feature_dict["Churn"][churn]))
                 fw.write(",".join(_list))
                 fw.write("\n")
             return pd.read_csv('data/new_churn.csv')
@@ -95,8 +96,8 @@ class ChurnpPredWithGBDT:
     # 调用sklearn进行模型训练
     def train_model(self):
         print('开始训练')
-        lable = "Churn"
-        customer_id = "customerID"
+        lable = "churn"
+        customer_id = "customer_id"
         x_columns = [x for x in self.train.columns if x not in [lable, customer_id]]
         x_train = self.train[x_columns]
         y_train = self.train[lable]
@@ -107,8 +108,8 @@ class ChurnpPredWithGBDT:
     # 模型评估
     def evaluate(self, gbdt):
         print("模型评估")
-        lable = "Churn"
-        customer_id = "customerID"
+        lable = "churn"
+        customer_id = "customer_id"
         x_columns = [x for x in self.test.columns if x not in [lable, customer_id]]
         x_test = self.test[x_columns]
         y_test = self.test[lable]
@@ -118,11 +119,11 @@ class ChurnpPredWithGBDT:
             # y[0]表示样本lable=0的概率，y[1]表示样本lable=1的概率
             new_y_pred.append(1 if y[1] > 0.5 else 0)
         mse = mean_squared_error(y_test, new_y_pred)
-        print("MSE:%.4f" % mse)
+        print("GBDT-MSE:%.4f" % mse)
         accuracy = metrics.accuracy_score(y_test.values, new_y_pred)
-        print("Accuracy:%.4g" % accuracy)
+        print("GBDT-Accuracy:%.4g" % accuracy)
         auc = metrics.roc_auc_score(y_test.values, new_y_pred)
-        print("AUC Score:%.4g" % auc)
+        print("GBDT-AUC Score:%.4g" % auc)
 
 
 if __name__ == '__main__':
