@@ -7,3 +7,6 @@ seventh/data
 eight/data
 ninth/data
 .idea/
+NewsRec/news/__pycache__/
+NewsRec/index/__pycache__/
+NewsRec/NewsRec/__pycache__/
