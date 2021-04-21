@@ -29,9 +29,9 @@ const router = new Router({
       name: 'login',
       component: login,
       meta: {
-        needLogin: true
+        needLogin: false
       }
-    },
+    }
   ]
 })
 

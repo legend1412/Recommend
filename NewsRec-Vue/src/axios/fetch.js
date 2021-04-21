@@ -2,7 +2,7 @@ import axios from './axios'
 import Vue from 'vue'
 import qs from 'qs'
 
-export default async (url = '', data = {}, type = 'GET', headers) => {
+export default async(url = '', data = {}, type = 'GET', headers) => {
 
   type = type.toUpperCase();
   if (type == 'GET') {
@@ -20,7 +20,7 @@ export default async (url = '', data = {}, type = 'GET', headers) => {
   if (type == 'POST') {
     requestConfig.data = qs.stringify(data);
   }
-  const response = await axios(url, responseConfig);
+  const response = await axios(url, requestConfig);
   if (response) {
     return response.data;
   }
