@@ -21,7 +21,7 @@ axios.defaults.withCredentials = true
 // });
 
 //添加响应拦截器
-axios.interceptors.response.usr(res => {
+axios.interceptors.response.use(res => {
   // let loading = Loading.service({});
   // loading.close()
   // //未登录的情况

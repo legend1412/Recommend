@@ -7,47 +7,47 @@ import login from '@/pages/Login'
 
 Vue.use(Router)
 const router = new Router({
-  routes:[
+  routes: [
     {
-      path:'/',
-      name:'home',
-      component:home,
-      meta:{
-        needLogin:true
+      path: '/',
+      name: 'home',
+      component: home,
+      meta: {
+        needLogin: true
       }
     },
     {
-      path:'/news',
-      name:'news',
-      component:news,
-      meta:{
-        needLogin:true
+      path: '/news',
+      name: 'news',
+      component: news,
+      meta: {
+        needLogin: true
       }
     },
     {
-      path:'/login',
-      name:'login',
-      component:login,
-      meta:{
-        needLogin:true
+      path: '/login',
+      name: 'login',
+      component: login,
+      meta: {
+        needLogin: true
       }
     },
   ]
 })
 
-router.beforeEach((to,from,next)=> {
+router.beforeEach((to, from, next) => {
   if (to.meta.needLogin) {
     if (store.state.vuexlogin.isLogin || localStorage.getItem('username')) {
       next()
     } else {
       next({
-        path:'/login',
-        query:{redirect:to.fullPath}
+        path: '/login',
+        query: {redirect: to.fullPath}
       })
     }
-  }else{
+  } else {
     next()
   }
 })
 
-export default  router
+export default router

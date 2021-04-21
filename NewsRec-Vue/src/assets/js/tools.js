@@ -30,20 +30,20 @@ exports.install = function (Vue, options) {
     return str
   }
   //数据加载缓冲
-  Vue.prototype.loading=function (msg){
-    this.$layer.msg(msg,{
-      time:3600,
-      shade:true,
-      shadeClose:false
+  Vue.prototype.loading = function (msg) {
+    this.$layer.msg(msg, {
+      time: 3600,
+      shade: true,
+      shadeClose: false
     })
   }
   //计算时间差
-  Vue.prototype.deTime=function (time,newtime,efftime){
+  Vue.prototype.deTime = function (time, newtime, efftime) {
     let t1 = new Date(time)
-    let l2 = new Date(newtime)
-    let detime = parseInt(t2-t1)/1000/3600
-    console.log(datime+'-----'+efftime)
-    if (detime>efftime){
+    let t2 = new Date(newtime)
+    let detime = parseInt(t2 - t1) / 1000 / 3600
+    console.log(detime + '-----' + efftime)
+    if (detime > efftime) {
       this.$children[0].$children[0].layout()
     }
   }
