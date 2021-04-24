@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'NewsRec.wsgi.application'
 DB_HOST = "127.0.0.1"
 DB_PORT = 9090
 DB_USER = "root"
-DB_PASSWD = "wsyj9003"
+DB_PASSWD = "9003"
 DB_NAME = "newsrec"
 
 DATABASES = {
@@ -87,7 +87,11 @@ DATABASES = {
         'USER': DB_USER,
         'PASSWORD': DB_PASSWD,
         'HOST': DB_HOST,
-        'PORT': DB_PORT
+        'PORT': DB_PORT,
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
+            'charset': 'utf8mb4'
+        }
     }
 }
 
@@ -122,6 +126,7 @@ USE_I18N = True
 USE_L10N = True
 
 USE_TZ = True
+APPEND_SLASH = False
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/

@@ -30,7 +30,7 @@ import {mapActions} from 'vuex'
 import {getLogin, login} from '../assets/js/api'
 
 export default {
-  name: 'cyan',
+  name: 'zjh',
   data () {
     return {
       users: [],
