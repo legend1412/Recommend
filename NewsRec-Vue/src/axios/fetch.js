@@ -1,13 +1,12 @@
 import axios from './axios'
-import Vue from 'vue'
+// import Vue from 'vue'
 import qs from 'qs'
 
-export default async(url = '', data = {}, type = 'GET', headers) => {
-
-  type = type.toUpperCase();
-  if (type == 'GET') {
+export default async (url = '', data = {}, type = 'GET', headers) => {
+  type = type.toUpperCase()
+  if (type === 'GET') {
     if (Object.keys(data).length !== 0) {
-      url = url + '?' + qs.stringify(data);
+      url = url + '?' + qs.stringify(data)
     }
   }
   let requestConfig = {
@@ -17,11 +16,11 @@ export default async(url = '', data = {}, type = 'GET', headers) => {
     }
   }
 
-  if (type == 'POST') {
-    requestConfig.data = qs.stringify(data);
+  if (type === 'POST') {
+    requestConfig.data = qs.stringify(data)
   }
-  const response = await axios(url, requestConfig);
+  const response = await axios(url, requestConfig)
   if (response) {
-    return response.data;
+    return response.data
   }
 }

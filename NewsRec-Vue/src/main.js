@@ -3,13 +3,13 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import animate from 'animate.css'
+// import animate from 'animate.css'
 import './assets/style/common.less'
 import commontool from './assets/js/tools'
 import store from './store'
 import layer from 'vue-layer'
 
-Vue.prototype.$layer=layer(Vue)
+Vue.prototype.$layer = layer(Vue)
 Vue.use(commontool)
 
 Vue.config.productionTip = false
@@ -19,6 +19,6 @@ new Vue({
   el: '#app',
   router,
   store,
-  components: { App },
+  components: {App},
   template: '<App/>'
 })

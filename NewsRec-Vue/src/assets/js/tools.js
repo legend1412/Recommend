@@ -1,5 +1,5 @@
 exports.install = function (Vue, options) {
-  //时间格式化
+  // 时间格式化
   Vue.prototype.timeFormat = function (time) {
     if (!time) return false
     var datetime = new Date(time)
@@ -11,7 +11,7 @@ exports.install = function (Vue, options) {
     var s = datetime.getSeconds() < 10 ? '0' + datetime.getSeconds() : datetime.getSeconds()
     return y + '年' + m + '月' + d + '日  ' + h + ':' + mm + ':' + s
   }
-  //获取url
+  // 获取url
   Vue.prototype.getUrlparams = function (url) {
     let urlArr = url.split('?')
     if (urlArr < 2) return false
@@ -23,13 +23,13 @@ exports.install = function (Vue, options) {
     })
     return result
   }
-  //处理文本换行不匹配
+  // 处理文本换行不匹配
   Vue.prototype.returnline = function (str, reg, replacestr) {
     let re = new RegExp(reg, 'g')
     str = str.replace(re, replacestr)
     return str
   }
-  //数据加载缓冲
+  // 数据加载缓冲
   Vue.prototype.loading = function (msg) {
     this.$layer.msg(msg, {
       time: 3600,
@@ -37,7 +37,7 @@ exports.install = function (Vue, options) {
       shadeClose: false
     })
   }
-  //计算时间差
+  // 计算时间差
   Vue.prototype.deTime = function (time, newtime, efftime) {
     let t1 = new Date(time)
     let t2 = new Date(newtime)

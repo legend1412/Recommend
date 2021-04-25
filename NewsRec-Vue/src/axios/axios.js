@@ -1,8 +1,8 @@
 import axios from 'axios'
-import Vue from 'vue'
-import router from '../router'
+// import Vue from 'vue'
+// import router from '../router'
 
-//设置请求发送cookie，默认是false，不发送
+// 设置请求发送cookie，默认是false，不发送
 axios.defaults.withCredentials = true
 
 // //添加请求拦截器
@@ -20,7 +20,7 @@ axios.defaults.withCredentials = true
 //   return Promise.reject(err)
 // });
 
-//添加响应拦截器
+// 添加响应拦截器
 axios.interceptors.response.use(res => {
   // let loading = Loading.service({});
   // loading.close()
@@ -37,22 +37,22 @@ axios.interceptors.response.use(res => {
   // if (res.date.status !=1){
   //   return Promise.reject({message:res.data.info});
   // }
-  return res;
+  return res
 }, err => {
   if (err && err.response) {
     switch (err.response.status) {
       case 404:
-        err.message = "未找到指定文件";
-        break;
+        err.message = '未找到指定文件'
+        break
       case 403:
-        err.message = "未授权，请登录";
-        break;
+        err.message = '未授权，请登录'
+        break
       default:
-        err.message = "获取返回状态失败"
+        err.message = '获取返回状态失败'
     }
   }
   return Promise.reject(err)
-});
+})
 axios.install = (Vue) => {
   Vue.prototype.$axios = axios
 }

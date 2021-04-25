@@ -58,7 +58,7 @@ def home(request):
             'new_hot_value': news_hot_value[one.new_id] if _cate == '2' or _cate == '1' else 0,
             'new_content': str(one.new_content[:100])
         })
-    return JsonResponse(request)
+    return JsonResponse(result)
 
 
 # 热度榜单的数据排序逻辑:new_seenum*0.3+new_sidnum*0.5+(new_date-base-data)**0.2

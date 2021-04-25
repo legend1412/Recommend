@@ -6,15 +6,16 @@
 </template>
 
 <script>
-import newFooter from "./components/newFooter";
+import newFooter from './components/newFooter'
+
 export default {
   name: 'App',
   components: {
-    'new-footer':newFooter
+    'new-footer': newFooter
   },
   mounted() {
-    if(localStorage.getItem('newslogintime')){
-      this.deTime(localStorage.getItem('newslogintime'),new Date(),1)
+    if (localStorage.getItem('newslogintime')) {
+      this.deTime(localStorage.getItem('newslogintime'), new Date(), 1)
     }
   }
 }
@@ -24,8 +25,9 @@ export default {
 #app {
   overflow: auto;
 }
+
 /*改变vue-layer弹层样式*/
-.vl-notify-mask{
+.vl-notify-mask {
   opacity: 0.7;
 }
 </style>

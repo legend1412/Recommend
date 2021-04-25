@@ -1,13 +1,13 @@
 <template>
   <nav>
     <ul class="pagination">
-      <li :class="{'disabled': current == 1}"><a href="javascript:;" @click="setCurrent(current - 1)"> ? </a></li>
-      <li :class="{'disabled': current == 1}"><a href="javascript:;" @click="setCurrent(1)"> 首页 </a></li>
-      <li v-for="p in grouplist" :class="{'active': current == p.val}" :key="p.val">
+      <li :class="{'disabled': current === 1}"><a href="javascript:" @click="setCurrent(current - 1)"> ? </a></li>
+      <li :class="{'disabled': current === 1}"><a href="javascript:" @click="setCurrent(1)"> 首页 </a></li>
+      <li v-for="p in grouplist" :class="{'active': current === p.val}" :key="p.val">
         <a href="javascript:;" @click="setCurrent(p.val)"> {{ p.text }} </a>
       </li>
-      <li :class="{'disabled': current == page}"><a href="javascript:;" @click="setCurrent(page)"> 尾页 </a></li>
-      <li :class="{'disabled': current == page}"><a href="javascript:;" @click="setCurrent(current + 1)"> ?</a></li>
+      <li :class="{'disabled': current === page}"><a href="javascript:" @click="setCurrent(page)"> 尾页 </a></li>
+      <li :class="{'disabled': current === page}"><a href="javascript:" @click="setCurrent(current + 1)"> ?</a></li>
     </ul>
   </nav>
 </template>
@@ -21,19 +21,19 @@ export default {
     }
   },
   props: {
-    total: { //数据总条数
+    total: { // 数据总条数
       type: Number,
       default: 0
     },
-    display: { //每页显示条数
+    display: { // 每页显示条数
       type: Number,
       default: 10
     },
-    currentPage: { //当前页码
+    currentPage: { // 当前页码
       type: Number,
       default: 1
     },
-    pagegroup: { //分页条数
+    pagegroup: { // 分页条数
       type: Number,
       default: 5,
       coerce: function (v) {
@@ -41,16 +41,16 @@ export default {
         return v % 2 === 1 ? v : v + 1
       }
     },
-    refresh: { //不是必须，搜索后默认第一页
+    refresh: { // 不是必须，搜索后默认第一页
       type: Boolean,
       default: false
     }
   },
   computed: {
-    page: function () { //总页数
+    page: function () { // 总页数
       return Math.floor(this.total / this.display)
     },
-    grouplist: function () { //获取分页页码
+    grouplist: function () { // 获取分页页码
       this.doRefresh()
       let len = this.page, temp = [], list = [], count = Math.floor(this.pagegroup / 2), center = this.current
       if (len <= this.pagegroup) {
@@ -74,8 +74,8 @@ export default {
         })
       } while (temp.length)
       if (this.page > this.pagegroup) {
-        (this.current > count + 1) && list.unshift({text: "...", val: list[0].val - 1})
-        (this.current < this.page - count) && list.push({text: "...", val: list[list.length - 1].val - 1})
+        (this.current > count + 1) && list.unshift({text: '...', val: list[0].val - 1})
+        (this.current < this.page - count) && list.push({text: '...', val: list[list.length - 1].val - 1})
       }
       return list
     }

@@ -1,52 +1,59 @@
 <template>
   <div class="recommonContain">
-    <new-header :active="isActive" @onGetnews="getCateNews"> </new-header>
+    <new-header :active="isActive" @onGetnews="getCateNews"></new-header>
     <div class="mainContent">
       <div class="mainLeft">
         <ul class="leftContent">
-          <li class="animated slideInUp" style="animation-duration:1s;animation-delay:0s" v-for="item in newsData.news" :key="item.new_id" @click="newsDesc({'newid':item.new_id,'cateid':newsData.cate_id})">
+          <li class="animated slideInUp" style="animation-duration:1s;animation-delay:0s" v-for="item in newsData.news"
+              :key="item.new_id" @click="newsDesc({'newid':item.new_id,'cateid':newsData.cate_id})">
             <h3 class="newsTitle">
-              {{item.new_title}}
-              <span class="newsOther">{{item.new_time}}</span>
-              <span v-if="isActive==1" class="newsCate" >{{item.new_cate}}</span>
+              {{ item.new_title }}
+              <span class="newsOther">{{ item.new_time }}</span>
+              <span v-if="isActive==1" class="newsCate">{{ item.new_cate }}</span>
             </h3>
-            <p class="newsContent">{{item.new_content}}</p>
+            <p class="newsContent">{{ item.new_content }}</p>
           </li>
-          <div  v-if="morebtn & isActive==1" class="moreBtn">
+          <div v-if="morebtn & isActive==1" class="moreBtn">
             <span @click="showMore">加载更多</span>
           </div>
-          <li v-if="moRecommon" class="animated slideInUp" style="animation-duration:1s;animation-delay:0s" v-for="item in newsOtherdata.news" :key="item.new_id+10" @click="newsDesc({'newid':item.new_id,'cateid':newsData.cate_id})">
+          <li v-if="moRecommon" class="animated slideInUp" style="animation-duration:1s;animation-delay:0s"
+              v-for="item in newsOtherdata.news" :key="item.new_id+10"
+              @click="newsDesc({'newid':item.new_id,'cateid':newsData.cate_id})">
             <h3 class="newsTitle">
-              {{item.new_title}}
-              <span class="newsOther">{{item.new_time}}</span>
-              <span class="newsCate" >{{item.new_cate}}</span>
+              {{ item.new_title }}
+              <span class="newsOther">{{ item.new_time }}</span>
+              <span class="newsCate">{{ item.new_cate }}</span>
             </h3>
-            <p class="newsContent">{{item.new_content}}</p>
+            <p class="newsContent">{{ item.new_content }}</p>
           </li>
         </ul>
-        <new-pagnation v-if="total>10" :total="total" :current-page='current' :refresh='refresh' @pagechange="pagechange"></new-pagnation>
+        <new-pagnation v-if="total>10" :total="total" :current-page='current' :refresh='refresh'
+                       @pagechange="pagechange"></new-pagnation>
 
       </div>
       <div class="mainRight">
-        <h3 class="hotTitle">{{hot_newsData.cate_name}}</h3>
+        <h3 class="hotTitle">{{ hot_newsData.cate_name }}</h3>
         <ul class="rightContent">
-          <li class="animated fadeInRight" style="animation-duration:1s;animation-delay:0s" v-for="item in hot_newsData.news" @click="newsDesc({'newid':item.new_id,'cateid':newsData.cate_id})" :key="item.new_id">
-            <span>{{item.new_title}}</span>
-            <i>{{item.new_time}}</i>
+          <li class="animated fadeInRight" style="animation-duration:1s;animation-delay:0s"
+              v-for="item in hot_newsData.news" @click="newsDesc({'newid':item.new_id,'cateid':newsData.cate_id})"
+              :key="item.new_id">
+            <span>{{ item.new_title }}</span>
+            <i>{{ item.new_time }}</i>
           </li>
         </ul>
       </div>
     </div>
-   </div>
+  </div>
 </template>
 
 <script>
 import {getCateNewsData} from '../assets/js/api'
 import newheader from '../components/newHeader.vue'
 import pagnation from '../components/pagnation'
+
 export default {
   name: 'HelloWorld',
-  data () {
+  data() {
     return {
       isActive: '1',
       newsData: {},
@@ -182,7 +189,7 @@ export default {
       this.morebtn = false
     }
   },
-  mounted () {
+  mounted() {
     this.getCateNews({'cateid': '2'})
     var tags = this.$route.query.tags
     var baseclick = this.$route.query.baseclick + ''
@@ -195,131 +202,151 @@ export default {
 }
 </script>
 <style lang="less" scoped>
-  @baseColor:#20a0ff;
-  #ellies(@n){
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: @n;
-    -webkit-box-orient: vertical;
-  }
-  .recommonContain{
+@baseColor: #20a0ff;
+#ellies(@n) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: @n;
+  -webkit-box-orient: vertical;
+}
+
+.recommonContain {
+  width: 100%;
+  padding: 2% 8%;
+  padding-bottom: 0;
+  box-sizing: border-box;
+
+  .mainContent {
     width: 100%;
-    padding:2% 8%;
-    padding-bottom: 0;
+    display: flex;
     box-sizing: border-box;
-    .mainContent{
-      width: 100%;
-      display: flex;
+
+    .mainLeft {
+      width: 60%;
       box-sizing: border-box;
-      .mainLeft{
-        width: 60%;
-        box-sizing: border-box;
-        .leftContent{
-          li{
-            width: 80%;
-            margin:2% 5%;
-            padding:1% 3%;
-            border:1px solid #666;
-            border-radius: 5px;
-            box-shadow: 5px 5px 10px #999;
-            cursor: pointer;
-            .newsTitle{
-              font-size: 16px;
-              margin-bottom: 10px;
-              color: #333;
-              line-height: 20px;
-              span{
-                font-size: 12px;
-              }
-              .newsCate{
-                display: inline-block;
-                height: 50px;
-                width: 50px;
-                border: 1px solid #eee;
-                float: right;
-                overflow: hidden;
-                word-break: break-all;
-                font-size: 14px;
-                border-radius: 50%;
-                color: @baseColor;
-                padding: 3px 10px;
-                box-sizing: border-box;
-                text-align: center;
-                #ellies(2)
-              }
+
+      .leftContent {
+        li {
+          width: 80%;
+          margin: 2% 5%;
+          padding: 1% 3%;
+          border: 1px solid #666;
+          border-radius: 5px;
+          box-shadow: 5px 5px 10px #999;
+          cursor: pointer;
+
+          .newsTitle {
+            font-size: 16px;
+            margin-bottom: 10px;
+            color: #333;
+            line-height: 20px;
+
+            span {
+              font-size: 12px;
             }
-            .newsContent{
+
+            .newsCate {
+              display: inline-block;
+              height: 50px;
+              width: 50px;
+              border: 1px solid #eee;
+              float: right;
+              overflow: hidden;
+              word-break: break-all;
               font-size: 14px;
-              line-height: 17px;
-              color:#666;
+              border-radius: 50%;
+              color: @baseColor;
+              padding: 3px 10px;
+              box-sizing: border-box;
+              text-align: center;
               #ellies(2)
             }
-            &:hover{
-              padding:2% 3%;
-            }
           }
-          .moreBtn{
-            text-align: center;
-            margin:20px;
-            span{
-              display: inline-block;
-              padding: 10px 25px;
-              border: 1px solid #eee;
-              border-radius: 10px;
-              color: #777;
-              &:hover{
-                background: @baseColor;
-                color: #fff;
-              }
-            }
-          }
-        }
-      }
-      .mainRight{
-        flex: 1;
-        &>h3{
-          width:100%;
-          padding: 10px;
-          margin-top:15px;
-          background: #dfdfdfdf;
-          vertical-align: middle;
-          box-sizing: border-box;
-        }
-        .hotTitle{
-          font-size: 18px;
-          padding: 5px;
-          color: #333;
-          margin-bottom: 10px;
-        }
-        .rightContent{
-          padding: 5px;
-          li{
-            width: 100%;
-            color: #666;
-            height:16px;
-            line-height: 16px;
-            display: flex;
-            margin-bottom: 10px;
-            justify-content: space-around;
-            cursor: pointer;
+
+          .newsContent {
             font-size: 14px;
-            span{
-              #ellies(1);
-              width: 70%;
-            }
-            i{
-              font-size: 12px;
-              #ellies(1);
-              width: 30%;
-            }
-            &:hover{
-              font-size: 15px;
-              color:#000
+            line-height: 17px;
+            color: #666;
+            #ellies(2)
+          }
+
+          &:hover {
+            padding: 2% 3%;
+          }
+        }
+
+        .moreBtn {
+          text-align: center;
+          margin: 20px;
+
+          span {
+            display: inline-block;
+            padding: 10px 25px;
+            border: 1px solid #eee;
+            border-radius: 10px;
+            color: #777;
+
+            &:hover {
+              background: @baseColor;
+              color: #fff;
             }
           }
         }
       }
     }
+
+    .mainRight {
+      flex: 1;
+
+      & > h3 {
+        width: 100%;
+        padding: 10px;
+        margin-top: 15px;
+        background: #dfdfdfdf;
+        vertical-align: middle;
+        box-sizing: border-box;
+      }
+
+      .hotTitle {
+        font-size: 18px;
+        padding: 5px;
+        color: #333;
+        margin-bottom: 10px;
+      }
+
+      .rightContent {
+        padding: 5px;
+
+        li {
+          width: 100%;
+          color: #666;
+          height: 16px;
+          line-height: 16px;
+          display: flex;
+          margin-bottom: 10px;
+          justify-content: space-around;
+          cursor: pointer;
+          font-size: 14px;
+
+          span {
+            #ellies(1);
+            width: 70%;
+          }
+
+          i {
+            font-size: 12px;
+            #ellies(1);
+            width: 30%;
+          }
+
+          &:hover {
+            font-size: 15px;
+            color: #000
+          }
+        }
+      }
+    }
   }
+}
 </style>
