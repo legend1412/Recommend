@@ -75,7 +75,7 @@ WSGI_APPLICATION = 'NewsRec.wsgi.application'
 DB_HOST = "127.0.0.1"
 DB_PORT = 9090
 DB_USER = "root"
-DB_PASSWD = "9003"
+DB_PASSWD = "wsyj9003"
 DB_NAME = "newsrec"
 
 DATABASES = {
