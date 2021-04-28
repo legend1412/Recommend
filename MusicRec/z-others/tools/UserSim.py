@@ -1,13 +1,14 @@
 """
 计算用户相似度
 """
-import os, django
+import django
+import json
+import os
+
+from user.models import UserTag
 
 os.environ['DJANGO_SETTING_MOUDLE'] = 'MusicRec.setting'
 django.setup()
-
-from user.models import UserTag
-import json
 
 
 class UserSim:
