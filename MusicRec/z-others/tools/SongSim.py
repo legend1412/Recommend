@@ -1,5 +1,6 @@
 """
-计算歌曲相似度
+Desc:
+    计算歌曲相似度
 """
 import django
 import json

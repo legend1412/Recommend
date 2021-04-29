@@ -1,5 +1,6 @@
 """
-计算用户相似度
+Desc:
+    计算用户相似度
 """
 import django
 import json
