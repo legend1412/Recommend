@@ -113,7 +113,7 @@ class PlayList:
 
     # 写入文件
     def write_to_file(self, filename, one):
-        fw = open(filename, "a", encoding="utf-8")
+        fw = open(filename, "a", encoding="utf8")
         fw.write(str(one) + "\n")
         fw.close()
 
