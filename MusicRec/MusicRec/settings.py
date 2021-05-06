@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'sing',
     'song',
     'user',
-    'index'
+    'indexmusic'
 ]
 
 MIDDLEWARE = [
