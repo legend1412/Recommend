@@ -1,23 +1,31 @@
 <template>
   <div id="app">
-    <img src="./assets/logo.png">
     <router-view/>
+    <new-footer/>
   </div>
 </template>
 
 <script>
+import newFooter from "components/newFooter";
 export default {
-  name: 'App'
+  name: 'App',
+  components:{
+    'new-footer':newFooter
+  },
+  mounted() {
+    if (localStorage.getItem('newslogintime')){
+      this.deTime(localStorage.getItem('newlogintime'),new Date(),24)
+    }
+  }
 }
 </script>
 
-<style>
+<style lang="less">
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  overflow: auto;
+}
+/*改变vue-layer弹层样式*/
+.vl-notify-mask{
+  opacity: 0.7;
 }
 </style>
