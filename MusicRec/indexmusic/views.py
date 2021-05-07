@@ -2,7 +2,7 @@
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 
-from index.models import Cate
+from indexmusic.models import Cate
 from user.models import User, UserBrowse
 from song.models import Song
 from sing.models import Sing
@@ -12,9 +12,9 @@ from playlist.views import get_play_list_all as allplaylist
 from song.views import get_song_all as allsongs
 from sing.views import get_sing_all as allsings
 from user.views import get_user_all as allusers, writebrowse, formatlocaltime
-from index.indextag import get_rec_tags
-from index.ranking import rank_result
-from index import recright
+from indexmusic.indextag import get_rec_tags
+from indexmusic.ranking import rank_result
+from indexmusic import recright
 
 
 # 用户选择登录

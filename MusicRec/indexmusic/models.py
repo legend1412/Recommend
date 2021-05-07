@@ -4,6 +4,7 @@ from django.db import models
 
 # 定义导航栏
 class Cate(models.Model):
+    id = models.AutoField(primary_key=True)
     cate_id = models.CharField(blank=False, max_length=64, verbose_name='ID', unique=True)
     cate_name = models.CharField(blank=False, max_length=64, verbose_name='名字')
 

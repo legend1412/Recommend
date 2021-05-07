@@ -4,6 +4,7 @@ from django.db import models
 
 # 歌手信息：id,name,MusicSize,MVSize,AlbumSize headPic
 class Sing(models.Model):
+    id = models.AutoField(primary_key=True)
     sing_id = models.CharField(blank=False, max_length=64, verbose_name='歌手ID', unique=True)
     sing_name = models.CharField(blank=False, max_length=100, verbose_name='歌手名字')
     sing_music_num = models.IntegerField(blank=True, verbose_name='音乐数目')
@@ -20,6 +21,7 @@ class Sing(models.Model):
 
 
 class SingTag(models.Model):
+    id = models.AutoField(primary_key=True)
     sing_id = models.CharField(blank=False, max_length=64, verbose_name='歌手ID')
     tag = models.CharField(blank=True, max_length=64, verbose_name='歌手标签')
 
@@ -32,6 +34,7 @@ class SingTag(models.Model):
 
 
 class SingSim(models.Model):
+    id = models.AutoField(primary_key=True)
     sing_id = models.CharField(blank=True, max_length=64, verbose_name='歌手ID')
     sim_sing_id = models.CharField(blank=True, max_length=64, verbose_name='相似歌手ID')
     sim = models.FloatField(blank=True, verbose_name='相似度')

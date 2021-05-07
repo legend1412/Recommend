@@ -1,18 +1,18 @@
 # -*- coding:utf-8 -*-
 from django.db import models
 from user.models import User
-from song.models import Song
 
 
 # Create your models here.
 # 歌单信息：歌单ID，创建者ID，名字，创建时间，更新时间，包含音乐数，播放次数，分享次数，评论次数，收藏次数，标签，歌单封面，描述
 class PlayList(models.Model):
+    id = models.AutoField(primary_key=True)
     pl_id = models.CharField(blank=False, max_length=64, verbose_name='ID', unique=True)
     pl_creator = models.ForeignKey(User, related_name='创建者信息', on_delete=models.CASCADE)
     pl_name = models.CharField(blank=False, max_length=64, verbose_name='歌单名字')
     pl_create_time = models.DateTimeField(blank=True, verbose_name='创建时间')
     pl_update_time = models.DateTimeField(blank=True, verbose_name='更新时间')
-    pl_songs_sum = models.IntegerField(blank=True, verbose_name='包含音乐数')
+    pl_songs_num = models.IntegerField(blank=True, verbose_name='包含音乐数')
     pl_listen_num = models.IntegerField(blank=True, verbose_name='播放次数')
     pl_share_num = models.IntegerField(blank=True, verbose_name='分享次数')
     pl_comment_num = models.IntegerField(blank=True, verbose_name='评论次数')
@@ -33,6 +33,7 @@ class PlayList(models.Model):
 
 
 class PlayListToSongs(models.Model):
+    id = models.AutoField(primary_key=True)
     pl_id = models.CharField(blank=False, max_length=64, verbose_name='歌单ID')
     song_id = models.CharField(blank=False, max_length=64, verbose_name='歌曲ID')
 
@@ -47,6 +48,7 @@ class PlayListToSongs(models.Model):
 
 # 歌单ID和歌曲标签对应信息
 class PlayListToTag(models.Model):
+    id = models.AutoField(primary_key=True)
     pl_id = models.CharField(blank=False, max_length=64, verbose_name='歌单ID')
     tag = models.CharField(blank=False, max_length=64, verbose_name='歌单标签')
 

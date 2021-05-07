@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 from django.contrib import admin
-from index.models import Cate
+from indexmusic.models import Cate
 
 
 class AdminCate(admin.ModelAdmin):

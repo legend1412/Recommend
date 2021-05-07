@@ -19,7 +19,7 @@ from indexmusic.views import login, home, get_cates, switchuser, rec, my_browse
 urlpatterns = [
     url(r'^login/$', login),
     url(r'^home/$', home),
-    url(r'^getcates/$', get_cates()),
+    url(r'^getcates/$', get_cates),
     url(r'^switchuser/$', switchuser),
     url(r'^rec/$', rec),
     url(r'^mybrowse/$', my_browse),

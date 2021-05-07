@@ -4,6 +4,7 @@ from django.db import models
 
 # 歌曲信息：id,name,专辑id[al],出版时间[publishTime],歌手信息[ar],总的评论数,热门评论数,歌曲链接
 class Song(models.Model):
+    id = models.AutoField(primary_key=True)
     song_id = models.CharField(blank=False, max_length=64, verbose_name='歌曲ID', unique=True)
     song_name = models.CharField(blank=True, max_length=100, verbose_name='歌曲名字')
     song_pl_id = models.CharField(blank=True, max_length=64, verbose_name='专辑ID')
@@ -24,6 +25,7 @@ class Song(models.Model):
 
 
 class SongLysic(models.Model):
+    id = models.AutoField(primary_key=True)
     song_id = models.CharField(blank=False, max_length=64, verbose_name='歌曲ID', unique=True)
     song_lysic = models.TextField(blank=True, verbose_name='歌词')
 
@@ -32,10 +34,11 @@ class SongLysic(models.Model):
 
     class Meta:
         db_table = 'songlysic'
-        verbose_name_plurar = '歌词信息'
+        verbose_name_plural = '歌词信息'
 
 
 class SongTag(models.Model):
+    id = models.AutoField(primary_key=True)
     song_id = models.CharField(blank=False, max_length=64, verbose_name='歌曲ID')
     tag = models.CharField(blank=True, max_length=64, verbose_name='歌曲标签')
 
@@ -48,6 +51,7 @@ class SongTag(models.Model):
 
 
 class SongSim(models.Model):
+    id = models.AutoField(primary_key=True)
     song_id = models.CharField(blank=True, max_length=64, verbose_name='歌曲ID')
     sim_song_id = models.CharField(blank=True, max_length=64, verbose_name=' 相似歌曲ID')
     sim = models.FloatField(blank=True, verbose_name='相似度')
