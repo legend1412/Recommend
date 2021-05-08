@@ -22,4 +22,3 @@ class Prepare:
             print(row[1]['ID'])
             trans_data[row[1]['ID']]=list()
             trans_data[row[1]['ID']].append(row[1]['标题'].replace(',','&'))
-            
