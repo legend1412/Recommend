@@ -25,7 +25,7 @@ class Book(models.Model):
     price = models.FloatField(blank=True, verbose_name="价格")
     publish_month = models.IntegerField(blank=True, verbose_name="出版距今月份")
     click = models.IntegerField(blank=True, verbose_name="点击次数")
-    socre = models.FloatField(blank=True, verbose_name="评分")
+    score = models.FloatField(blank=True, verbose_name="评分")
     judge = models.IntegerField(blank=True, verbose_name="评价人数")
     rec_most = models.IntegerField(blank=True, verbose_name="力荐人数")
     rec_more = models.IntegerField(blank=True, verbose_name="推荐人数")
