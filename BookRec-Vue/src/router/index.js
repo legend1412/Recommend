@@ -1,15 +1,53 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import HelloWorld from '@/components/HelloWorld'
+import store from '../store'
+import home from '@/pages/Home'
+import history from '@/pages/History'
+import login from '@/pages/Login'
 
 Vue.use(Router)
-
-export default new Router({
+const router = new Router({
   routes: [
     {
       path: '/',
-      name: 'HelloWorld',
-      component: HelloWorld
+      name: 'home',
+      component: home,
+      meta: {
+        needLogin: true
+      }
+    },
+    {
+      path: '/history',
+      name: 'history',
+      component: history,
+      meta: {
+        needLogin: true
+      }
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: login,
+      meta: {
+        needLogin: false
+      }
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  if (to.meta.needLogin) {
+    if (store.state.vuexlogin.isLogin || localStorage.getItem('username')) {
+      next()
+    } else {
+      next({
+        path: '/login',
+        query: {redirect: to.fullPath}
+      })
+    }
+  } else {
+    next()
+  }
+})
+
+export default router
