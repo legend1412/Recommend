@@ -73,7 +73,7 @@ WSGI_APPLICATION = 'BookRec.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DB_HOST = '127.0.0.1'
-DB_PORT = 3306
+DB_PORT = 9000
 DB_USER = 'root'
 DB_PASSWD = 'wsyj9003'
 DB_NAME = 'bookrec'
@@ -87,7 +87,11 @@ DATABASES = {
         'USER': DB_USER,
         'PASSWORD': DB_PASSWD,
         'HOST': DB_HOST,
-        'POAR': DB_PORT
+        'POAR': DB_PORT,
+        'OPTIONS': {
+            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
+            'charset': 'utf8mb4'
+        }
     }
 }
 

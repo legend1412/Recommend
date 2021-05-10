@@ -4,6 +4,7 @@ from django.db import models
 
 # 定义标签类
 class Cate(models.Model):
+    id = models.AutoField(primary_key=True)
     cid = models.IntegerField(blank=False, verbose_name='ID', unique=True)
     name = models.CharField(blank=False, max_length=64, verbose_name='名字')
 
@@ -17,6 +18,7 @@ class Cate(models.Model):
 
 # 定义图书信息
 class Book(models.Model):
+    id = models.AutoField(primary_key=True)
     bid = models.IntegerField(blank=False, verbose_name='ID', unique=True)
     name = models.CharField(blank=False, max_length=64, verbose_name='名字')
     author = models.CharField(blank=True, max_length=500, verbose_name='作者')
@@ -53,6 +55,7 @@ class Book(models.Model):
 
 
 class History(models.Model):
+    id = models.AutoField(primary_key=True)
     name = models.CharField(blank=False, max_length=64, verbose_name='名字')
     time = models.DateTimeField(blank=True, default="2008-12-12 12:12:00", verbose_name="点击时间")
     action = models.CharField(blank=False, max_length=64, verbose_name='行为')

@@ -4,6 +4,6 @@ from django.apps import AppConfig
 default_app_config = 'indexbook.CateConfig'
 
 
-class CateConfi(AppConfig):
+class CateConfig(AppConfig):
     name = 'indexbook'
     verbose_name = u'图书'
