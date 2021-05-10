@@ -11,7 +11,6 @@ NewsRec/news/__pycache__/
 NewsRec/index/__pycache__/
 NewsRec/NewsRec/__pycache__/
 NewsRec-Vue/node_modules/
-NewsRec-Vue/test/
 MusicRec/indexmusic/__pycache__/
 MusicRec/playlist/__pycache__/
 MusicRec/sing/__pycache__/
@@ -19,8 +18,6 @@ MusicRec/song/__pycache__/
 MusicRec/user/__pycache__/
 MusicRec/MusicRec/__pycache__/
 MusicRec-Vue/node_modules/
-MusicRec-Vue/test/
 BookRec/indexbook/__pycache__/
 BookRec/BookRec/__pycache__/
 BookRec-Vue/node_modules/
-BookRec-Vue/test/
