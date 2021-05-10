@@ -87,11 +87,7 @@ DATABASES = {
         'USER': DB_USER,
         'PASSWORD': DB_PASSWD,
         'HOST': DB_HOST,
-        'POAR': DB_PORT,
-        'OPTIONS': {
-            'init_command': 'SET sql_mode="STRICT_TRANS_TABLES"',
-            'charset': 'utf8mb4'
-        }
+        'POAR': DB_PORT
     }
 }
 
@@ -118,7 +114,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'zh-hans'
 
-TIME_ZONE = 'Asiz/Shanghai'
+TIME_ZONE = 'Asia/Shanghai'
 
 USE_I18N = True
 
