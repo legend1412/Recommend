@@ -87,7 +87,7 @@ DATABASES = {
         'USER': DB_USER,
         'PASSWORD': DB_PASSWD,
         'HOST': DB_HOST,
-        'POAR': DB_PORT
+        'PORT': DB_PORT
     }
 }
 
