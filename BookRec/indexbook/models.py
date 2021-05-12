@@ -20,7 +20,7 @@ class Cate(models.Model):
 class Book(models.Model):
     id = models.AutoField(primary_key=True)
     bid = models.IntegerField(blank=False, verbose_name='ID', unique=True)
-    name = models.CharField(blank=False, max_length=64, verbose_name='名字')
+    name = models.CharField(blank=False, max_length=200, verbose_name='名字')
     author = models.CharField(blank=True, max_length=500, verbose_name='作者')
     img = models.CharField(blank=True, max_length=500, verbose_name='封面图')
     tag = models.CharField(blank=True, max_length=500, verbose_name='标签')
