@@ -23,7 +23,7 @@ class Model:
     # 加载数据
     def load_data(self):
         if os.path.exists('data/train.txt'):
-            print('训练模型苏数据环境准备完毕，路径为：data/train.txt')
+            print('训练模型数据环境准备完毕，路径为：data/train.txt，从文件加载')
             return
         else:
             tag_dict = dict()

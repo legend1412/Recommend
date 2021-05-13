@@ -53,14 +53,18 @@
   - django_migrations
 
   - django_session
-
-​        不同的django项目都会存在上面表，但每个项目自己使用的数据表，则是根据models.py中定义的class生成
-
+  
+- 不同的django项目都会存在上面表，但每个项目自己使用的数据表，则是根据models.py中定义的class生成
+  
 - 爬取某图书网站的数据，但原始数据没有提供，提供了处理后的数据“豆瓣图书.xlsx”，但实际中，还是要自己学会将原始数据进行转化和处理，毕竟原始数据不能作为推荐算法直接使用，需要挖掘和分析
 
 - prepare.py将“豆瓣图书.xlsx”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
 
 - 利用navicat把to_sql.txt内容导入数据库的book表，需要给book表的name字段长度增加到200，否则导入时，有部分数据会因为长度问题而无法导入
+
+- 运行python manage.py createsuperuser，创建django的后台管理账户
+
+- 运行python manage.py runserver启动后台管理，访问地址： `http://127.0.0.1:8000/admin`
 
   #### 实现思路
 
