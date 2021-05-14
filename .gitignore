@@ -21,3 +21,4 @@ MusicRec-Vue/node_modules/
 BookRec/indexbook/__pycache__/
 BookRec/BookRec/__pycache__/
 BookRec-Vue/node_modules/
+BookRec-Vue/static/img/*.jpg
