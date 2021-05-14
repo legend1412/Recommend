@@ -33,7 +33,7 @@ def switchuser(request):
     if 'username' in request.session.keys():
         uname = request.session['username']
         # 删除浏览表中的记录
-        History.object.filter(name=uname).delete()
+        History.objects.filter(name=uname).delete()
         print('删除用户:%s的点击记录。。。' % uname)
         del request.session['username']  # 删除session
         del request.session['tags']  # 删除session
@@ -53,18 +53,18 @@ def home(request):
     result['code'] = 1
     result['data'] = dict()
 
-    tags = Cate.object.all()
+    tags = Cate.objects.all()
     # tag为all,表示是为用户进行图书推荐
     if tag == 'all':
         # 如果用户没有选择标签和用户没有产生任何行为，执行下面的逻辑
-        if 'tags' in request.session.keys() and request.session['tags'] == '' and History.object.filter(
-                name=uname).filter(~Q(tag='')).__ken__() == 0:
+        if 'tags' in request.session.keys() and request.session['tags'] == '' and History.objects.filter(
+                name=uname).filter(~Q(tag='')).__len__() == 0:
             books = Book.objects.order_by('-score').all()[:40]
             # 推荐
             total = books.__len__()
             for one in books:
                 _list.append({
-                    'bookid': one.bid,
+                    'bid': one.bid,
                     'name': one.name,
                     'img': one.img,
                     'author': one.author,
@@ -105,7 +105,7 @@ def home(request):
             for one in books[:40]:
                 one = Book.objects.filter(bid=one[0])[0]
                 _list.append({
-                    'bookid': one.bid,
+                    'bid': one.bid,
                     'name': one.name,
                     'img': one.img,
                     'author': one.author,
@@ -118,7 +118,7 @@ def home(request):
         total = books.__len__()
         for one in books[(_page_id - 1) * 20:_page_id * 20]:
             _list.append({
-                'bookid': one.bid,
+                'bid': one.bid,
                 'name': one.name,
                 'img': one.img,
                 'author': one.author,
@@ -163,7 +163,7 @@ def one(request):
     return JsonResponse({
         'code': 1,
         'data': {
-            'bookid': one.bid,
+            'bid': one.bid,
             "name": one.name,
             "img": one.img,
             "tag": one.tag,

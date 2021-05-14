@@ -64,8 +64,8 @@ class Prepare:
 
     def write_to_file(self):
         fw = open('data/to_sql.txt', 'a', encoding='utf-8')
-        for bookid in self.trans_data.keys():
-            fw.write(str(bookid) + ',' + ','.join(self.trans_data[bookid]) + '\n')
+        for bid in self.trans_data.keys():
+            fw.write(str(bid) + ',' + ','.join(self.trans_data[bid]) + '\n')
         fw.close()
         print('写文件完成！')
 

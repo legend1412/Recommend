@@ -28,10 +28,10 @@ class Model:
         else:
             tag_dict = dict()
             for line in open('data/to_sql.txt', 'r', encoding='utf-8'):
-                bookid, name, author, img, tag, price, pub_month, click, score, judge, rec_most, rec_more, \
+                bid, name, author, img, tag, price, pub_month, click, score, judge, rec_most, rec_more, \
                 rec_normal, rec_bad, rec_morebad, readed, reading, readup, mess = line.strip().split(",")
                 tag_dict.setdefault(tag, {})
-                tag_dict[tag][bookid] = {
+                tag_dict[tag][bid] = {
                     "price": price, "pub_month": pub_month, "click": click, "score": score, "judge": judge,
                     "rec_most": rec_most, "rec_more": rec_more, "rec_normal": rec_normal, "rec_bad": rec_bad,
                     "rec_morebad": rec_morebad, "readed": readed, "reading": reading, "readup": readup

@@ -20,7 +20,7 @@ def rank_result(request):
 # 歌单排行榜
 def rank_play_list(u_id):
     result_pl = list()
-    play_list = UserPlayListRec.object.filter(user=u_id).order_by('-sim')[12:]
+    play_list = UserPlayListRec.objects.filter(user=u_id).order_by('-sim')[12:]
     for pl in play_list:
         one = PlayList.objects.filter(pl_id=pl.related)
         if one.__len__() == 0:
@@ -44,7 +44,7 @@ def rank_song(u_id):
     songs = UserSongRec.objects.filter(user=u_id).order_by('-sim')[12:]
     print(songs)
     for song in songs:
-        one = Song.object.filter(song_id=song.related)
+        one = Song.objects.filter(song_id=song.related)
         if one.__len__() == 0:
             continue
         else:

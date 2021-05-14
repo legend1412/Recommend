@@ -70,7 +70,7 @@ def switchuser(request):
 # 获取导航栏
 def get_cates(request):
     _list = list()
-    for cate in Cate.object.all():
+    for cate in Cate.objects.all():
         _list.append({
             'cate_id': cate.cate_id,
             'cate_name': cate.cate_name
@@ -112,12 +112,12 @@ def my_browse(request):
     result['code'] = 1
     result['data'] = dict()
     _list = list()
-    browses = UserBrowse.object.filter(user_name=_uname).order_by('user_click_time')
+    browses = UserBrowse.objects.filter(user_name=_uname).order_by('user_click_time')
     total = browses.__len__()
     value = ''
     for one in browses[(_page_id - 1) * 30:_page_id * 30]:
         if one.click_cate == '2':
-            value = PlayList.object.filter(pl_id=one.click_id)[0].pl_name
+            value = PlayList.objects.filter(pl_id=one.click_id)[0].pl_name
         elif one.click_cate == '3':
             value = Song.objects.filter(song_id=one.click_id)[0].song_name
         elif one.click_cate == '4':

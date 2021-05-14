@@ -20,8 +20,8 @@
               <p class="recreater">评分</p>
               <p class="recreater">评价人数</p>
             </li>
-            <li v-for="item in books" :key="item.id" class="relist" >
-              <p><img :src='"../../static/img/"+item.id+".jpg"' @click="getOne($event,item.id)" class="bookimg" @error="imgError(item)"/></p>
+            <li v-for="item in books" :key="item.bid" class="relist" >
+              <p><img :src='"../../static/img/"+item.bid+".jpg"' @click="getOne($event,item.bid)" class="bookimg" @error="imgError(item)"/></p>
               <p class="rename">{{item.name}}</p>
               <p class="recreater">{{item.author}}</p>
               <p class="recreater">{{item.tag}}</p>

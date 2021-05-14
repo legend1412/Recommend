@@ -8,7 +8,7 @@ from user.models import User, UserSongRec, UserSingRec, UserPlayListRec, UserUse
 def rec_right_playlist(request):
     user = request.GET.get('username')
     u_id = User.objects.filter(u_name=user)[0].u_id
-    rec_all = UserPlayListRec.object.filter(user=u_id).order_by('-sim')[:12]
+    rec_all = UserPlayListRec.objects.filter(user=u_id).order_by('-sim')[:12]
     _list = list()
     for rec in rec_all:
         one = PlayList.objects.filter(pl_id=rec.related)[0]
