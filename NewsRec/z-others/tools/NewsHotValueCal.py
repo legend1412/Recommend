@@ -4,7 +4,7 @@
 """
 from datetime import datetime
 import pymysql
-from NewsRec.NewsRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
+from NewsRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
 
 
 class CalHotValue:

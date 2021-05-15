@@ -3,7 +3,7 @@
 代码11-3 每个类型下新闻的相似度计算
 """
 import os
-from NewsRec.NewsRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
+from NewsRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
 import pymysql
 
 

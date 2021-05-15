@@ -3,7 +3,7 @@
 代码11-4 获取NewsRec/settings.py中配置的前端展示的标签下的新闻
 """
 import pymysql
-from NewsRec.NewsRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME, ALLOW_TAGS
+from NewsRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME, ALLOW_TAGS
 import os
 
 
