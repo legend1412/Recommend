@@ -67,7 +67,8 @@ class SelectKeyWord:
 
 if __name__ == '__main__':
     # 原始数据文件路径
-    original_data_path = "../data/original/"
+    # original_data_path = "../data/original/"
+    original_data_path = 'E:/initdata/news/'
     files = os.listdir(original_data_path)
     # 关键词提取方式 _type=1:以title+content使用jieba的extract_tags进行关键词提取
     #             _type=2:以title进行分词处理作为文章关键词
