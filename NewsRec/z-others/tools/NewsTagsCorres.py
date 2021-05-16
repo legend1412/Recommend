@@ -16,7 +16,7 @@ class NewsTagsCor:
 
     # 连接mysql数据库
     def connect(self):
-        db = pymysql.Connect(DB_HOST, DB_USER, DB_PASSWD, DB_NAME, DB_PORT, charset='utf8')
+        db = pymysql.Connect(host=DB_HOST, user=DB_USER, password=DB_PASSWD, database=DB_NAME, port=DB_PORT, charset='utf8')
         return db
 
     # 获取每个标签下对应的文章
@@ -31,7 +31,7 @@ class NewsTagsCor:
                     print("%s 下无对应标签" % newid)
                 for tag in tags.split(","):
                     if tag in ALLOW_TAGS:
-                        sql = "select new_hot from newhot where new_id=%savepoint" % newid
+                        sql = "select new_hot from newhot where new_id=%s" % newid
                         self.cursor.execute(sql)
                         hot_value = self.cursor.fetchone()
                         result.setdefault(tag, {})
@@ -54,7 +54,7 @@ class NewsTagsCor:
 
 if __name__ == '__main__':
     print("开始寻找对应关键词下的新闻...")
-    keyword_path = "../data/keywords"
+    keyword_path = "../data/keywords/"
     ntc = NewsTagsCor(file_path=keyword_path)
     ntc.write_to_mysql()
     print("关键词下的新闻数据写入完毕，表为:newsrec.newtag")
