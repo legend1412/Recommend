@@ -18,7 +18,7 @@ class Correlation:
 
     # 连接mysql数据库
     def connect(self):
-        db = pymysql.Connect(DB_HOST, DB_USER, DB_PASSWD, DB_NAME, DB_PORT, charset='utf8')
+        db = pymysql.Connect(host=DB_HOST, user=DB_USER, password=DB_PASSWD, database=DB_NAME, port=DB_PORT, charset='utf8')
         return db
 
     # 加载数据
@@ -42,7 +42,7 @@ class Correlation:
             for newid2 in self.news_tags.keys():
                 id2_tags = set(self.news_tags[newid2].split(","))
                 if newid1 != newid2:
-                    print(newid1 + "\t" + newid2 + "\t" + str(id1_tags & id2_tags))
+                    # print(newid1 + "\t" + newid2 + "\t" + str(id1_tags & id2_tags))
                     cor = (len(id1_tags & id2_tags)) / len(id1_tags | id2_tags)
                     if cor > 0.0:
                         news_cor_list.append([newid1, newid2, format(cor, ".2f")])
@@ -52,7 +52,7 @@ class Correlation:
     # 将相似度数据写入数据库
     def wirte_to_mysql(self):
         for row in self.news_cor_list:
-            sql_w = "insert into newsim(new_id_base,new_id_sim,new_correlation) values(%s,%s,%s)"
+            sql_w = "insert into newsim(new_id_base,new_id_sim,new_correlation) values(%s,%s,%s)" % (row[0], row[1], row[2])
             try:
                 self.cursor.execute(sql_w)
                 self.db.commit()
@@ -64,10 +64,10 @@ class Correlation:
 
 if __name__ == '__main__':
     # 原始数据文件路径
-    original_data_path = "../data/keywords"
+    original_data_path = "../data/keywords/"
     files = os.listdir(original_data_path)
     for file in files:
         print("开始计算文件%s下的新闻相关度。" % file)
         cor = Correlation(original_data_path + file)
         cor.wirte_to_mysql()
-    print("\n相关度计算完毕，数据写入路径 z-othersd/data/correlation")
+    print("相关度计算完毕")

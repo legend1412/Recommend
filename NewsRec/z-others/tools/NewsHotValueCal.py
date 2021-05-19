@@ -15,13 +15,13 @@ class CalHotValue:
 
     # 连接mysql数据库
     def connect(self):
-        db = pymysql.Connect(DB_HOST, DB_USER, DB_PASSWD, DB_NAME, DB_PORT, charset='utf8')
+        db = pymysql.Connect(host=DB_HOST, user=DB_USER, password=DB_PASSWD, database=DB_NAME, port=DB_PORT, charset='utf8')
         return db
 
-    # j计算热度值
+    # 计算热度值
     def cal_hot_value(self):
         base_time = datetime.now()
-        sql = "select new_id,new_cate_id,new_seenum,new_disnum,new_time from new"
+        sql = "select new_id,new_cate_id,new_seenum,new_disnum,new_time from news"
         self.cursor.execute(sql)
         result_list = self.cursor.fetchall()
         result = list()
