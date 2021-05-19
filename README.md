@@ -28,7 +28,7 @@
 - 先整合下7个Excel文件中涉及到的新闻类别，插入到cate表
 - 将原始Excel中，类别字段用数字替代，与cate表对应即可
 - 通过navicat将增加字段后的excel文件导入mysql的news表中，一共7个文件
-- 基于TFIDF，对新闻关键词进行抽取，运行NewsKeyWordsSelect.py
+- 运行NewsKeyWordsSelect.py,基于TFIDF，对新闻关键词进行抽取
 - 使用xlrd读取Excel文件，必须是xls格式的
 - 运行NewsHotValueCal.py，计算新闻热度值，写入newhot表
 - 运行NewsTagcCorres.py，根据新闻标签或者关键词，获取对应的新闻信息，写入newtag表
