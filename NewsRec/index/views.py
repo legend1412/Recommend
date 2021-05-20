@@ -14,7 +14,7 @@ def login(request):
         result["users"] = ALLOW_USERS
         result["tags"] = ALLOW_TAGS
         return JsonResponse(result)
-    elif request.method == "POS":
+    elif request.method == "POST":
         # 从前端获取用户名，并写入session
         uname = request.POST.get('username')
         request.session['username'] = uname

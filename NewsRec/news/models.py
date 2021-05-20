@@ -49,7 +49,7 @@ class News(models.Model):
         return self.new_title
 
     class Meta:
-        db_table = 'new'
+        db_table = 'news'
         verbose_name_plural = '新闻信息表'
 
 

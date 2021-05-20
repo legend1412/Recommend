@@ -33,6 +33,7 @@
 - 运行NewsHotValueCal.py，计算新闻热度值，写入newhot表
 - 运行NewsTagcCorres.py，根据新闻标签或者关键词，获取对应的新闻信息，写入newtag表
 - 运行NewsCorrelationCalculation.py，计算新闻相关度，同时写入newsim表
+- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
   
   #### 实现思路
 - 各大主题下的热度排序
@@ -72,7 +73,7 @@
 - 爬取某图书网站的数据，但原始数据没有提供，提供了处理后的数据“豆瓣图书.xlsx”，但实际中，还是要自己学会将原始数据进行转化和处理，毕竟原始数据不能作为推荐算法直接使用，需要挖掘和分析
 - prepare.py将“豆瓣图书.xlsx”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
 - 利用navicat把to_sql.txt内容导入数据库的book表，需要给book表的name字段长度增加到200，否则导入时，有部分数据会因为长度问题而无法导入
-- 运行python manage.py createsuperuser，创建django的后台管理账户
+- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
 - 运行python manage.py runserver启动后台管理，访问地址： `http://127.0.0.1:8000/admin`
 - 运行model.py，对模型进行训练和保存
 - 在BookRec-Vue下，运行`npm run dev`，启动前端vue，进行访问
