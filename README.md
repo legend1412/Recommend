@@ -43,8 +43,9 @@
 - 为你推荐（不同用户行为不同看到的为你推荐也不同，指定几个用户作为展示）
 
 ### 搭建音乐推荐系统
-- 在MySQL中新建数据库musicrec，这次数据太多，不再直接导入，由程序运行产生
-- 前端依然是vue，后端django
+- 前端依然是vue，后端django 
+- 在mysql中新建数据库newsrec，创建表：cate、playlist、playlisttosongs、playlisttotag、sing、singsim、singtag、song、songlysic、songsim、songtag、user、userbrowse、userplaylistrec、usersim、usersingrec、usersongrec、usertag、useruserrec
+- 
   
   #### 实现思路
 - 利用网易云API获取部分数据
