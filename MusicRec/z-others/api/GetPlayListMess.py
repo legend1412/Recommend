@@ -4,6 +4,7 @@ Desc:
 """
 import requests
 import traceback
+import os
 
 
 # 获取每个歌单的信息类
@@ -18,11 +19,31 @@ class PlayList:
         self.playlist_mess = 'data/playlist_mess/'
         # 歌单包含的歌曲id信息
         self.trackid_mess = 'data/song_mess/'
+        # 判断上述目录和文件是否存在，不存在就创建
+        self.mkfile(self.playlist_file)
+        self.mkfile(self.error_id_file)
+        self.mkdir(self.creator_mess)
+        self.mkdir(self.playlist_mess)
+        self.mkfile(self.trackid_mess)
 
         self.ids_list = self.get_ids()
         self.url = 'https://api.imjad.cn/cloudmusic/?type=playlist&id='
         # 获得的歌单信息出错的歌单id
         self.error_id = list()
+
+    # 创建文件
+    def mkfile(self, filepath):
+        filepath1 = os.path.join(os.getcwd(), filepath)
+        if not os.path.exists(os.path.dirname(filepath1)):
+            os.makedirs(os.path.dirname(filepath1))
+        if not os.path.exists(filepath1):
+            file = open(filepath1, 'w')
+            file.close()
+
+    # 创建目录
+    def mkdir(self, dirs):
+        if not os.path.exists(os.path.join(os.getcwd(), dirs)):
+            os.makedirs(os.path.join(os.getcwd(), dirs))
 
     # 由歌单url，获取歌单id
     def get_ids(self):
@@ -60,7 +81,7 @@ class PlayList:
                 pass
             # break
         self.write_to_file(self.error_id_file, ",".join(self.error_id))
-        print("歌单信息获取完毕，写入文件: %s" % self.playlist_mess)
+        print("歌单信息获取完毕，写入文件: %s" % self.playlist_file)
 
     # 每个歌单的内容进行格式化处理 写入文件
     # 需要获取的信息: 歌单信息、创建者信息、歌单音乐信息

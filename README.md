@@ -44,8 +44,20 @@
 
 ### 搭建音乐推荐系统
 - 前端依然是vue，后端django 
-- 在mysql中新建数据库newsrec，创建表：cate、playlist、playlisttosongs、playlisttotag、sing、singsim、singtag、song、songlysic、songsim、songtag、user、userbrowse、userplaylistrec、usersim、usersingrec、usersongrec、usertag、useruserrec
-- 
+- 在mysql中新建数据库newsrec，创建表：cate、playlist、playlisttosongs、playlisttotag、sing、singsim、singtag、
+  song、songlysic、songsim、songtag、user、userbrowse、userplaylistrec、usersim、usersingrec、usersongrec、usertag、useruserrec
+- 使用django作为后端，则首次需要运行python manage.py migrate，则会在数据库中创建django的表，我猜测django会根据models.py定义 的实体去处理
+  - auth_group
+  - auth_group_permissions
+  - auth_permission
+  - auth_user
+  - auth_user_groups
+  - auth_user_user_permissions
+  - django_admin_log
+  - django_content_type
+  - django_migrations
+  - django_session
+- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)  
   
   #### 实现思路
 - 利用网易云API获取部分数据
