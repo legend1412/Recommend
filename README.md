@@ -78,7 +78,7 @@
   
 - 运行GetSingMess.py，根据歌曲ID获取歌手信息，保存到sings_mess_all.txt，错误信息保存到sings_mess_error_1.txt。这个文件没有运行成功，因为在爬虫的时候失败了。直接适用案例中给的数据
   
-- 
+  
   
   #### 实现思路
   
