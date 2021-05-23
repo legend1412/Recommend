@@ -25,12 +25,13 @@ from sing.models import Sing, SingTag
 
 class ToMySQL:
     def __init__(self):
-        self.db = self.__connect()
+        self.db = self.connect()
         self.curosr = self.db.cursor()
 
     # 连接到mysql数据库
-    def __connect(self):
-        db = pymysql.Connect(DB_HOST, DB_USER, DB_PASSWD, DB_NAME, DB_PORT, charset='utf8')
+    def connect(self):
+        db = pymysql.Connect(host=DB_HOST, user=DB_USER, password=DB_PASSWD, database=DB_NAME, port=DB_PORT,
+                             charset='utf8')
         return db
 
     # 将歌曲信息写入数据库 ok
@@ -46,7 +47,7 @@ class ToMySQL:
     """
 
     def song_mess_to_mysql(self):
-        for line in open('data/song_mess_all.txt', 'r', encoding='utf-8'):
+        for line in open('../api/data/songs_mess_all.txt', 'r', encoding='utf-8'):
             _list = line.split(' |+| ')
             if _list.__len__() == 9:
                 song_id, song_name, song_pl_id, song_publish_time, song_sing_id, song_total_comments, song_hot_comments, size, song_url = line.split(
@@ -316,21 +317,21 @@ class ToMySQL:
         print(song_playlist_tag_dict)
 
         # 将歌曲 -> 标签信息写入数据库,直接写入数据库数据太多，写入文件，利用工具导入
-        # for song in song_playlist_tag_dict.keys():
-        #     print(song)
-        #     for tag in song_playlist_tag_dict[song].split(","):
-        #         SongTag(song_id= song,tag= tag.replace(" ","")).save()
-        # fw = open("data/song_tag.txt","a",encoding="utf-8")
-        # for song in song_playlist_tag_dict.keys():
-        #     print(song)
-        #     song_have_write = list()
-        #     for tag in song_playlist_tag_dict[song].split(","):
-        #         tag = tag.replace(" ","")
-        #         if tag not in song_have_write:
-        #             fw.write(song + "," + tag +"\n")
-        #             song_have_write.append(tag)
-        # fw.close()
-        # print("Over !")
+        for song in song_playlist_tag_dict.keys():
+            print(song)
+            for tag in song_playlist_tag_dict[song].split(","):
+                SongTag(song_id=song, tag=tag.replace(" ", "")).save()
+        fw = open("data/song_tag.txt", "a", encoding="utf-8")
+        for song in song_playlist_tag_dict.keys():
+            print(song)
+            song_have_write = list()
+            for tag in song_playlist_tag_dict[song].split(","):
+                tag = tag.replace(" ", "")
+                if tag not in song_have_write:
+                    fw.write(song + "," + tag + "\n")
+                    song_have_write.append(tag)
+        fw.close()
+        print("Over !")
 
         # 将歌手 -> 标签信息写入数据库
         # for sing in sing_song_dict.keys():
@@ -374,6 +375,7 @@ class ToMySQL:
 
 if __name__ == '__main__':
     tomysql = ToMySQL()
+    tomysql.song_mess_to_mysql()
     # tomysql.playListSingMessToMySQL()
     # tomysql.playListMessToMysql()
     # tomysql.userMessToMySQL()

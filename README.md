@@ -44,8 +44,10 @@
 
 ### 搭建音乐推荐系统
 - 前端依然是vue，后端django 
+
 - 在mysql中新建数据库newsrec，创建表：cate、playlist、playlisttosongs、playlisttotag、sing、singsim、singtag、
   song、songlysic、songsim、songtag、user、userbrowse、userplaylistrec、usersim、usersingrec、usersongrec、usertag、useruserrec
+  
 - 使用django作为后端，则首次需要运行python manage.py migrate，则会在数据库中创建django的表，我猜测django会根据models.py定义 的实体去处理
   - auth_group
   - auth_group_permissions
@@ -57,16 +59,43 @@
   - django_content_type
   - django_migrations
   - django_session
-- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)  
+  
+- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
+  
+  #### 数据处理
+  
+  ##### 数据获取
+  
+- playlist_id_name_all.txt记录的歌单的信息，共1066首，这是程序的入口，所以这里需要有初始数据，直接从给的案例中拷贝过来
+
+- 运行GetPlayListMess.py进行歌单信息类的处理。可能是目标网站的反爬出机制，一次性爬1000多首歌，会失败很多，后来就几首几首的做，这个也是在爬虫中比较麻烦的一件事
+  
+- 爬虫完毕后，获取创建者信息，保存到user_mess_all.txt，歌单信息保存到pl_mess_all.txt，歌单包含的歌曲信息保存到ids_all1.txt
+  
+- 所有关于id的信息都保存到ids_all.txt中，关于这些id是怎么来了，程序中没有体现，所以直接从给的案例中拷贝，初步考虑应该跟保存到ids_all1.txt中一样，直接通过爬虫获取然后保存的
+  
+- 运行GetSongMess.py，根据歌曲ID获取歌曲信息，歌词保存到songs_lysics_all.txt中，歌曲信息保存到songs_mess_all.txt中，失败的信息写入error_ids_1.txt中
+  
+- 运行GetSingMess.py，根据歌曲ID获取歌手信息，保存到sings_mess_all.txt，错误信息保存到sings_mess_error_1.txt。这个文件没有运行成功，因为在爬虫的时候失败了。直接适用案例中给的数据
+  
+- 
   
   #### 实现思路
+  
 - 利用网易云API获取部分数据
+
 - 基于标签进行歌单详情页的推荐、歌曲详情页的推荐、歌手详情页的推荐
+
 - 基于用户的协同过滤算法给用户推荐用户、个用户推荐歌曲
+
 - 基于物品的协同过滤算法给用户推荐歌手
+
 - 基于内容的推荐算法给用户推荐歌单
+
 - 个性化排行榜
+
 - 为你推荐（不同用户行为不同看到的为你推荐也不同）
+
 - 我的足迹，展示用户在站内的行为
 ### 图书推荐系统
 - 前端依然是vue，后端django
@@ -83,13 +112,16 @@
   - django_migrations
   - django_session
 - 不同的django项目都会存在上面表，但每个项目自己使用的数据表，则是根据models.py中定义的class生成
-- 爬取某图书网站的数据，但原始数据没有提供，提供了处理后的数据“豆瓣图书.xlsx”，但实际中，还是要自己学会将原始数据进行转化和处理，毕竟原始数据不能作为推荐算法直接使用，需要挖掘和分析
-- prepare.py将“豆瓣图书.xlsx”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
-- 利用navicat把to_sql.txt内容导入数据库的book表，需要给book表的name字段长度增加到200，否则导入时，有部分数据会因为长度问题而无法导入
 - 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
 - 运行python manage.py runserver启动后台管理，访问地址： `http://127.0.0.1:8000/admin`
 - 运行model.py，对模型进行训练和保存
 - 在BookRec-Vue下，运行`npm run dev`，启动前端vue，进行访问
+  
+  #### 数据处理
+- 爬取某图书网站的数据，但原始数据没有提供，提供了处理后的数据“豆瓣图书.xlsx”，但实际中，还是要自己学会将原始数据进行转化和处理，毕竟原始数据不能作为推荐算法直接使用，需要挖掘和分析
+- prepare.py将“豆瓣图书.xlsx”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
+- 利用navicat把to_sql.txt内容导入数据库的book表，需要给book表的name字段长度增加到200，否则导入时，有部分数据会因为长度问题而无法导入
+
   #### 实现思路
 - 基于GBDT模型的图书推荐（不同用户行为不同看到的为你推荐也不同，指定几个用户作为展示）
 - 图书详情展示

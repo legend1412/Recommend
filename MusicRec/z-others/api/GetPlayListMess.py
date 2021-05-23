@@ -2,54 +2,45 @@
 Desc:
     获取提供的1066个歌单信息
 """
-import requests
 import traceback
-import os
+
+import requests
+
+import common.operdirandfiler as odf
+
+from itertools import islice
 
 
 # 获取每个歌单的信息类
 class PlayList:
     def __init__(self):
-        self.playlist_file = 'data/plsylist_url/playlist_id_name_all.txt'
+        self.playlist_file = 'data/playlist_url/playlist_id_name_all.txt'
         # 获取出错的歌单id保存文件
         self.error_id_file = 'data/error_playlist_ids.txt'
-        # 歌单创造者信息
+        # 歌单创建者信息
         self.creator_mess = 'data/user_mess/'
         # 每个歌单的json信息
         self.playlist_mess = 'data/playlist_mess/'
         # 歌单包含的歌曲id信息
         self.trackid_mess = 'data/song_mess/'
         # 判断上述目录和文件是否存在，不存在就创建
-        self.mkfile(self.playlist_file)
-        self.mkfile(self.error_id_file)
-        self.mkdir(self.creator_mess)
-        self.mkdir(self.playlist_mess)
-        self.mkfile(self.trackid_mess)
+        odf.mkfile(self.playlist_file)
+        odf.mkfile(self.error_id_file)
+        odf.mkdir(self.creator_mess)
+        odf.mkdir(self.playlist_mess)
+        odf.mkfile(self.trackid_mess)
 
-        self.ids_list = self.get_ids()
+        self.ids_list = self.get_ids_error()
         self.url = 'https://api.imjad.cn/cloudmusic/?type=playlist&id='
         # 获得的歌单信息出错的歌单id
         self.error_id = list()
-
-    # 创建文件
-    def mkfile(self, filepath):
-        filepath1 = os.path.join(os.getcwd(), filepath)
-        if not os.path.exists(os.path.dirname(filepath1)):
-            os.makedirs(os.path.dirname(filepath1))
-        if not os.path.exists(filepath1):
-            file = open(filepath1, 'w')
-            file.close()
-
-    # 创建目录
-    def mkdir(self, dirs):
-        if not os.path.exists(os.path.join(os.getcwd(), dirs)):
-            os.makedirs(os.path.join(os.getcwd(), dirs))
 
     # 由歌单url，获取歌单id
     def get_ids(self):
         print('根据歌单链接获取歌单ID。。。')
         ids_list = list()
-        for line in open(self.playlist_file, 'r', encoding='utf-8').readlines():
+        fileopen = open(self.playlist_file, 'r', encoding='utf-8')
+        for line in islice(fileopen, 1, None):
             try:
                 pl_id = line.strip().split('\t')[0].split('id=')[1]
                 ids_list.append(pl_id)
@@ -59,6 +50,24 @@ class PlayList:
         print('获取歌单ID完成。。。')
         return ids_list
 
+    # 因为不可能一次性下载所有歌曲信息
+    # 部分歌曲下载失败后，将歌单id写入了文件error_playlist_ids.txt，这个文件是把所有id都放到一行，中间用逗号隔开
+    # 把里面的内容复制到另外的文件中，重新获取歌单id同时获取信息，这样循环，就能把所有的歌单的信息获取到
+    def get_ids_error(self):
+        print('获取失败的歌单ID')
+        ids_list = list()
+        fileopen = open('./data/playlist_url/error.txt', 'r', encoding='utf-8')
+        for line in islice(fileopen, 0, None):
+            try:
+                pl_id_arr = line.strip().split(',')
+                for pl_id in pl_id_arr:
+                    ids_list.append(pl_id)
+            except Exception as e:
+                print(e)
+                pass
+        print('解析错误歌单ID完成')
+        return ids_list
+
     # 获取每个歌单的具体信息 url： https://api.imjad.cn/cloudmusic/?type=playlist&id=2340739428
     def get_every_playlist_mess(self):
         print('获取每个歌单的具体信息。。。')
@@ -66,6 +75,8 @@ class PlayList:
         while self.ids_list.__len__() != 0:
             i += 1
             pl_id = self.ids_list.pop()
+            # if pl_id != '2068079160':
+            #     continue
             url = self.url + str(pl_id)
             try:
                 print("%s - 歌单ID为：%s" % (i, pl_id))
@@ -80,14 +91,14 @@ class PlayList:
                 self.error_id.append(pl_id)
                 pass
             # break
-        self.write_to_file(self.error_id_file, ",".join(self.error_id))
+        odf.write_to_file(self.error_id_file, ",".join(self.error_id))
         print("歌单信息获取完毕，写入文件: %s" % self.playlist_file)
 
     # 每个歌单的内容进行格式化处理 写入文件
     # 需要获取的信息: 歌单信息、创建者信息、歌单音乐信息
     def get_format_playlist_mess(self, json_line):
         # 创建者信息 用户id，昵称，生日，性别，省份，城市，类型，标签，头像链接，用户状态，账号状态，djStatus,vipStatus，签名
-        creator = json_line['playlisnt']['creator']
+        creator = json_line['playlist']['creator']
         c_list = (
             str(creator['userId']),
             str(creator["nickname"]),
@@ -104,7 +115,7 @@ class PlayList:
             str(creator["vipType"]),
             str(creator["signature"]).replace('\n', '')
         )
-        self.write_to_file(self.creator_mess + 'user_mess_all.txt', ' |=| '.join(c_list))
+        odf.write_to_file(self.creator_mess + 'user_mess_all.txt', ' |=| '.join(c_list))
         # 歌单信息
         # 歌单ID，创建者ID，名字，创建时间，更新时间，包含音乐数，播放次数，分享次数，评论次数，收藏次数，标签，歌单封面，描述
         playlist = json_line["playlist"]
@@ -123,20 +134,14 @@ class PlayList:
             str(playlist["coverImgUrl"]),
             str(playlist["description"]).replace("\n", "")
         ]
-        self.write_to_file(self.playlist_mess + "pl_mess_all.txt", " |=| ".join(p_list))
+        odf.write_to_file(self.playlist_mess + "pl_mess_all.txt", " |=| ".join(p_list))
 
         # 歌单包含的歌曲信息
         t_list = list()
         trackids = json_line["playlist"]["trackIds"]
         for one in trackids:
             t_list.append(str(one["id"]))
-        self.write_to_file(self.trackid_mess + "ids_all1.txt", str(playlist["id"]) + "\t" + ",".join(t_list))
-
-    # 写入文件
-    def write_to_file(self, filename, one):
-        fw = open(filename, "a", encoding="utf8")
-        fw.write(str(one) + "\n")
-        fw.close()
+        odf.write_to_file(self.trackid_mess + "ids_all1.txt", str(playlist["id"]) + "\t" + ",".join(t_list))
 
 
 if __name__ == '__main__':
