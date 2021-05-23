@@ -4,7 +4,11 @@ Desc:
     把数据写入数据库
 """
 import os
+import pymysql
+import common.opertime as ot
+import json
 import django
+
 os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MusicRec.settings")
 # os.environ['DJANGO_SETTINGS_MODULE'] = 'MusicRec.setttings'
 django.setup()
@@ -13,9 +17,7 @@ django.setup()
  django.core.exceptions.ImproperlyConfigured: Requested setting INSTALLED_APPS, but settings are not 
  django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
 """
-import pymysql
-import time
-import json
+
 from MusicRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
 from playlist.models import PlayListToSongs, PlayListToTag, PlayList
 from song.models import SongLysic, Song, SongTag
@@ -56,7 +58,7 @@ class ToMySQL:
                     song_id=song_id,
                     song_name=song_name,
                     song_pl_id=song_pl_id,
-                    song_publish_time=self.transform_time(int(song_publish_time) / 1000),
+                    song_publish_time=ot.transform_time(int(song_publish_time) / 1000),
                     song_sing_id=song_sing_id,
                     song_total_comments=song_total_comments,
                     song_hot_comments=song_hot_comments,
@@ -167,7 +169,7 @@ class ToMySQL:
                 user = User(
                     u_id=u_id,
                     u_name=u_name,
-                    u_birthday=self.transform_time(float(int(u_birthday) / 1000)),
+                    u_birthday=ot.transform_time(float(int(u_birthday) / 1000)),
                     u_gender=int(u_gender),
                     u_province=u_province,
                     u_city=u_city,
@@ -187,7 +189,7 @@ class ToMySQL:
                 user = User(
                     u_id=u_id,
                     u_name=u_name,
-                    u_birthday=self.transform_time(float(int(u_birthday) / 1000)),
+                    u_birthday=ot.transform_time(float(int(u_birthday) / 1000)),
                     u_gender=int(u_gender),
                     u_province=u_province,
                     u_city=u_city,
@@ -235,8 +237,8 @@ class ToMySQL:
                 pl_id=pl_id,
                 pl_creator=user,
                 pl_name=pl_name,
-                pl_create_time=self.transform_time(int(pl_create_time) / 1000),
-                pl_update_time=self.transform_time(int(pl_update_time) / 1000),
+                pl_create_time=ot.transform_time(int(pl_create_time) / 1000),
+                pl_update_time=ot.transform_time(int(pl_update_time) / 1000),
                 pl_songs_num=int(pl_songs_num),
                 pl_listen_num=int(pl_listen_num),
                 pl_share_num=int(pl_share_num),
@@ -334,12 +336,12 @@ class ToMySQL:
         print("Over !")
 
         # 将歌手 -> 标签信息写入数据库
-        # for sing in sing_song_dict.keys():
-        #     print(sing)
-        #     songId = sing_song_dict[sing]
-        #     for tag in song_playlist_tag_dict[songId].split(","):
-        #         SingTag(sing_id=sing, tag= tag).save()
-        # print("Over !")
+        for sing in sing_song_dict.keys():
+            print(sing)
+            song_id = sing_song_dict[sing]
+            for tag in song_playlist_tag_dict[song_id].split(","):
+                SingTag(sing_id=sing, tag=tag).save()
+        print("Over !")
 
         fw1 = open('data/sing_tag.txt', 'a', encoding='utf-8')
         for sing in sing_song_dict.keys():
@@ -361,16 +363,6 @@ class ToMySQL:
             for tag in one.pl_tags.split(','):
                 UserTag(user_id=one.pl_creator.u_id, tag=tag.replace(' ', '')).save()
         print('Over!')
-
-    # 13位时间戳转换为时间
-    def transform_time(self, t1):
-        try:
-            dt = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t1))
-        except Exception as e:
-            print(t1)
-            print('%s,%s' % (t1, e))
-            dt = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(0))
-        return dt
 
 
 if __name__ == '__main__':
