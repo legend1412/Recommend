@@ -5,8 +5,8 @@ Desc:
 """
 import os
 import django
-
-os.environ['DJANGO_SETTINGS_MODULE'] = 'MusicRec.setttings'
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MusicRec.settings")
+# os.environ['DJANGO_SETTINGS_MODULE'] = 'MusicRec.setttings'
 django.setup()
 """
  上边import 解决错误：
@@ -47,7 +47,7 @@ class ToMySQL:
     """
 
     def song_mess_to_mysql(self):
-        for line in open('../api/data/songs_mess_all.txt', 'r', encoding='utf-8'):
+        for line in open('../api/data/song_mess/songs_mess_all.txt', 'r', encoding='utf-8'):
             _list = line.split(' |+| ')
             if _list.__len__() == 9:
                 song_id, song_name, song_pl_id, song_publish_time, song_sing_id, song_total_comments, song_hot_comments, size, song_url = line.split(
@@ -365,11 +365,11 @@ class ToMySQL:
     # 13位时间戳转换为时间
     def transform_time(self, t1):
         try:
-            dt = time.strftime('Y-%m-%d %H:%M:%S', time.localtime(t1))
+            dt = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(t1))
         except Exception as e:
             print(t1)
             print('%s,%s' % (t1, e))
-            dt = time.strftime('Y-%m-%d %H:%M:%S', time.localtime(0))
+            dt = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(0))
         return dt
 
 
