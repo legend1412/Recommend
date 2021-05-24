@@ -6,6 +6,7 @@ Desc:
 import os
 import pymysql
 import common.opertime as ot
+import common.operdirandfiler as odf
 import json
 import django
 
@@ -29,6 +30,8 @@ class ToMySQL:
     def __init__(self):
         self.db = self.connect()
         self.curosr = self.db.cursor()
+        self.error_song_file = 'error_songs.txt'
+        self.error_lysic_file = 'error_lysic.txt'
 
     # 连接到mysql数据库
     def connect(self):
@@ -39,10 +42,10 @@ class ToMySQL:
     # 将歌曲信息写入数据库 ok
     """
         song_id = models.CharField(blank=False, max_length=64, verbose_name="歌曲ID", unique=True)
-        song_name = models.CharField(blank=False, max_length=100, verbose_name="歌曲名字")
+        song_name = models.CharField(blank=False, max_length=200, verbose_name="歌曲名字")
         song_pl_id = models.CharField(blank=False, max_length=64, verbose_name="专辑ID")
         song_publish_time = models.DateTimeField(blank=True, verbose_name="出版时间")
-        song_sing_id = models.CharField(blank=False, max_length=100, verbose_name="歌手ID")
+        song_sing_id = models.CharField(blank=False, max_length=200, verbose_name="歌手ID")
         song_total_comments = models.IntegerField(blank=True,verbose_name="歌曲总的评论数")
         song_hot_comments = models.IntegerField(blank=True,verbose_name="歌曲热门评论数")
         song_url = models.CharField(blank=True, max_length=1000, verbose_name="歌曲链接")
@@ -54,11 +57,14 @@ class ToMySQL:
             if _list.__len__() == 9:
                 song_id, song_name, song_pl_id, song_publish_time, song_sing_id, song_total_comments, song_hot_comments, size, song_url = line.split(
                     ' |+| ')
+                if song_publish_time is None or song_publish_time.lower() == 'null':
+                    odf.write_to_file(self.error_song_file, line.replace('\n', ''))
+                    continue
                 s = Song(
                     song_id=song_id,
                     song_name=song_name,
                     song_pl_id=song_pl_id,
-                    song_publish_time=ot.transform_time(int(song_publish_time) / 1000),
+                    song_publish_time=ot.transform_time(abs(int(song_publish_time)) / 1000),
                     song_sing_id=song_sing_id,
                     song_total_comments=song_total_comments,
                     song_hot_comments=song_hot_comments,
@@ -71,7 +77,8 @@ class ToMySQL:
                     print(song_id)
                     pass
             else:
-                print(line)
+                odf.write_to_file(self.error_song_file, line.replace('\n', ''))
+                # print(line)
         print('Over!')
 
     # 歌词信息写入数据库 ok
@@ -82,20 +89,26 @@ class ToMySQL:
 
     def song_lysic_to_mysql(self):
         i = 0
-        for line in open('data/song_lysic_mess_all.txt', 'r', encoding='utf-8'):
+        for line in open('../api/data/song_mess/songs_lysics_all.txt', 'r', encoding='utf-8'):
             _list = line.strip().split('\t')
-            if _list.__len__() > 1:
-                songid = _list[0]
-                lysic = _list[1]
-                if lysic == 'null':
-                    lysic = '暂无歌词提供！'
-                SongLysic(song_id=songid, song_lysic=lysic).save()
-            else:
-                songid = _list[0]
-                lysic = '暂无提供歌词！'
-                SongLysic(song_id=songid, song_lysic=lysic).save()
-            i += 1
-            print(i)
+            songid = ''
+            try:
+                if _list.__len__() > 1:
+                    songid = _list[0]
+                    lysic = _list[1]
+                    if lysic == 'null':
+                        lysic = '暂无歌词提供！'
+                    SongLysic(song_id=songid, song_lysic=lysic).save()
+                else:
+                    songid = _list[0]
+                    lysic = '暂无提供歌词！'
+                    SongLysic(song_id=songid, song_lysic=lysic).save()
+                i += 1
+                print(i)
+            except Exception as e:
+                print(e)
+                print(songid)
+                odf.write_to_file(self.error_lysic_file, line.replace('\n', ''))
         print('歌词信息写入数据库完成！')
 
     # 歌手信息写入数据库 ok
@@ -367,7 +380,10 @@ class ToMySQL:
 
 if __name__ == '__main__':
     tomysql = ToMySQL()
-    tomysql.song_mess_to_mysql()
+    # 歌曲信息
+    # tomysql.song_mess_to_mysql()
+    # 歌词信息
+    tomysql.song_lysic_to_mysql()
     # tomysql.playListSingMessToMySQL()
     # tomysql.playListMessToMysql()
     # tomysql.userMessToMySQL()

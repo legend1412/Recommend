@@ -6,10 +6,10 @@ from django.db import models
 class Song(models.Model):
     id = models.AutoField(primary_key=True)
     song_id = models.CharField(blank=False, max_length=64, verbose_name='歌曲ID', unique=True)
-    song_name = models.CharField(blank=True, max_length=100, verbose_name='歌曲名字')
+    song_name = models.CharField(blank=True, max_length=200, verbose_name='歌曲名字')
     song_pl_id = models.CharField(blank=True, max_length=64, verbose_name='专辑ID')
     song_publish_time = models.DateTimeField(blank=True, verbose_name='出版时间')
-    song_sing_id = models.CharField(blank=True, max_length=100, verbose_name='歌手ID')
+    song_sing_id = models.CharField(blank=True, max_length=200, verbose_name='歌手ID')
     song_total_comments = models.IntegerField(blank=True, verbose_name='歌曲总的评论数')
     song_hot_comments = models.IntegerField(blank=True, verbose_name='歌曲热门评论数')
     song_url = models.CharField(blank=True, max_length=1000, verbose_name='歌曲链接')

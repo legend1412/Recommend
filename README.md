@@ -78,10 +78,20 @@
   
 - 运行GetSingMess.py，根据歌曲ID获取歌手信息，保存到sings_mess_all.txt，错误信息保存到sings_mess_error_1.txt。这个文件没有运行成功，因为在爬虫的时候失败了。直接适用案例中给的数据
   
+  ##### 数据导入
   
+  由于这个项目的数据量比较打，所以数据导入是分开进行的
   
+- 导入歌曲信息，运行ToMySQL.py，执行song_mess_to_mysql方法，将歌曲信息写入song表中。一共写入24343条记录。出错记录数是1609条。在原来的方法基础上做了一点修改：
+
+  - 如果song_publish_time是null的，将信息记录到error_songs.txt，
+  - 如果一行的内容长度分割后不是9，不再打印，直接记录到error_songs.txt
+  - 修改song表的song_name和song_sing_id字段长度到200，同时需要修改models.py下的song类
+
+- 导入歌词信息，运行ToMySQL.py，执行song_lysic_to_mysql方法，将歌词信息写入songlysic表中。错误信息写入error_lysic.txt。一共导入25952条记录
+
   #### 实现思路
-  
+
 - 利用网易云API获取部分数据
 
 - 基于标签进行歌单详情页的推荐、歌曲详情页的推荐、歌手详情页的推荐
