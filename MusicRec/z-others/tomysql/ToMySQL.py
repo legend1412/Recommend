@@ -30,8 +30,14 @@ class ToMySQL:
     def __init__(self):
         self.db = self.connect()
         self.curosr = self.db.cursor()
-        self.error_song_file = 'error_songs.txt'
-        self.error_lysic_file = 'error_lysic.txt'
+        self.error_song_file = 'data/error_songs.txt'
+        self.error_lysic_file = 'data/error_lysic.txt'
+        self.error_sing_file = 'data/error_sings.txt'
+        self.error_user_file = 'data/error_users.txt'
+        self.error_playlist_file = 'data/error_playlist.txt'
+        self.error_playlist_sing_file = 'data/error_playlist_sing.txt'
+        self.error_playlist_tag_file = 'data/error_playlist_tag.txt'
+        self.error_user_tag_file = 'data/error_user_tag.txt'
 
     # 连接到mysql数据库
     def connect(self):
@@ -52,11 +58,12 @@ class ToMySQL:
     """
 
     def song_mess_to_mysql(self):
+        i = 0
         for line in open('../api/data/song_mess/songs_mess_all.txt', 'r', encoding='utf-8'):
             _list = line.split(' |+| ')
             if _list.__len__() == 9:
-                song_id, song_name, song_pl_id, song_publish_time, song_sing_id, song_total_comments, song_hot_comments, size, song_url = line.split(
-                    ' |+| ')
+                [song_id, song_name, song_pl_id, song_publish_time, song_sing_id, song_total_comments,
+                 song_hot_comments, size, song_url] = line.split(' |+| ')
                 if song_publish_time is None or song_publish_time.lower() == 'null':
                     odf.write_to_file(self.error_song_file, line.replace('\n', ''))
                     continue
@@ -79,6 +86,8 @@ class ToMySQL:
             else:
                 odf.write_to_file(self.error_song_file, line.replace('\n', ''))
                 # print(line)
+            i += 1
+            print(i)
         print('Over!')
 
     # 歌词信息写入数据库 ok
@@ -122,8 +131,9 @@ class ToMySQL:
     """
 
     def sing_mess_to_mysql(self):
+        i = 0
         have_write_sing = list()
-        for line in open('data/sing_mess_all.txt', 'r', encoding='utf-8').readlines():
+        for line in open('../api/data/sing_mess/sings_mess_all.txt', 'r', encoding='utf-8').readlines():
             _list = line.strip().split(',')
             if _list[0] in have_write_sing:
                 continue
@@ -146,6 +156,10 @@ class ToMySQL:
                 have_write_sing.append(sing_id)
             else:
                 print(_list)
+                odf.write_to_file(self.error_sing_file, line.replace('\n', ''))
+                # print(line)
+            i += 1
+            print(i)
         print('Over!')
 
     # 用户信息写入数据库 ok
@@ -169,12 +183,16 @@ class ToMySQL:
     def user_mess_to_mysql(self):
         i = 0
         uid_list = list()
-        for line in open('data/user_mess_all.txt', 'r', encoding='utf-8').readlines():
+        for line in open('../api/data/user_mess/user_mess_all.txt', 'r', encoding='utf-8').readlines():
             if line.split(' |=| ').__len__() < 14:
+                odf.write_to_file(self.error_user_file, line.replace('\n', ''))
                 continue
-            u_id, u_name, u_birthday, u_gender, u_province, u_city, u_type, u_tags, u_img_url, u_auth_status, u_account_status, u_dj_status, u_vip_type, u_sign = line.split(
-                " |=| ")
-            if u_id in uid_list:
+            [u_id, u_name, u_birthday, u_gender, u_province, u_city, u_type, u_tags, u_img_url, u_auth_status,
+             u_account_status, u_dj_status, u_vip_type, u_sign] = line.split(" |=| ")
+            if u_birthday is None or u_birthday.lower() == 'null':
+                odf.write_to_file(self.error_user_file, line.replace('\n', ''))
+                continue
+            elif u_id in uid_list:
                 continue
             else:
                 uid_list.append(u_id)
@@ -182,7 +200,7 @@ class ToMySQL:
                 user = User(
                     u_id=u_id,
                     u_name=u_name,
-                    u_birthday=ot.transform_time(float(int(u_birthday) / 1000)),
+                    u_birthday=ot.transform_time(abs(float(int(u_birthday) / 1000))),
                     u_gender=int(u_gender),
                     u_province=u_province,
                     u_city=u_city,
@@ -196,13 +214,11 @@ class ToMySQL:
                     u_sign='我就是我是颜色不一样的花火！' if u_sign == "\n" else u_sign
                 )
                 user.save()
-                i += 1
-                print(i)
             except Exception as e:
                 user = User(
                     u_id=u_id,
                     u_name=u_name,
-                    u_birthday=ot.transform_time(float(int(u_birthday) / 1000)),
+                    u_birthday=ot.transform_time(abs(float(int(u_birthday) / 1000))),
                     u_gender=int(u_gender),
                     u_province=u_province,
                     u_city=u_city,
@@ -216,9 +232,10 @@ class ToMySQL:
                     u_sign='纵有诗论满腹，却道不尽这魏巍河山！'
                 )
                 user.save()
-                i += 1
-                print(i)
                 print('Error:{},{}'.format(u_id, e))
+            i += 1
+            # print(i)
+        print('Over!')
 
     # 歌单信息写入数据库 ok
     """
@@ -239,31 +256,43 @@ class ToMySQL:
 
     def playlist_mess_to_mysql(self):
         i = 0
-        for line in open('data/pl_mess_all.txt', 'r', encoding='utf-8').readlines():
-            pl_id, pl_creator, pl_name, pl_create_time, pl_update_time, pl_songs_num, pl_listen_num, pl_share_num, pl_comment_num, pl_follow_num, pl_tags, pl_img_url, pl_desc = line.split(
-                " |=| ")
+        for line in open('../api/data/playlist_mess/pl_mess_all.txt', 'r', encoding='utf-8').readlines():
+            if line.split(' |=| ').__len__() < 13:
+                odf.write_to_file(self.error_playlist_file, line.replace('\n', ''))
+                i += 1
+                print(i)
+                continue
+            [pl_id, pl_creator, pl_name, pl_create_time, pl_update_time, pl_songs_num, pl_listen_num, pl_share_num,
+             pl_comment_num, pl_follow_num, pl_tags, pl_img_url, pl_desc] = line.split(" |=| ")
+            if pl_create_time is None or pl_create_time.lower() == 'null':
+                odf.write_to_file(self.error_playlist_file, line.replace('\n', ''))
+                i += 1
+                print(i)
+                continue
             try:
                 user = User.objects.filter(u_id=pl_creator)[0]
-            except:
-                user = User.objects.filter(u_id=pl_creator)[0]
-            pl = PlayList(
-                pl_id=pl_id,
-                pl_creator=user,
-                pl_name=pl_name,
-                pl_create_time=ot.transform_time(int(pl_create_time) / 1000),
-                pl_update_time=ot.transform_time(int(pl_update_time) / 1000),
-                pl_songs_num=int(pl_songs_num),
-                pl_listen_num=int(pl_listen_num),
-                pl_share_num=int(pl_share_num),
-                pl_comment_num=int(pl_comment_num),
-                pl_follow_num=int(pl_follow_num),
-                pl_tags=str(pl_tags).replace("[", "").replace("]", "").replace("\'", ""),
-                pl_img_url=pl_img_url,
-                pl_desc=pl_desc
-            )
-            pl.save()
+                pl = PlayList(
+                    pl_id=pl_id,
+                    pl_creator=user,
+                    pl_name=pl_name,
+                    pl_create_time=ot.transform_time(abs(int(pl_create_time)) / 1000),
+                    pl_update_time=ot.transform_time(abs(int(pl_update_time)) / 1000),
+                    pl_songs_num=int(pl_songs_num),
+                    pl_listen_num=int(pl_listen_num),
+                    pl_share_num=int(pl_share_num),
+                    pl_comment_num=int(pl_comment_num),
+                    pl_follow_num=int(pl_follow_num),
+                    pl_tags=str(pl_tags).replace("[", "").replace("]", "").replace("\'", ""),
+                    pl_img_url=pl_img_url,
+                    pl_desc=pl_desc
+                )
+                pl.save()
+            except Exception as e:
+                print(e)
+                odf.write_to_file(self.error_playlist_file, line.replace('\n', ''))
             i += 1
             print(i)
+        print('Over!')
 
     # 歌单和歌曲的id对应信息写入数据库 ok
     """
@@ -273,37 +302,44 @@ class ToMySQL:
 
     def playlist_sing_mess_to_mysql(self):
         i = 0
-        for line in open('data/pl_sing_id.txt', 'r', encoding='utf-8'):
+        for line in open('../api/data/song_mess/ids_all.txt', 'r', encoding='utf-8'):
             pid, sids = line.strip().split('\t')
             for sid in str(sids).split(','):
                 try:
                     pls = PlayListToSongs(pl_id=pid, song_id=sid)
                     pls.save()
-                    i += 1
-                    print(i)
                 except Exception as e:
                     print(e, pid, sid)
+                    odf.write_to_file(self.error_playlist_sing_file, pid + ',' + sid)
+            i += 1
+            print(i)
         print('歌单和歌曲ID对应信息写入完毕！')
 
     # 歌单和歌单tag写入数据库 ok
     def playlist_tag_mess_to_mysql(self):
         i = 0
-        for line in open('data/pl_mess_all.txt', 'r', encoding='utf-8'):
-            _list = line.split(' |=| ')
-            pl_id = _list[0]
-            tags = _list[10].replace('[', '').replace(']', '')
-            if tags.split(',').__len__() > 1:
-                for tag in tags.split('.'):
-                    PlayListToTag(pl_id=pl_id, tag=tag.replace("\'", "").replace(" ", "")).save()
-                    i += 1
-                    print(i)
-            else:
-                PlayListToTag(pl_id=pl_id, tag=tags.replace("\'", "").replace(" ", "")).save()
-                i += 1
-                print(i)
+        for line in open('../api/data/playlist_mess/pl_mess_all.txt', 'r', encoding='utf-8'):
+            try:
+                _list = line.split(' |=| ')
+                if _list.__len__() > 10:
+                    pl_id = _list[0]
+                    tags = _list[10].replace('[', '').replace(']', '')
+                    if tags.split(',').__len__() > 1:
+                        for tag in tags.split(','):
+                            PlayListToTag(pl_id=pl_id, tag=tag.replace("\'", "").replace(" ", "")).save()
+                    else:
+                        PlayListToTag(pl_id=pl_id, tag=tags.replace("\'", "").replace(" ", "")).save()
+
+                else:
+                    odf.write_to_file(self.error_playlist_tag_file, line.replace('\n', ''))
+            except Exception as e:
+                print(e)
+                odf.write_to_file(self.error_playlist_tag_file, line.replace('\n', ''))
+            i += 1
+            print(i)
         print('Over!')
 
-    # 歌手和歌手标签，歌曲和歌曲标签 写入数据库
+    # 歌手和歌手标签， 写入数据库
     def sing_tag_mess_to_mysql(self):
         # 1.歌手->歌曲
         sing_song_dict = dict()
@@ -336,6 +372,7 @@ class ToMySQL:
             print(song)
             for tag in song_playlist_tag_dict[song].split(","):
                 SongTag(song_id=song, tag=tag.replace(" ", "")).save()
+
         fw = open("data/song_tag.txt", "a", encoding="utf-8")
         for song in song_playlist_tag_dict.keys():
             print(song)
@@ -371,10 +408,17 @@ class ToMySQL:
 
     # 将用户->标签写入数据库
     def user_tag_mess_to_mysql(self):
+        i = 0
         for one in PlayList.objects.all():
-            print(one)
-            for tag in one.pl_tags.split(','):
-                UserTag(user_id=one.pl_creator.u_id, tag=tag.replace(' ', '')).save()
+            try:
+                print(one)
+                for tag in one.pl_tags.split(','):
+                    UserTag(user_id=one.pl_creator.u_id, tag=tag.replace(' ', '')).save()
+                    i += 1
+                    print(i)
+            except Exception as e:
+                print(e)
+                odf.write_to_file(self.error_user_tag_file, one)
         print('Over!')
 
 
@@ -383,13 +427,16 @@ if __name__ == '__main__':
     # 歌曲信息
     # tomysql.song_mess_to_mysql()
     # 歌词信息
-    tomysql.song_lysic_to_mysql()
-    # tomysql.playListSingMessToMySQL()
-    # tomysql.playListMessToMysql()
-    # tomysql.userMessToMySQL()
-    # tomysql.SongLysicToMySQL()
-    # tomysql.SingMessToMySQL()
-    # tomysql.SongMessToMySQL()
-    # tomysql.playListTagMessToMySQL()
-    # tomysql.SingAndTagMessToMySQL()
-    # tomysql.UserTagMessToMySQL()
+    # tomysql.song_lysic_to_mysql()
+    # 歌手信息
+    # tomysql.sing_mess_to_mysql()
+    # 用户信息
+    # tomysql.user_mess_to_mysql()
+    # 导入歌单信息
+    # tomysql.playlist_mess_to_mysql()
+    # 导入歌单和歌曲id的对应关系
+    # tomysql.playlist_sing_mess_to_mysql()
+    # 导入歌单和歌单标签对应关系
+    # tomysql.playlist_tag_mess_to_mysql()
+    # 导入用户和标签的对应关系
+    # tomysql.user_tag_mess_to_mysql()

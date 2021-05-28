@@ -17,6 +17,8 @@ MusicRec/sing/__pycache__/
 MusicRec/song/__pycache__/
 MusicRec/user/__pycache__/
 MusicRec/MusicRec/__pycache__/
+MusicRec/z-others/api/data/
+MusicRec/z-others/tomysql/data/
 MusicRec-Vue/node_modules/
 BookRec/indexbook/__pycache__/
 BookRec/BookRec/__pycache__/

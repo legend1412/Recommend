@@ -72,7 +72,7 @@
   
 - 爬虫完毕后，获取创建者信息，保存到user_mess_all.txt，歌单信息保存到pl_mess_all.txt，歌单包含的歌曲信息保存到ids_all1.txt
   
-- 所有关于id的信息都保存到ids_all.txt中，关于这些id是怎么来了，程序中没有体现，所以直接从给的案例中拷贝，初步考虑应该跟保存到ids_all1.txt中一样，直接通过爬虫获取然后保存的
+- 所有关于id的信息都保存到ids_all.txt中，这里面就是歌单id和其对应的歌曲id。关于这些id是怎么来了，程序中没有体现，所以直接从给的案例中拷贝，初步考虑应该跟保存到ids_all1.txt中一样，直接通过爬虫获取然后保存的
   
 - 运行GetSongMess.py，根据歌曲ID获取歌曲信息，歌词保存到songs_lysics_all.txt中，歌曲信息保存到songs_mess_all.txt中，失败的信息写入error_ids_1.txt中
   
@@ -82,13 +82,60 @@
   
   由于这个项目的数据量比较打，所以数据导入是分开进行的
   
-- 导入歌曲信息，运行ToMySQL.py，执行song_mess_to_mysql方法，将歌曲信息写入song表中。一共写入24343条记录。出错记录数是1609条。在原来的方法基础上做了一点修改：
+- 导入歌曲信息
 
+  - 运行ToMySQL.py，执行song_mess_to_mysql方法，读取songs_mess_all.txt，将歌曲信息写入song表中。
+  - 一共写入24343条记录。出错记录数是1609条。
   - 如果song_publish_time是null的，将信息记录到error_songs.txt，
   - 如果一行的内容长度分割后不是9，不再打印，直接记录到error_songs.txt
   - 修改song表的song_name和song_sing_id字段长度到200，同时需要修改models.py下的song类
 
-- 导入歌词信息，运行ToMySQL.py，执行song_lysic_to_mysql方法，将歌词信息写入songlysic表中。错误信息写入error_lysic.txt。一共导入25952条记录
+- 导入歌词信息
+
+  - 运行ToMySQL.py，执行song_lysic_to_mysql方法，读取songs_lysics_all.txt，将歌词信息写入songlysic表中。
+  - 错误信息写入error_lysic.txt。
+  - 一共导入25952条记录，出错记录数是0
+
+- 导入歌手信息
+
+  - 运行ToMySQL.py，执行sing_mess_to_mysql方法，读取sings_mess_all.txt，将歌词信息写入sing表中。
+  - 错误信息写入error_sings.txt。
+  - 一共导入11637条记录，出错记录数是23条。
+  - 保存歌手信息的文件sings_mess_all.txt中有 17555条记录，但存在重复记录，程序根据歌手id判断，避免重复导入
+  - 如果一行的内容长度分割后不是6，不再打印，直接记录到error_sings.txt
+
+- 导入用户信息
+
+  - 运行ToMySQL.py，执行user_mess_to_mysql方法，读取user_mess_all.txt，将歌词信息写入user表中。
+  - 错误信息写入error_users.txt中，包括生日是空或者等于null字符串、一行内容分割后长度小于14的
+  - 一共导入643条记录，出错记录数是158条
+
+- 导入歌单信息
+
+  - 运行ToMySQL.py，执行playlist_mess_to_mysql方法，读取pl_mess_all.txt，将歌词信息写入playlist表中。
+  - 错误信息写入error_playlist.txt中，包括歌单创建时间是空或者等于null字符串、创建者 id不在user表中的
+  - 一共导入877条记录，出错记录数是189条
+
+- 导入歌单和歌曲的id对应关系
+
+  - 运行ToMySQL.py，执行playlist_sing_mess_to_mysql方法，读取ids_all.txt，将歌单和歌曲对应关系写入playlisttosongs表中。
+  - 错误信息写入error_playlist_sing.txt中，记录错误的歌单id和歌曲id
+  - 共计37651条记录，其中包含1066个歌单，每个歌单下包含若干歌曲，在不同的歌单下，会包含重复的歌曲
+
+- 导入歌单和歌单标签对应关系
+
+  - 运行ToMySQL.py，执行playlist_tag_mess_to_mysql方法，读取pl_mess_all.txt，将歌单和歌单标签对应关系写入playlisttotag表中
+  - 错误信息写入error_playlist_tag.txt中
+  - 共有1066个歌单，导入的数据量是2846，因为一个歌单存在多个标签
+
+- 处理歌手和歌曲的关系
+
+- 导入用户和标签的对应关系
+
+  - 直接读取数据库的playlist表，然后获取用户id和tag写入usertag表中，共写入2377条数据
+  - 错误信息写入error_user_tag.txt中
+
+- 在导入过程中，可能会因为出错，重新导入，但数据量这么大，每次导入不应该先清空数据库的数据再导入，应该支持追加导入，自动判断是否重复等
 
   #### 实现思路
 
