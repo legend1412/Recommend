@@ -7,8 +7,7 @@
 - 对于每个案例使用的vue包在package.json中，通过npm install安装
 - vue创建项目的时候，项目名称不能是骆驼命名法，都使用小写字母即可
 ### 搭建新闻推荐系统
-- 虽然存在数据库备份，但我还是要从最出的步骤做起
-- 在mysql中新建数据库newsrec，创建表：cate，news，newbrowse，newhot，newsim，newtag
+- 虽然存在数据库备份，但我还是要从最初的步骤做起
 - 使用django作为后端，则首次需要运行python manage.py migrate，则会在数据库中创建django的表，我猜测django会根据models.py定义 的实体去处理
   - auth_group
   - auth_group_permissions
@@ -21,19 +20,26 @@
   - django_migrations
   - django_session
 - 不同的django项目都会存在上面表，但每个项目自己使用的数据表，则是根据models.py中定义的class生成
-- 运行python manage.py createsuperuser，创建django的后台管理账户
+- 运行python manage.py makemigrations news，让django存储models中的信息
+- 运行python manage.py migrate，完成数据库表的创建：cate，news，newbrowse，newhot，newsim，newtag
+- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
 
   #### 处理数据
 - 原始数据是7个Excel文件
-- 先整合下7个Excel文件中涉及到的新闻类别，插入到cate表
+- 先整合下7个Excel文件中涉及到的新闻类别，插入到cate表:
+  ```
+  1：国际要闻，2：互联网，3：经济要闻，4：中国军事，5：社会公益，6：书评，7：影视综艺
+  ```
 - 将原始Excel中，类别字段用数字替代，与cate表对应即可
 - 通过navicat将增加字段后的excel文件导入mysql的news表中，一共7个文件
+- 也可以将excel文件转成csv格式的进行导入，很多导入的工具支持csv而不支持excel
+- 无论是excel格式还是csv格式，导入的时候注意字段需要对应起来  
+- 导入的方法应该是自己写一套最好了（暂未实现）  
 - 运行NewsKeyWordsSelect.py,基于TFIDF，对新闻关键词进行抽取
 - 使用xlrd读取Excel文件，必须是xls格式的
 - 运行NewsHotValueCal.py，计算新闻热度值，写入newhot表
 - 运行NewsTagcCorres.py，根据新闻标签或者关键词，获取对应的新闻信息，写入newtag表
 - 运行NewsCorrelationCalculation.py，计算新闻相关度，同时写入newsim表
-- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
   
   #### 实现思路
 - 各大主题下的热度排序
@@ -41,6 +47,36 @@
 - 基于item的推荐
 - 热度榜（注意覆盖度）
 - 为你推荐（不同用户行为不同看到的为你推荐也不同，指定几个用户作为展示）
+
+### 图书推荐系统
+- 前端依然是vue，后端django
+- 新建数据库bookrec，创建三个表结构：book，cate，history
+- 使用django作为后端，则首次需要运行python manage.py migrate，则会在数据库中创建django的表，我猜测django会根据models.py定义 的实体去处理
+  - auth_group
+  - auth_group_permissions
+  - auth_permission
+  - auth_user
+  - auth_user_groups
+  - auth_user_user_permissions
+  - django_admin_log
+  - django_content_type
+  - django_migrations
+  - django_session
+- 不同的django项目都会存在上面表，但每个项目自己使用的数据表，则是根据models.py中定义的class生成
+- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
+- 运行python manage.py runserver启动后台管理，访问地址： `http://127.0.0.1:8000/admin`
+- 运行model.py，对模型进行训练和保存
+- 在BookRec-Vue下，运行`npm run dev`，启动前端vue，进行访问
+  
+  #### 数据处理
+- 爬取某图书网站的数据，但原始数据没有提供，提供了处理后的数据“豆瓣图书.xlsx”，但实际中，还是要自己学会将原始数据进行转化和处理，毕竟原始数据不能作为推荐算法直接使用，需要挖掘和分析
+- prepare.py将“豆瓣图书.xlsx”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
+- 利用navicat把to_sql.txt内容导入数据库的book表，需要给book表的name字段长度增加到200，否则导入时，有部分数据会因为长度问题而无法导入
+
+  #### 实现思路
+- 基于GBDT模型的图书推荐（不同用户行为不同看到的为你推荐也不同，指定几个用户作为展示）
+- 图书详情展示
+- 我的足迹
 
 ### 搭建音乐推荐系统
 - 前端依然是vue，后端django 
@@ -154,32 +190,3 @@
 - 为你推荐（不同用户行为不同看到的为你推荐也不同）
 
 - 我的足迹，展示用户在站内的行为
-### 图书推荐系统
-- 前端依然是vue，后端django
-- 新建数据库bookrec，创建三个表结构：book，cate，history
-- 使用django作为后端，则首次需要运行python manage.py migrate，则会在数据库中创建django的表，我猜测django会根据models.py定义 的实体去处理
-  - auth_group
-  - auth_group_permissions
-  - auth_permission
-  - auth_user
-  - auth_user_groups
-  - auth_user_user_permissions
-  - django_admin_log
-  - django_content_type
-  - django_migrations
-  - django_session
-- 不同的django项目都会存在上面表，但每个项目自己使用的数据表，则是根据models.py中定义的class生成
-- 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
-- 运行python manage.py runserver启动后台管理，访问地址： `http://127.0.0.1:8000/admin`
-- 运行model.py，对模型进行训练和保存
-- 在BookRec-Vue下，运行`npm run dev`，启动前端vue，进行访问
-  
-  #### 数据处理
-- 爬取某图书网站的数据，但原始数据没有提供，提供了处理后的数据“豆瓣图书.xlsx”，但实际中，还是要自己学会将原始数据进行转化和处理，毕竟原始数据不能作为推荐算法直接使用，需要挖掘和分析
-- prepare.py将“豆瓣图书.xlsx”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
-- 利用navicat把to_sql.txt内容导入数据库的book表，需要给book表的name字段长度增加到200，否则导入时，有部分数据会因为长度问题而无法导入
-
-  #### 实现思路
-- 基于GBDT模型的图书推荐（不同用户行为不同看到的为你推荐也不同，指定几个用户作为展示）
-- 图书详情展示
-- 我的足迹
