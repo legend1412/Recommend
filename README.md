@@ -42,8 +42,8 @@
 - 运行NewsCorrelationCalculation.py，计算新闻相关度，同时写入newsim表
   
   #### 运行程序
-- 切换到NewsRec目录下，运行python manage.py runserver，等待django启动
-- 切换到NewsRec-Vue目录下，运行npm run dev，等待vue启动
+- 在NewsRec目录下，运行python manage.py runserver，启动django，后台管理的访问地址：`http://127.0.0.1:8000/admin`  
+- 在NewsRec-Vue目录下，运行`npm run dev`，启动vue，地址：`http://127.0.0.1:8000/`
 - django和vue都启动后，即可通过浏览器访问
   
   #### 实现思路
@@ -54,8 +54,6 @@
 - 为你推荐（不同用户行为不同看到的为你推荐也不同，指定几个用户作为展示）
 
 ### 图书推荐系统
-- 前端依然是vue，后端django
-- 新建数据库bookrec，创建三个表结构：book，cate，history
 - 使用django作为后端，则首次需要运行python manage.py migrate，则会在数据库中创建django的表，我猜测django会根据models.py定义 的实体去处理
   - auth_group
   - auth_group_permissions
@@ -68,15 +66,20 @@
   - django_migrations
   - django_session
 - 不同的django项目都会存在上面表，但每个项目自己使用的数据表，则是根据models.py中定义的class生成
+- 运行python manage.py makemigrations indexbook，让django存储models中的信息
+- 运行python manage.py migrate，完成数据库表的创建：book，cate，history
 - 运行python manage.py createsuperuser，创建django的后台管理账户(admin/9003)
-- 运行python manage.py runserver启动后台管理，访问地址： `http://127.0.0.1:8000/admin`
-- 运行model.py，对模型进行训练和保存
-- 在BookRec-Vue下，运行`npm run dev`，启动前端vue，进行访问
-  
+
   #### 数据处理
 - 爬取某图书网站的数据，但原始数据没有提供，提供了处理后的数据“豆瓣图书.xlsx”，但实际中，还是要自己学会将原始数据进行转化和处理，毕竟原始数据不能作为推荐算法直接使用，需要挖掘和分析
-- prepare.py将“豆瓣图书.xlsx”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
+- 使用pandas处理excel，需要先将xlsx格式转换为xls格式  
+- prepare.py将“豆瓣图书.xls”转换成可以直接导入数据库的txt文本格式（to_sql.txt）
 - 利用navicat把to_sql.txt内容导入数据库的book表，需要给book表的name字段长度增加到200，否则导入时，有部分数据会因为长度问题而无法导入
+- 运行model.py，对模型进行训练和保存
+  
+  #### 运行程序
+- 在BookRec目录下，运行python manage.py runserver启动后台管理，访问地址： `http://127.0.0.1:8000/admin`
+- 在BookRec-Vue目录下，运行`npm run dev`，启动前端vue，进行访问
 
   #### 实现思路
 - 基于GBDT模型的图书推荐（不同用户行为不同看到的为你推荐也不同，指定几个用户作为展示）

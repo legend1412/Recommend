@@ -10,7 +10,7 @@ import random
 
 class Prepare:
     def __init__(self):
-        self.file = 'E:/initdata/豆瓣图书.xls'
+        self.file = 'E:/initdata/books/豆瓣图书.xls'
         self.data = self.load_data()
         self.trans_data = self.transform()
 

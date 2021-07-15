@@ -16,7 +16,7 @@ from sklearn.metrics import mean_squared_error
 
 class Model:
     def __init__(self):
-        self.data = self.load_data()
+        self.load_data()
         self.train_data, self.test_data = self.split_data()
         self.gbdt = self.train_model()
 
@@ -29,7 +29,7 @@ class Model:
             tag_dict = dict()
             for line in open('data/to_sql.txt', 'r', encoding='utf-8'):
                 bid, name, author, img, tag, price, pub_month, click, score, judge, rec_most, rec_more, \
-                rec_normal, rec_bad, rec_morebad, readed, reading, readup, mess = line.strip().split(",")
+                    rec_normal, rec_bad, rec_morebad, readed, reading, readup, mess = line.strip().split(",")
                 tag_dict.setdefault(tag, {})
                 tag_dict[tag][bid] = {
                     "price": price, "pub_month": pub_month, "click": click, "score": score, "judge": judge,
@@ -92,6 +92,6 @@ if __name__ == '__main__':
     m = Model()
     m.evalute_model()
     # 保存模型
-    # joblib.dump(m.gbdt, 'model/gbdt.model')
+    joblib.dump(m.gbdt, 'model/gbdt.model')
     # 加载模型
     # joblib.load('model/gbdt.model')

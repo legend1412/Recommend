@@ -83,14 +83,14 @@ def home(request):
             choose_tags = list(set(choose_tags))
 
             # 用户已经点击过的图书 召回时进行过滤
-            clicked_books = [one['objects'] for one in History.objects.filter(name=uname).values('object').distinct()]
+            clicked_books = [one['object'] for one in History.objects.filter(name=uname).values('object').distinct()]
             # 初步召回数据集，每个标签下召回10本图书
             all_books = list()
             for tag in choose_tags:
                 one_books = Book.objects.filter(tag=tag).filter(~Q(name__in=clicked_books)).order_by('-score')[:10]
                 all_books.extend(one_books)
             # 加载模型
-            gbdt = joblib.load('../z-others/model/gbdt.model')
+            gbdt = joblib.load('../BookRec/z-others/model/gbdt.model')
             # 对召回的数据进行排序
             sort_books_dict = dict()
             for book in all_books:
@@ -168,7 +168,7 @@ def one(request):
             "img": one.img,
             "tag": one.tag,
             "click": one.click,
-            "score": one.socre,
+            "score": one.score,
             "judge": one.judge,
             "rec_most": one.rec_most,
             "rec_more": one.rec_more,

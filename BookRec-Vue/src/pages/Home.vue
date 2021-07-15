@@ -1,12 +1,12 @@
 <template>
   <div class="recommonContain">
-    <mheader :active="activenow" @onGetnews="switchtab"> </mheader>
+    <mheader :active="activenow" @onGetnews="switchtab"></mheader>
     <div class="mainContent">
       <div class="Con bookCon">
         <h3>图书标签</h3>
         <ul class="lists">
           <li :class="tag == 'all' ? 'oktag' : ''" @click="getTagData('all')">推荐</li>
-          <li :class="tag == item ? 'oktag' : ''" v-for="(item,index) in tags" :key="index" @click="getTagData(item)">{{item}}</li>
+          <li :class="tag == item ? 'oktag' : ''" v-for="(item,index) in tags" :key="index" @click="getTagData(item)">{{ item }}</li>
           <!--<li v-show="tags.length < 20" class="moretag" @click="getmoreTag()">更多 >></li>-->
         </ul>
         <hr style="border: 5px dotted #ddd"/>
@@ -20,13 +20,13 @@
               <p class="recreater">评分</p>
               <p class="recreater">评价人数</p>
             </li>
-            <li v-for="item in books" :key="item.bid" class="relist" >
-              <p><img :src='"../../static/img/"+item.bid+".jpg"' @click="getOne($event,item.bid)" class="bookimg" @error="imgError(item)"/></p>
-              <p class="rename">{{item.name}}</p>
-              <p class="recreater">{{item.author}}</p>
-              <p class="recreater">{{item.tag}}</p>
-              <p class="recreater">{{item.score}}</p>
-              <p class="recreater">{{item.judge}}</p>
+            <li v-for="item in books" :key="item.bid" class="relist">
+              <p><img :src='"static/img/"+item.bid+".jpg"' @click="getOne($event,item.bid)" class="bookimg" @error="imgError(item)"/></p>
+              <p class="rename">{{ item.name }}</p>
+              <p class="recreater">{{ item.author }}</p>
+              <p class="recreater">{{ item.tag }}</p>
+              <p class="recreater">{{ item.score }}</p>
+              <p class="recreater">{{ item.judge }}</p>
             </li>
             <li v-show="(books.length <= 20) && showmobook" class="more" @click="showmore()">更多 >></li>
           </ul>
@@ -36,16 +36,17 @@
     <div class="rightpag">
       <mpagnation v-if="total>display" :total="total" :current-page='current' :refresh='refresh' @pagechange="pagechange"></mpagnation>
     </div>
-   </div>
+  </div>
 </template>
 
 <script>
 import {getMainData, getOneData} from '../assets/js/api'
 import newheader from '../components/newHeader.vue'
 import pagnation from '../components/pagnation'
+
 export default {
   name: 'HelloWorld',
-  data () {
+  data() {
     return {
       books: {},
       // 歌单相关
@@ -86,7 +87,7 @@ export default {
       } else {
         getdata.page = option.page
       }
-      console.log(option)
+      // console.log(option)
       getdata.username = this.$store.state.vuexlogin.userName
       getMainData(getdata).then((res) => {
         this.$layer.closeAll()
@@ -110,7 +111,7 @@ export default {
       })
     },
     getOne: function (e, opt) {
-      console.log()
+      // console.log(opt)
       var onedata = {
         'id': opt
       }
@@ -118,8 +119,8 @@ export default {
       getOneData(onedata).then(res => {
         res.data.mess = this.returnline(res.data.mess, '=', '<br>')
         // var dataimg = e.target.getElementsByClassName('bookimg')[0].getAttribute('src')
-		var dataimg = e.target.src
-        this.$layer.open({
+        var dataimg = e.target.src
+        this.$layer.msg({
           content: '<div>' +
             '<div style="display: flex;justify-content: center">' +
             '<img style="width: 120px;height:180px;margin-right: 20px" src="' + dataimg + '"/>' +
@@ -190,174 +191,200 @@ export default {
       this.showmobook = false
     },
     // err img
-    imgError (item) {
+    imgError(item) {
       item.img = require('../assets/img/book.jpg')
     }
   },
-  mounted () {
+  mounted() {
     this.getBookdatas({'tag': 'all'})
   }
 }
 </script>
 <style lang="less" scoped>
-  @baseColor:#20a0ff;
-  #ellies(@n){
-    overflow: hidden;
-    text-overflow: ellipsis;
-    -webkit-line-clamp: @n;
-    -webkit-box-orient: vertical;
-    white-space: nowrap;
-  }
-  .recommonContain{
+@baseColor: #20a0ff;
+#ellies(@n) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-line-clamp: @n;
+  -webkit-box-orient: vertical;
+  white-space: nowrap;
+}
+
+.recommonContain {
+  width: 100%;
+  padding: 2% 8%;
+  padding-bottom: 0;
+  box-sizing: border-box;
+
+  .mainContent {
     width: 100%;
-    padding:2% 8%;
-    padding-bottom: 0;
+    display: flex;
     box-sizing: border-box;
-    .mainContent{
-      width: 100%;
-      display: flex;
+    justify-content: space-around;
+
+    .Con {
       box-sizing: border-box;
-      justify-content: space-around;
-      .Con{
-        box-sizing: border-box;
-        padding:10px;
-        border:1px solid #ddd;
-        box-shadow: 0 0 5px 5px #eee;
-        min-height: 500px;
-        margin-top:15px;
-        margin-bottom: 15px;
-        .lists{
-          margin-top:10px;
-          li{
-            display: inline-block;
-            border: 1px solid #ddd;
-            box-sizing: border-box;
-            padding: 6px;
-            border-radius: 4px;
-            margin:5px;
-            text-align: center;
-            cursor: pointer;
-            font-size: 12px;
-            &:hover{
-              color: @baseColor;
-              border: 1px solid @baseColor;
-            }
-          }
-          .oktag{
+      padding: 10px;
+      border: 1px solid #ddd;
+      box-shadow: 0 0 5px 5px #eee;
+      min-height: 500px;
+      margin-top: 15px;
+      margin-bottom: 15px;
+
+      .lists {
+        margin-top: 10px;
+
+        li {
+          display: inline-block;
+          border: 1px solid #ddd;
+          box-sizing: border-box;
+          padding: 6px;
+          border-radius: 4px;
+          margin: 5px;
+          text-align: center;
+          cursor: pointer;
+          font-size: 12px;
+
+          &:hover {
             color: @baseColor;
             border: 1px solid @baseColor;
           }
-          .moretag{
-            color: orange;
-            border: 1px solid orange;
-          }
         }
-        .relists{
-          margin-top:20px;
+
+        .oktag {
+          color: @baseColor;
+          border: 1px solid @baseColor;
+        }
+
+        .moretag {
+          color: orange;
+          border: 1px solid orange;
+        }
+      }
+
+      .relists {
+        margin-top: 20px;
+        display: flex;
+        justify-content: space-around;
+        flex-flow: column;
+
+        .more {
+          margin: auto;
+          padding: 5px;
+          border: 1px solid orange;
+          color: #fff;
+          background: orange;
+          text-align: center;
+          width: 150px;
+          border-radius: 3px;
+          height: 30px;
+          line-height: 30px;
+          margin-top: 15px;
+          cursor: pointer;
+        }
+
+        .relist {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 5px;
+          color: #333;
+          margin-bottom: 15px;
           display: flex;
+          align-items: center;
           justify-content: space-around;
-          flex-flow: column;
-          .more{
-            margin:auto;
-            padding: 5px;
-            border:1px solid orange;
-            color:#fff;
-            background: orange;
-            text-align: center;
-            width: 150px;
-            border-radius: 3px;
-            height: 30px;
-            line-height: 30px;
-            margin-top:15px;
+          box-shadow: 0 0 1px 2px #ddd;
+          /*&:hover{
+            color: @baseColor;
+            box-shadow: 0 0 20px 5px #ddd;
+          }*/
+
+          .bookimg:hover {
             cursor: pointer;
+            box-shadow: 0 0 20px 5px #ddd;
           }
-          .relist{
-            width: 100%;
+
+          .recreater {
+            font-size: 12px;
+            color: #666;
+            line-height: 14px;
+            margin-bottom: 5px;
+            margin-top: 5px;
+            #ellies(1)
+          }
+
+          .rename {
+            font-size: 14px;
+            line-height: 16px;
+            #ellies(1)
+          }
+
+          img {
+            width: 100px;
+            height: 120px;
+            border-radius: 5px;
+          }
+
+          p {
+            width: 20%;
             box-sizing: border-box;
-            padding: 5px;
-            color: #333;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: space-around;
-            box-shadow: 0 0 1px 2px #ddd;
-            /*&:hover{
-              color: @baseColor;
-              box-shadow: 0 0 20px 5px #ddd;
-            }*/
-			.bookimg:hover{
-            cursor: pointer;
-			  box-shadow: 0 0 20px 5px #ddd;
-			}
-            .recreater{
-              font-size: 12px;
-              color: #666;
-              line-height: 14px;
-              margin-bottom: 5px;
-              margin-top: 5px;
-              #ellies(1)
-            }
-            .rename{
-              font-size: 14px;
-              line-height: 16px;
-              #ellies(1)
-            }
-            img{
-              width: 100px;
-              height:120px;
-              border-radius: 5px;
-            }
-            p{
-              width: 20%;
-              box-sizing: border-box;
-            }
-            p:nth-child(1){
-              padding-left: 20px;
-            }
-            p:nth-child(4),p:nth-child(5),p:nth-child(6){
-              width: 13%;
-            }
           }
-          .title{
-            box-shadow: none;
-            margin-bottom: 30px;
-            &:hover{
-              box-shadow: none;
-              color: #666;
-              cursor: auto;
-            }
+
+          p:nth-child(1) {
+            padding-left: 20px;
           }
-          .onelist{
-            width: 100%;
-            color:#666;
-            margin:5px 0;
-            display: flex;
-            justify-content: space-between;
-            cursor: pointer;
-            &:hover{
-              color:@baseColor;
-            }
-            .onetime,.onename{
-              #ellies(1);
-              display: inline-block;
-              box-sizing: border-box;
-              padding: 0 10px;
-            }
+
+          p:nth-child(4), p:nth-child(5), p:nth-child(6) {
+            width: 13%;
           }
         }
-      }
-      .bookCon{
-        flex: 2;
-        margin-right: 15px;
-      }
-      .Con{
-        flex: 1;
-        margin-left: 15px;
-        min-width: 30%;
+
+        .title {
+          box-shadow: none;
+          margin-bottom: 30px;
+
+          &:hover {
+            box-shadow: none;
+            color: #666;
+            cursor: auto;
+          }
+        }
+
+        .onelist {
+          width: 100%;
+          color: #666;
+          margin: 5px 0;
+          display: flex;
+          justify-content: space-between;
+          cursor: pointer;
+
+          &:hover {
+            color: @baseColor;
+          }
+
+          .onetime, .onename {
+            #ellies(1);
+            display: inline-block;
+            box-sizing: border-box;
+            padding: 0 10px;
+          }
+        }
       }
     }
-    .rightpag{
-      width: 100%;
+
+    .bookCon {
+      flex: 2;
+      margin-right: 15px;
+    }
+
+    .Con {
+      flex: 1;
+      margin-left: 15px;
+      min-width: 30%;
     }
   }
+
+  .rightpag {
+    width: 100%;
+  }
+}
 </style>
