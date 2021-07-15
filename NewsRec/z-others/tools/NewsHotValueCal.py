@@ -40,8 +40,9 @@ class CalHotValue:
             try:
                 self.cursor.execute(sql_w)
                 self.db.commit()
-            except:
+            except Exception as ex:
                 print("rollback", row)
+                print("异常:" + str(ex))
                 self.db.rollback()
         print("热度数据写入数据库:newsrec.newhot")
 

@@ -27,8 +27,9 @@ class NewsTagsCor:
             for line in open(path, encoding='utf-8').readlines():
                 try:
                     newid, tags = line.strip().split("\t")
-                except:
+                except Exception as ex:
                     print("%s 下无对应标签" % newid)
+                    print("异常:"+str(ex))
                 for tag in tags.split(","):
                     if tag in ALLOW_TAGS:
                         sql = "select new_hot from newhot where new_id=%s" % newid
@@ -47,7 +48,8 @@ class NewsTagsCor:
                 try:
                     self.cursor.execute(sql_w)
                     self.db.commit()
-                except:
+                except Exception as ex:
+                    print("异常:" + str(ex))
                     print("rollback", tag, newid, self.result[tag][newid])
                     self.db.rollback()
 

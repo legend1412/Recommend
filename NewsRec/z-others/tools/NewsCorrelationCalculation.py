@@ -29,8 +29,9 @@ class Correlation:
             try:
                 newid, newtags = line.strip().split('\t')
                 news_tags[newid] = newtags
-            except:
+            except Exception as ex:
                 print('读取分词数据过程中出现错误，错误行为：{}'.format(line))
+                print("异常:" + str(ex))
                 pass
         return news_tags
 
@@ -56,8 +57,9 @@ class Correlation:
             try:
                 self.cursor.execute(sql_w)
                 self.db.commit()
-            except:
+            except Exception as ex:
                 print("rollback", row)
+                print("异常:" + str(ex))
                 self.db.rollback()
         print("相似度数据写入数据库:newsrec.newsim")
 

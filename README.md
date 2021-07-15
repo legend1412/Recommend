@@ -35,11 +35,16 @@
 - 也可以将excel文件转成csv格式的进行导入，很多导入的工具支持csv而不支持excel
 - 无论是excel格式还是csv格式，导入的时候注意字段需要对应起来  
 - 导入的方法应该是自己写一套最好了（暂未实现）  
-- 运行NewsKeyWordsSelect.py,基于TFIDF，对新闻关键词进行抽取
+- 运行NewsKeyWordsSelect.py,基于TFIDF，读取7个excel文件对新闻关键词进行抽取
 - 使用xlrd读取Excel文件，必须是xls格式的
 - 运行NewsHotValueCal.py，计算新闻热度值，写入newhot表
 - 运行NewsTagcCorres.py，根据新闻标签或者关键词，获取对应的新闻信息，写入newtag表
 - 运行NewsCorrelationCalculation.py，计算新闻相关度，同时写入newsim表
+  
+  #### 运行程序
+- 切换到NewsRec目录下，运行python manage.py runserver，等待django启动
+- 切换到NewsRec-Vue目录下，运行npm run dev，等待vue启动
+- django和vue都启动后，即可通过浏览器访问
   
   #### 实现思路
 - 各大主题下的热度排序

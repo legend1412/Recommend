@@ -14,7 +14,7 @@ export const getsinglist=(onename)=>fetch('/api/sing/one/',onename,'get')
 //详细列表模块
 export const getuserlist=(onename)=>fetch('/api/user/one/',onename,'get')
 //推荐模块
-export const getNewsData=(newsInfo)=>fetch('/api/news/one',newsInfo,'get')
+// export const getNewsData=(newsInfo)=>fetch('/api/news/one',newsInfo,'get')
 //获取用户以及标签
 export const getLogin=()=>fetch('/api/indexmusic/login/','','get')
 //登录

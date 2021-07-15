@@ -52,7 +52,7 @@ import newheader from '../components/newHeader.vue'
 import pagnation from '../components/pagnation'
 
 export default {
-  name: 'HelloWorld',
+  name: 'NewsRec',
   data() {
     return {
       isActive: '1',
