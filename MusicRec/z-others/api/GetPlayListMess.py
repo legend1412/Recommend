@@ -22,7 +22,7 @@ class PlayList:
         # 每个歌单的json信息
         self.playlist_mess = 'data/playlist_mess/'
         # 歌单包含的歌曲id信息
-        self.trackid_mess = 'data/song_mess/'
+        self.trackid_mess = 'data/playlist_mess/'
         # 判断上述目录和文件是否存在，不存在就创建
         odf.mkfile(self.playlist_file)
         odf.mkfile(self.error_id_file)
@@ -141,7 +141,7 @@ class PlayList:
         trackids = json_line["playlist"]["trackIds"]
         for one in trackids:
             t_list.append(str(one["id"]))
-        odf.write_to_file(self.trackid_mess + "ids_all1.txt", str(playlist["id"]) + "\t" + ",".join(t_list))
+        odf.write_to_file(self.trackid_mess + "pl_sing_id_1.txt", str(playlist["id"]) + "\t" + ",".join(t_list))
 
 
 if __name__ == '__main__':

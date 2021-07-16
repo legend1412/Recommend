@@ -13,12 +13,18 @@ import common.operdirandfiler as odf
 class GetSingMess:
     def __init__(self):
         self.artist_url = 'https://api.imjad.cn/cloudmusic/?type=artist&id='
+
+        # 保存所有歌曲信息的文件
         self.song_id_file = 'data/song_mess/songs_mess_all.txt'
         odf.mkfile(self.song_id_file)
+
+        # 保存歌手信息的文件
         self.sings_mess_file = 'data/sing_mess/sings_mess_all.txt'
         odf.mkfile(self.sings_mess_file)
+
+        # 保存出错的歌手id信息
         self.error_sing_list = list()
-        self.error_sing_file = 'data/sing_mess/sings_mess_error_1.txt'
+        self.error_sing_file = 'data/sing_mess/error_sing_ids.txt'
         odf.mkfile(self.error_sing_file)
         self.sing_ids = self.get_sings_ids()
 

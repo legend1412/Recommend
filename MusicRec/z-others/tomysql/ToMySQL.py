@@ -18,7 +18,6 @@ django.setup()
  django.core.exceptions.ImproperlyConfigured: Requested setting INSTALLED_APPS, but settings are not 
  django.core.exceptions.AppRegistryNotReady: Apps aren't loaded yet.
 """
-
 from MusicRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
 from playlist.models import PlayListToSongs, PlayListToTag, PlayList
 from song.models import SongLysic, Song, SongTag
@@ -302,7 +301,7 @@ class ToMySQL:
 
     def playlist_sing_mess_to_mysql(self):
         i = 0
-        for line in open('../api/data/song_mess/ids_all.txt', 'r', encoding='utf-8'):
+        for line in open('../api/data/playlist_mess/pl_sing_id.txt', 'r', encoding='utf-8'):
             pid, sids = line.strip().split('\t')
             for sid in str(sids).split(','):
                 try:

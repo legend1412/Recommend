@@ -24,12 +24,12 @@ class GetSongMess:
 
         # 保存 获取失败的id
         self.error_ids = list()
-        self.error_ids_file = 'data/song_mess/error_ids.txt'
+        self.error_ids_file = 'data/song_mess/error_song_ids.txt'
         odf.mkfile(self.error_ids_file)
 
-        # 记录所有id的文件 合并 获取所有 歌曲id
-        self.ids_all_file = 'data/song_mess/ids_all.txt'
-        odf.mkfile(self.ids_all_file)
+        # 歌单id及其包含的歌曲id的文件
+        self.pl_sing_id_all_file = 'data/playlist_mess/pl_sing_id.txt'
+        odf.mkfile(self.pl_sing_id_all_file)
 
         # 歌词文件
         self.songs_lysics_all = 'data/song_mess/songs_lysics_all.txt'
@@ -44,9 +44,9 @@ class GetSongMess:
     def get_song_ids(self):
         ids_list = set()
         print('获取所有的歌曲id信息。。。')
-        for line in open(self.ids_all_file, 'r').readlines():
+        for line in open(self.pl_sing_id_all_file, 'r').readlines():
             try:
-                for song_id in line.strip().split(','):
+                for song_id in line.strip().split('\t')[1].split(','):
                     ids_list.add(song_id)
             except Exception as e:
                 print(e)
@@ -121,7 +121,7 @@ class GetSongMess:
             if one not in ids_list_not:
                 print(i)
                 i += 1
-                odf.write_to_file(self.ids_all_file + 'not_get_ids_%s.txt' % str(int(i / 50000)), one)
+                odf.write_to_file(self.pl_sing_id_all_file + 'not_get_ids_%s.txt' % str(int(i / 50000)), one)
 
 
 if __name__ == '__main__':
