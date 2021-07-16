@@ -24,7 +24,7 @@ class GetSongMess:
 
         # 保存 获取失败的id
         self.error_ids = list()
-        self.error_ids_file = 'data/song_mess/error_ids_1.txt'
+        self.error_ids_file = 'data/song_mess/error_ids.txt'
         odf.mkfile(self.error_ids_file)
 
         # 记录所有id的文件 合并 获取所有 歌曲id

@@ -16,7 +16,7 @@ class PlayList:
     def __init__(self):
         self.playlist_file = 'data/playlist_url/playlist_id_name_all.txt'
         # 获取出错的歌单id保存文件
-        self.error_id_file = 'data/error_playlist_ids.txt'
+        self.error_id_file = 'data/playlist_url/error_playlist_ids.txt'
         # 歌单创建者信息
         self.creator_mess = 'data/user_mess/'
         # 每个歌单的json信息
@@ -30,7 +30,7 @@ class PlayList:
         odf.mkdir(self.playlist_mess)
         odf.mkfile(self.trackid_mess)
 
-        self.ids_list = self.get_ids_error()
+        self.ids_list = self.get_ids()
         self.url = 'https://api.imjad.cn/cloudmusic/?type=playlist&id='
         # 获得的歌单信息出错的歌单id
         self.error_id = list()
@@ -56,7 +56,7 @@ class PlayList:
     def get_ids_error(self):
         print('获取失败的歌单ID')
         ids_list = list()
-        fileopen = open('./data/playlist_url/error.txt', 'r', encoding='utf-8')
+        fileopen = open('./data/playlist_url/playlist_get_fail.txt', 'r', encoding='utf-8')
         for line in islice(fileopen, 0, None):
             try:
                 pl_id_arr = line.strip().split(',')
@@ -84,7 +84,7 @@ class PlayList:
                 # 解析信息
                 self.get_format_playlist_mess(r.json())
             except Exception as e:
-                # 获取出错将出错id写入记录一下，然后写入文件，出错时进行跳过
+                # 将出错id写入记录一下，然后写入文件，出错时进行跳过
                 print(e)
                 traceback.print_exc()
                 print("歌单ID为：%s 获取出错，进行记录" % pl_id)
