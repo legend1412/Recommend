@@ -7,7 +7,7 @@ import math
 
 class RecUser:
     def __init__(self):
-        self.file = '../tomysql/data/pl_mess_all.txt'
+        self.playlist_mess_file = '../api/data/playlist_mess/pl_mess_all.txt'
         self.user_tags_count_dict = dict()  # 用户对标签的次数统计
         self.load_data()
 
@@ -15,7 +15,7 @@ class RecUser:
 
     # 加载数据
     def load_data(self):
-        for line in open(self.file, 'r', encoding='utf-8'):
+        for line in open(self.playlist_mess_file, 'r', encoding='utf-8'):
             pl_mess_list = line.strip().split(' |=| ')
             playlist_id, user_id, tags = (
                 pl_mess_list[0],

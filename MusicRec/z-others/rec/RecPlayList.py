@@ -14,7 +14,7 @@ import os
 
 class RecPlayLit:
     def __init__(self):
-        self.file = '../tomysql/data/pl_mess_all.txt'
+        self.playlist_mess_file = '../api/data/playlist_mess/pl_mess_all.txt'
         self.tags_list = list()  # 所有标签列表
         self.user_tags_count_dict = dict()  # 用户对标签的次数统计
         self.playlist_tags_dict = dict()  # 歌单和标签的对应关系
@@ -28,7 +28,7 @@ class RecPlayLit:
 
     # 加载数据
     def load_data(self):
-        for line in open(self.file, 'r', encoding='utf-8'):
+        for line in open(self.playlist_mess_file, 'r', encoding='utf-8'):
             pl_mess_list = line.strip().split(' |=| ')
             playlist_id, user_id, tags = (pl_mess_list[0], pl_mess_list[1],
                                           str(pl_mess_list[10]).replace('[', '').replace(']', '').replace("'",

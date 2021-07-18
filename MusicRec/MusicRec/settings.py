@@ -77,7 +77,7 @@ WSGI_APPLICATION = 'MusicRec.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 DB_HOST = "127.0.0.1"
-DB_PORT = 9001
+DB_PORT = 9000
 DB_USER = "root"
 DB_PASSWD = "wsyj9003"
 DB_NAME = "musicrec"

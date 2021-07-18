@@ -14,9 +14,9 @@ import os
 
 class RecSing:
     def __init__(self):
-        self.playlist_mess_file = '../tomysql/data/pl_mess_all.txt'
-        self.playlist_song_mess_file = '../tomysql/data/pl_sing_id.txt'
-        self.song_mess_file = '../tomysql/data/song_mess_all.txt'
+        self.playlist_mess_file = '../api/data/playlist_mess/pl_mess_all.txt'
+        self.playlist_song_mess_file = '../api/data/playlist_mess/pl_sing_id.txt'
+        self.song_mess_file = '../api/data/song_mess/songs_mess_all.txt'
 
         self.user_singer_dict, self.singer_list = self.load_data()
         self.sing_sim = self.item_similarity_best()
@@ -97,7 +97,7 @@ class RecSing:
             item_sim.setdefault(i, dict())
             for j, cuv in related_items.items():
                 item_sim[i].setdefault(j, 0)
-                item[i][j] = cuv / math.sqrt(item_user_count[i] * item_user_count[j])
+                item_sim[i][j] = cuv / math.sqrt(item_user_count[i] * item_user_count[j])
 
         json.dump(item_sim, open('data/singer_sim_singer.json', 'w', encoding='utf-8'))
         print('歌手相似计算完毕!')
@@ -121,7 +121,7 @@ class RecSing:
                 score = 0.0
                 for singer_sim in self.sing_sim[singer].keys():
                     if singer_sim == singer or singer_sim not in self.user_singer_dict[user].keys() \
-                            or singer_sim[singer].keys():
+                            or singer_sim not in self.sing_sim[singer].keys():
                         continue
                     score += self.sing_sim[singer][singer_sim] * self.user_singer_dict[user][singer_sim]
                 user_singer_score_dict[user][singer] = score

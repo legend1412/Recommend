@@ -15,9 +15,9 @@ import json
 
 class RecSong:
     def __init__(self):
-        self.playlist_mess_file = '../tomysql/data/pl_mess_all.txt'
-        self.playlist_song_mess_file = '../tomysql/data/pl_sing_id.txt'
-        self.song_mess_file = '../tomysql/data/song_mess_all.txt'
+        self.playlist_mess_file = '../api/data/playlist_mess/pl_mess_all.txt'
+        self.playlist_song_mess_file = '../api/data/playlist_mess/pl_sing_id.txt'
+        self.song_mess_file = '../api/data/song_mess/songs_mess_all.txt'
 
         self.user_song_dict, self.user_list = self.load_data()
         self.user_sim = self.user_similarity_best()
@@ -48,7 +48,7 @@ class RecSong:
                 user_list.append(user_id)
             user_song_dict.setdefault(user_id, {})
             for song_id in playlist_song_dict[playlist_id]:
-                user_song_dict[user_id].setdfault(song_id, 0)
+                user_song_dict[user_id].setdefault(song_id, 0)
                 user_song_dict[user_id][song_id] += 1
 
         # print(user_song_dict)
@@ -102,7 +102,7 @@ class RecSong:
             print('用户对歌手的偏好从文件加载完毕!')
             return user_song_score_dict
         for user in self.user_song_dict.keys():
-            print(user)
+            # print(user)
             user_song_score_dict.setdefault(user, {})
             # 遍历所有用户
             for user_sim in self.user_sim[user].keys():
@@ -118,9 +118,9 @@ class RecSong:
 
     # 写入文件
     def write_to_file(self):
-        fw = open('data/user-song_prefer.txt', 'a', encoding='utf-8')
+        fw = open('data/user_song_prefer.txt', 'a', encoding='utf-8')
         for user in self.user_song_dict.keys():
-            sort_user_song_prefer = sorted(self.user_song_score_dict[user].items(), key=lambda oen: one[1],
+            sort_user_song_prefer = sorted(self.user_song_score_dict[user].items(), key=lambda one: one[1],
                                            reverse=True)
             for one in sort_user_song_prefer[:100]:
                 fw.write(user + ',' + one[0] + ',' + str(one[1]) + '\n')

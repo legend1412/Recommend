@@ -110,10 +110,8 @@
 - 运行```python manage.py migrate```，完成数据库表的创建：```cate、playlist、playlisttosongs、playlisttotag、sing、singsim、singtag、song、songlysic、songsim、songtag、user、userbrowse、userplaylistrec、usersim、usersingrec、usersongrec、usertag、useruserrec```
 - 运行```python manage.py createsuperuser```，创建django的后台管理账户(admin/9003)
   
-  #### 数据处理
-  
-  ##### 数据获取
-  
+  #### 数据处理  
+  ##### 数据获取  
 - playlist_id_name_all.txt记录的歌单的信息，共1066首，这是程序的入口，所以这里需要有初始数据，直接从给的案例中拷贝过来
 - 在playlist_url下创建txt文件：playlist_get_fail.txt，用来保存爬虫失败的歌曲信息
 - 运行GetPlayListMess.py进行歌单信息类的处理。可能是目标网站的反爬出机制，一次性爬1000多首歌，会失败很多，后来就几首几首的做，这个也是在爬虫中比较麻烦的一件事
@@ -123,8 +121,7 @@
 - 运行GetSongMess.py，根据歌曲ID获取歌曲信息，歌词保存到songs_lysics_all.txt中，歌曲信息保存到songs_mess_all.txt中，失败的信息写入error_song_ids.txt中  
 - 运行GetSingMess.py，根据歌曲ID获取歌手信息，保存到sings_mess_all.txt，错误信息保存到error_sing_ids.txt。这个文件没有运行成功，因为在爬虫的时候失败了。直接适用案例中给的数据  
 
-  ##### 数据导入
-  
+  ##### 数据导入  
   由于这个项目的数据量比较大，所以数据导入是分开进行的  
 - 导入歌曲信息
   - 运行ToMySQL.py，执行song_mess_to_mysql方法，读取songs_mess_all.txt，将歌曲信息写入song表中。
@@ -158,12 +155,25 @@
   - 运行ToMySQL.py，执行playlist_tag_mess_to_mysql方法，读取pl_mess_all.txt，将歌单和歌单标签对应关系写入playlisttotag表中
   - 错误信息写入error_playlist_tag.txt中
   - 共有1066个歌单，导入的数据量是2846，因为一个歌单存在多个标签
-- 处理歌手和歌曲的关系
+- 处理歌手、歌曲以及他们的标签的对应的关系
+  - 运行ToMySQL.py，执行sing_tag_mess_to_mysql方法，这个方法做事情比较多
+  - 从Song表中读取song_id和song_sing_id，获取歌手和歌曲的对应关系，将其保存到sing_song.json中
+  - 从PlayListToSongs表中获取pl_id、song_id，从PlayList表中获取pl_id、pl_tags，通过pl_id进行关联，获取歌曲及其歌单标签的对应关系，保存在song_tag.json和song_tag.txt中
+  - 通过上面两步操作后，就可以知道song_id，sing_id，pl_id，pl_tags的对应关系，从而可以获取歌手及其歌单标签的对应关系，保存在sing_tag.txt
+  - 先让程序生成上面的4个文件，再读取song_tag.json，写入songtag，写入完毕后，读取sing_song.json，并结合song_tag.json的结果，写入singtag表数据
+  - 之所以有两个txt文件，song_tag.txt和sing_tag.txt，是因为数据量比较大，直接往数据库写入，可能时间比较长，把数据保存到txt中，然后可以通过专门的数据库工具导入
 - 导入用户和标签的对应关系
   - 直接读取数据库的playlist表，然后获取用户id和tag写入usertag表中，共写入2377条数据
   - 错误信息写入error_user_tag.txt中
 - 在导入过程中，可能会因为出错，重新导入，但数据量这么大，每次导入不应该先清空数据库的数据再导入，应该支持追加导入，自动判断是否重复等
 
+  #### 进行数据分析
+- 运行RecPlayList.py，统计：标签信息、用户打标信息、歌单对应标签信息，构建：歌单特征信息矩阵、用户特征标签偏好矩阵、计算用户对歌单的偏好。运行完毕后，产生两个文件：user_playlist_prefer.json和user_playlist_prefer.txt
+- 运行RecSing.py，构建：歌曲和歌手对应关系、歌曲和歌手对应关，统计：用户和歌手对应信息，计算：歌手相似，产生singer_sim_singer.json，然后再计算用户对歌手的偏好，产生user_singer_prefer.json和user_singer_prefer.txt
+- 运行RecSong.py，统计：歌单和歌曲对应关系、用户和歌曲对应信息，计算：用户相似度，用户对歌曲的偏好，产生user_song_prefer.json和user_song_prefer.txt
+- 运行RecUser.py，统计：用户打标签，产生user_user_prefer.txt
+
+  
   #### 实现思路
 - 利用网易云API获取部分数据
 - 基于标签进行歌单详情页的推荐、歌曲详情页的推荐、歌手详情页的推荐

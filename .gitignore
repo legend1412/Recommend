@@ -13,6 +13,7 @@ NewsRec/index/__pycache__/
 NewsRec/NewsRec/__pycache__/
 NewsRec-Vue/node_modules/
 NewsRec/news/migrations/
+NewsRec/z-others/data/keywords/*.txt
 MusicRec/indexmusic/__pycache__/
 MusicRec/playlist/__pycache__/
 MusicRec/sing/__pycache__/
@@ -30,4 +31,5 @@ BookRec/__pycache__/
 BookRec/indexbook/migrations/
 BookRec/z-others/data/*.txt
 BookRec/z-others/model/gbdt.model
-NewsRec/z-others/data/keywords/*.txt
+MusicRec/z-others/rec/data/
+MusicRec/z-others/tomysql/*.txt
