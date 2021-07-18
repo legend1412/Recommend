@@ -352,7 +352,7 @@ class ToMySQL:
                 else:
                     sing_song_dict[one['song_sing_id']] = one['song_id']
             json.dump(sing_song_dict, open('data/sing_song.json', 'w', encoding='utf-8'))
-        # print(sing_song_dict)
+        print(sing_song_dict)
 
         # 2.歌曲->歌单->标签
         song_playlist_tag_dict = dict()
@@ -370,32 +370,32 @@ class ToMySQL:
                     song_playlist_tag_dict[one.song_id] = pl_tags[0]["pl_tags"]
             json.dump(song_playlist_tag_dict, open('data/song_tag.json', 'w', encoding='utf-8'))
 
-        # print(song_playlist_tag_dict)
+        print(song_playlist_tag_dict)
 
         # 将歌曲 -> 标签信息写入数据库,直接写入数据库数据太多，写入文件，利用工具导入
-        # i = 0
-        # for song in song_playlist_tag_dict.keys():
-        #     # print(song)
-        #     song_have_write = list()
-        #     for tag in song_playlist_tag_dict[song].split(","):
-        #         tag = tag.replace(" ", "")
-        #         if tag not in song_have_write:
-        #             SongTag(song_id=song, tag=tag).save()
-        #             song_have_write.append(tag)
-        #             i += 1
-        #             print('%s-歌曲ID：%s' % (i, song))
+        i = 0
+        for song in song_playlist_tag_dict.keys():
+            # print(song)
+            song_have_write = list()
+            for tag in song_playlist_tag_dict[song].split(","):
+                tag = tag.replace(" ", "")
+                if tag not in song_have_write:
+                    SongTag(song_id=song, tag=tag).save()
+                    song_have_write.append(tag)
+                    i += 1
+                    print('%s-歌曲ID：%s' % (i, song))
 
-        # fw = open("data/song_tag.txt", "a", encoding="utf-8")
-        # for song in song_playlist_tag_dict.keys():
-        #     # print(song)
-        #     song_have_write = list()
-        #     for tag in song_playlist_tag_dict[song].split(","):
-        #         tag = tag.replace(" ", "")
-        #         if tag not in song_have_write:
-        #             fw.write(song + "," + tag + "\n")
-        #             song_have_write.append(tag)
-        # fw.close()
-        # print("Over !")
+        fw = open("data/song_tag.txt", "a", encoding="utf-8")
+        for song in song_playlist_tag_dict.keys():
+            # print(song)
+            song_have_write = list()
+            for tag in song_playlist_tag_dict[song].split(","):
+                tag = tag.replace(" ", "")
+                if tag not in song_have_write:
+                    fw.write(song + "," + tag + "\n")
+                    song_have_write.append(tag)
+        fw.close()
+        print("Over !")
 
         # 将歌手 -> 标签信息写入数据库
         i = 0
@@ -415,20 +415,20 @@ class ToMySQL:
 
         print("Over !")
 
-        # fw1 = open('data/sing_tag.txt', 'a', encoding='utf-8')
-        # for sing in sing_song_dict.keys():
-        #     # print(sing)
-        #     song_id = sing_song_dict[sing]
-        #     sing_have_write = list()
-        #     if song_id not in song_playlist_tag_dict:
-        #         continue
-        #     for tag in song_playlist_tag_dict[song_id].split(','):
-        #         tag = tag.replace(' ', '')
-        #         if tag not in sing_have_write:
-        #             fw1.write(sing + ',' + tag + '\n')
-        #             sing_have_write.append(tag)
-        # fw1.close()
-        # print('Over!')
+        fw1 = open('data/sing_tag.txt', 'a', encoding='utf-8')
+        for sing in sing_song_dict.keys():
+            # print(sing)
+            song_id = sing_song_dict[sing]
+            sing_have_write = list()
+            if song_id not in song_playlist_tag_dict:
+                continue
+            for tag in song_playlist_tag_dict[song_id].split(','):
+                tag = tag.replace(' ', '')
+                if tag not in sing_have_write:
+                    fw1.write(sing + ',' + tag + '\n')
+                    sing_have_write.append(tag)
+        fw1.close()
+        print('Over!')
 
     # 将用户->标签写入数据库
     def user_tag_mess_to_mysql(self):

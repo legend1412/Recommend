@@ -33,3 +33,4 @@ BookRec/z-others/data/*.txt
 BookRec/z-others/model/gbdt.model
 MusicRec/z-others/rec/data/
 MusicRec/z-others/tomysql/*.txt
+MusicRec/z-others/tools/data/

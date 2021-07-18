@@ -15,7 +15,7 @@ class SingSim:
 
     def get_sing_tags(self):
         sing_tags_dict = dict()
-        for line in open('data/sing_tag.txt'):
+        for line in open('../tomysql/data/sing_tag.txt', 'r', encoding='utf-8'):
             sing_id, tag = line.strip().split(',')
             sing_tags_dict.setdefault(sing_id, set())
             sing_tags_dict[sing_id].add(tag)

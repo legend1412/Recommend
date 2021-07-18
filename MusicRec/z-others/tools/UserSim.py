@@ -6,10 +6,10 @@ import django
 import json
 import os
 
-from user.models import UserTag
-
-os.environ['DJANGO_SETTING_MOUDLE'] = 'MusicRec.setting'
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "MusicRec.settings")
 django.setup()
+
+from user.models import UserTag
 
 
 class UserSim:

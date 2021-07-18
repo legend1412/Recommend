@@ -161,7 +161,8 @@
   - 从PlayListToSongs表中获取pl_id、song_id，从PlayList表中获取pl_id、pl_tags，通过pl_id进行关联，获取歌曲及其歌单标签的对应关系，保存在song_tag.json和song_tag.txt中
   - 通过上面两步操作后，就可以知道song_id，sing_id，pl_id，pl_tags的对应关系，从而可以获取歌手及其歌单标签的对应关系，保存在sing_tag.txt
   - 先让程序生成上面的4个文件，再读取song_tag.json，写入songtag，写入完毕后，读取sing_song.json，并结合song_tag.json的结果，写入singtag表数据
-  - 之所以有两个txt文件，song_tag.txt和sing_tag.txt，是因为数据量比较大，直接往数据库写入，可能时间比较长，把数据保存到txt中，然后可以通过专门的数据库工具导入
+  - 之所以有两个txt文件，song_tag.txt和sing_tag.txt，是因为数据量比较大，直接往数据库写入，可能时间比较长，把数据保存到txt中，然后可以通过专门的数据库工具导入。
+  - song_tag.txt和sing_tag.txt为SongSim.py和SingSim.py中计算歌曲和歌手相似度提供数据来源
 - 导入用户和标签的对应关系
   - 直接读取数据库的playlist表，然后获取用户id和tag写入usertag表中，共写入2377条数据
   - 错误信息写入error_user_tag.txt中
@@ -172,6 +173,11 @@
 - 运行RecSing.py，构建：歌曲和歌手对应关系、歌曲和歌手对应关，统计：用户和歌手对应信息，计算：歌手相似，产生singer_sim_singer.json，然后再计算用户对歌手的偏好，产生user_singer_prefer.json和user_singer_prefer.txt
 - 运行RecSong.py，统计：歌单和歌曲对应关系、用户和歌曲对应信息，计算：用户相似度，用户对歌曲的偏好，产生user_song_prefer.json和user_song_prefer.txt
 - 运行RecUser.py，统计：用户打标签，产生user_user_prefer.txt
+  #### 计算相似度
+- 运行UserSim.py，计算用户相似度，产生user_sim.json和user_sim.txt
+- 运行SongSim.py，计算歌曲相似度，使用ToMySQL.py中，执行sing_tag_mess_to_mysql方法产生的song_tag.txt文件，产生song_sim.json和song_sim.txt
+- 运行SingSim.py，计算歌曲相似度，使用ToMySQL.py中，执行sing_tag_mess_to_mysql方法产生的sing_tag.txt文件，产生sing_sim.json和sing_sim.txt
+
 
   
   #### 实现思路

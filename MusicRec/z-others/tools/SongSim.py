@@ -19,7 +19,7 @@ class SongSim:
 
     def get_song_tags(self):
         song_tags_dict = dict()
-        for line in open('data/song_tag.txt', 'r', encoding='utf-8'):
+        for line in open('../tomysql/data/song_tag.txt', 'r', encoding='utf-8'):
             song_id, tag = line.strip().split(',')
             song_tags_dict.setdefault(song_id, set())
             song_tags_dict[song_id].add(tag)
