@@ -117,7 +117,7 @@ class UserSingRec(models.Model):
         return self.user
 
     class Meta:
-        db_table = 'usersimgrec'
+        db_table = 'usersingrec'
         verbose_name_plural = '用户歌手推荐'
 
 

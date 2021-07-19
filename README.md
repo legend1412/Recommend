@@ -174,7 +174,9 @@
 
   #### 进行数据分析
 - 运行RecPlayList.py，统计：标签信息、用户打标信息、歌单对应标签信息，构建：歌单特征信息矩阵、用户特征标签偏好矩阵、计算用户对歌单的偏好。运行完毕后，产生两个文件：user_playlist_prefer.json和user_playlist_prefer.txt
+- 把user_playlist_prefer.txt中的数据导入到userplaylistrec表中
 - 运行RecSing.py，构建：歌曲和歌手对应关系、歌曲和歌手对应关，统计：用户和歌手对应信息，计算：歌手相似，产生singer_sim_singer.json，然后再计算用户对歌手的偏好，产生user_singer_prefer.json和user_singer_prefer.txt
+- 把user_singer_prefer.txt中的数据导入usersingrec表中  
 - 运行RecSong.py，统计：歌单和歌曲对应关系、用户和歌曲对应信息，计算：用户相似度，用户对歌曲的偏好，产生user_song_prefer.json和user_song_prefer.txt
 - 运行RecUser.py，统计：用户打标签，产生user_user_prefer.txt
   #### 计算相似度
