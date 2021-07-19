@@ -95,7 +95,7 @@ class UserPlayListRec(models.Model):
 class UserSongRec(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.CharField(blank=True, max_length=64, verbose_name='用户ID')
-    related = models.CharField(blank=True, max_length=64, verbose_name='曲ID')
+    related = models.CharField(blank=True, max_length=64, verbose_name='歌曲ID')
     sim = models.FloatField(blank=True, verbose_name='相似度')
 
     def __str__(self):
@@ -110,7 +110,7 @@ class UserSongRec(models.Model):
 class UserSingRec(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.CharField(blank=True, max_length=64, verbose_name='用户ID')
-    related = models.CharField(blank=True, max_length=64, verbose_name='歌手ID')
+    related = models.CharField(blank=True, max_length=128, verbose_name='歌手ID')
     sim = models.FloatField(blank=True, verbose_name='相似度')
 
     def __str__(self):

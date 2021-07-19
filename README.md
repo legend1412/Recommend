@@ -174,15 +174,21 @@
 
   #### 进行数据分析
 - 运行RecPlayList.py，统计：标签信息、用户打标信息、歌单对应标签信息，构建：歌单特征信息矩阵、用户特征标签偏好矩阵、计算用户对歌单的偏好。运行完毕后，产生两个文件：user_playlist_prefer.json和user_playlist_prefer.txt
-- 把user_playlist_prefer.txt中的数据导入到userplaylistrec表中
+- 运行ToMySQL.py中的user_palylist_prefer_to_mysql方法，把user_playlist_prefer.txt中的数据导入到userplaylistrec表中
 - 运行RecSing.py，构建：歌曲和歌手对应关系、歌曲和歌手对应关，统计：用户和歌手对应信息，计算：歌手相似，产生singer_sim_singer.json，然后再计算用户对歌手的偏好，产生user_singer_prefer.json和user_singer_prefer.txt
-- 把user_singer_prefer.txt中的数据导入usersingrec表中  
+- 运行ToMySQL.py中的user_sing_prefer_to_mysql方法，把user_singer_prefer.txt中的数据导入usersingrec表中
+- 在向usersingrec表导入数据时，由于一刀切的认为一行数据只有2个逗号，造成存在3个逗号的数据就无法导入。这里应该是判断第1个逗号前的是userid，最后一个逗号后的是相似度，中间的是sing才是正确的逻辑。  
 - 运行RecSong.py，统计：歌单和歌曲对应关系、用户和歌曲对应信息，计算：用户相似度，用户对歌曲的偏好，产生user_song_prefer.json和user_song_prefer.txt
+- 运行ToMySQL.py中的user_song_prefer_to_mysql方法，把user_song_prefer.txt中的数据导入usersongrec表中
 - 运行RecUser.py，统计：用户打标签，产生user_user_prefer.txt
+- 运行ToMySQL.py中的user_user_prefer_to_mysql方法，把user_user_prefer.txt中的数据导入useruserrec表中  
   #### 计算相似度
 - 运行UserSim.py，计算用户相似度，产生user_sim.json和user_sim.txt
+- 运行ToMySQL.py中的user_sim_to_mysql方法，把user_sim.txt中的数据导入usersim表中  
 - 运行SongSim.py，计算歌曲相似度，使用ToMySQL.py中，执行sing_tag_mess_to_mysql方法产生的song_tag.txt文件，产生song_sim.json和song_sim.txt
+- 运行ToMySQL.py中的song_sim_to_mysql方法，把song_sim.txt中的数据导入songsim表中  
 - 运行SingSim.py，计算歌曲相似度，使用ToMySQL.py中，执行sing_tag_mess_to_mysql方法产生的sing_tag.txt文件，产生sing_sim.json和sing_sim.txt
+- 运行ToMySQL.py中的sing_sim_to_mysql方法，把sing_sim.txt中的数据导入singsim表中
 
 
   

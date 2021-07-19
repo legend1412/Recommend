@@ -44,11 +44,11 @@ class SingSim:
                 i += 1
                 print(str(i) + '\t' + sing1)
             json.dump(sim, open('data/sing_sim.json', 'w', encoding='utf-8'))
-        print('歌曲相似度计算完毕!')
+        print('歌手相似度计算完毕!')
         return sim
 
     def transform(self):
-        fw = open('data/sim_sim.txt', 'a', encoding='utf-8')
+        fw = open('data/sing_sim.txt', 'a', encoding='utf-8')
         for s1 in self.sim.keys():
             for s2 in self.sim[s1].keys():
                 fw.write(s1 + ',' + s2 + ',' + str(self.sim[s1][s2]) + '\n')

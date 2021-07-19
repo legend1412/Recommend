@@ -20,9 +20,9 @@ django.setup()
 """
 from MusicRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
 from playlist.models import PlayListToSongs, PlayListToTag, PlayList
-from song.models import SongLysic, Song, SongTag
-from user.models import User, UserTag, UserPlayListRec
-from sing.models import Sing, SingTag
+from song.models import SongLysic, Song, SongTag, SongSim
+from user.models import User, UserTag, UserPlayListRec, UserSingRec, UserSongRec, UserUserRec, UserSim
+from sing.models import Sing, SingTag, SingSim
 
 
 class ToMySQL:
@@ -461,9 +461,92 @@ class ToMySQL:
             user_id, playlist_id, sim = user_playlist_prefer[0], user_playlist_prefer[1], user_playlist_prefer[2]
             UserPlayListRec(user=user_id, related=playlist_id, sim=sim).save()
             i += 1
-            print('%s-歌手ID：%s' % (i, line))
+            if i % 2000 == 0:
+                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
 
         print("写入userplaylistrec表完毕 !")
+
+    # 把用户对歌手的偏好user_singer_prefer.txt数据写入数据库usersingrec
+    def user_sing_prefer_to_mysql(self):
+        i = 0
+        for line in open('../rec/data/user_singer_prefer.txt', 'r', encoding='utf-8'):
+            try:
+                user_sing_prefer = line.strip().split(',')
+                user_id, sing_id, sim = user_sing_prefer[0], user_sing_prefer[1], user_sing_prefer[2]
+                UserSingRec(user=user_id, related=sing_id, sim=sim).save()
+            except Exception as e:
+                print(e)
+                odf.write_to_file('error.txt', line)
+            i += 1
+            if i % 2000 == 0:
+                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+
+        print("写入usersingrec表完毕 !")
+
+    # 把用户对歌曲的偏好user_song_prefer.txt数据写入数据库usersongrec
+    def user_song_prefer_to_mysql(self):
+        i = 0
+        for line in open('../rec/data/user_song_prefer.txt', 'r', encoding='utf-8'):
+            user_song_prefer = line.strip().split(',')
+            user_id, song_id, sim = user_song_prefer[0], user_song_prefer[1], user_song_prefer[2]
+            UserSongRec(user=user_id, related=song_id, sim=sim).save()
+            i += 1
+            if i % 2000 == 0:
+                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+
+        print("写入usersongrec表完毕 !")
+
+    # 把用户对用户的偏好user_user_prefer.txt数据写入数据库useruserrec
+    def user_user_prefer_to_mysql(self):
+        i = 0
+        for line in open('../rec/data/user_user_prefer.txt', 'r', encoding='utf-8'):
+            user_user_prefer = line.strip().split(',')
+            user_id1, user_id2, sim = user_user_prefer[0], user_user_prefer[1], user_user_prefer[2]
+            UserUserRec(user=user_id1, related=user_id2, sim=sim).save()
+            i += 1
+            if i % 2000 == 0:
+                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+
+        print("写入useruserrec表完毕 !")
+
+    # 把歌手与歌手的相似度sing_sim.txt数据写入数据库singsim
+    def sing_sim_to_mysql(self):
+        i = 0
+        for line in open('../tools/data/sing_sim.txt', 'r', encoding='utf-8'):
+            sing_sim = line.strip().split(',')
+            sing_id, sim_sing_id, sim = sing_sim[0], sing_sim[1], sing_sim[2]
+            SingSim(sing_id=sing_id, sim_sing_id=sim_sing_id, sim=sim).save()
+            i += 1
+            if i % 2000 == 0:
+                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+
+        print("写入singsim表完毕 !")
+
+    # 把歌曲与歌曲的相似度song_sim.txt数据写入数据库songsim
+    def song_sim_to_mysql(self):
+        i = 0
+        for line in open('../tools/data/song_sim.txt', 'r', encoding='utf-8'):
+            song_sim = line.strip().split(',')
+            song_id, sim_song_id, sim = song_sim[0], song_sim[1], song_sim[2]
+            SongSim(song_id=song_id, sim_song_id=sim_song_id, sim=sim).save()
+            i += 1
+            if i % 2000 == 0:
+                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+
+        print("写入songsim表完毕 !")
+
+    # 把用户与用户的相似度 user_sim.txt数据写入数据库usersim
+    def user_sim_to_mysql(self):
+        i = 0
+        for line in open('../tools/data/user_sim.txt', 'r', encoding='utf-8'):
+            user_sim = line.strip().split(',')
+            user_id, sim_user_id, sim = user_sim[0], user_sim[1], user_sim[2]
+            UserSim(user_id=user_id, sim_user_id=sim_user_id, sim=sim).save()
+            i += 1
+            if i % 2000 == 0:
+                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+
+        print("写入usersim表完毕 !")
 
 
 if __name__ == '__main__':
@@ -487,4 +570,17 @@ if __name__ == '__main__':
     # 导入用户和标签的对应关系
     # tomysql.user_tag_mess_to_mysql()
     # 把用户对歌单的偏好写入数据库
-    tomysql.user_palylist_prefer_to_mysql()
+    # tomysql.user_palylist_prefer_to_mysql()
+    # 把用户对歌手的偏好写入数据库
+    # tomysql.user_sing_prefer_to_mysql()
+    # 把用户对歌曲的偏好写入数据库
+    # tomysql.user_song_prefer_to_mysql()
+    # 把用户对用户的偏好写入数据库
+    # tomysql.user_user_prefer_to_mysql()
+    # 把歌手与歌手相似度写入数据库
+    # tomysql.sing_sim_to_mysql()
+    # 把歌曲与歌曲相似度写入数据库
+    # tomysql.song_sim_to_mysql()
+    # 把用户与用户相似度写入数据库
+    # tomysql.user_sim_to_mysql()
+
