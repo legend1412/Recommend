@@ -16,7 +16,7 @@ import json
 class RecSong:
     def __init__(self):
         self.playlist_mess_file = '../api/data/playlist_mess/pl_mess_all.txt'
-        self.playlist_song_mess_file = '../api/data/playlist_mess/pl_sing_id.txt'
+        self.playlist_song_mess_file = '../api/data/playlist_mess/pl_song_id.txt'
         self.song_mess_file = '../api/data/song_mess/songs_mess_all.txt'
 
         self.user_song_dict, self.user_list = self.load_data()

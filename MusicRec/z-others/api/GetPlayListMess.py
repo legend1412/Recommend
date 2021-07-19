@@ -113,7 +113,7 @@ class PlayList:
             str(creator["accountStatus"]),
             str(creator["djStatus"]),
             str(creator["vipType"]),
-            str(creator["signature"]).replace('\n', '')
+            str(creator["signature"]).replace('\n', '无签名')
         )
         odf.write_to_file(self.creator_mess + 'user_mess_all.txt', ' |=| '.join(c_list))
         # 歌单信息
@@ -132,7 +132,7 @@ class PlayList:
             str(playlist["subscribedCount"]),
             str(playlist["tags"]),
             str(playlist["coverImgUrl"]),
-            str(playlist["description"]).replace("\n", "")
+            str(playlist["description"]).replace("\n", "无描述")
         ]
         odf.write_to_file(self.playlist_mess + "pl_mess_all.txt", " |=| ".join(p_list))
 

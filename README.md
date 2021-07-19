@@ -109,14 +109,15 @@
   让django存储models中的信息
 - 运行```python manage.py migrate```，完成数据库表的创建：```cate、playlist、playlisttosongs、playlisttotag、sing、singsim、singtag、song、songlysic、songsim、songtag、user、userbrowse、userplaylistrec、usersim、usersingrec、usersongrec、usertag、useruserrec```
 - 运行```python manage.py createsuperuser```，创建django的后台管理账户(admin/9003)
+- 创建数据库的时候，建议采用UTF-8的编码格式，gbk会导致不分字符编码格式不正确，从而无法导入数据
   
   #### 数据处理  
   ##### 数据获取  
 - playlist_id_name_all.txt记录的歌单的信息，共1066首，这是程序的入口，所以这里需要有初始数据，直接从给的案例中拷贝过来
 - 在playlist_url下创建txt文件：playlist_get_fail.txt，用来保存爬虫失败的歌曲信息
 - 运行GetPlayListMess.py进行歌单信息类的处理。可能是目标网站的反爬出机制，一次性爬1000多首歌，会失败很多，后来就几首几首的做，这个也是在爬虫中比较麻烦的一件事
-  - 爬虫完毕后，获取创建者信息，保存到user_mess_all.txt，歌单信息保存到pl_mess_all.txt，歌单包含的所有歌曲的id信息保存到pl_sing_id_1.txt
-  - pl_sing_id_1.txt通过爬出返回的结果来看，只返回了歌单id下的一首歌曲id，其他的歌曲id并未返回，或者压根就没有。所以使用了案例中的ids_all.txt,并改名为pl_sing_id.txt
+  - 爬虫完毕后，获取创建者信息，保存到user_mess_all.txt，歌单信息保存到pl_mess_all.txt，歌单包含的所有歌曲的id信息保存到pl_song_id_1.txt
+  - pl_song_id_1.txt通过爬出返回的结果来看，只返回了歌单id下的一首歌曲id，其他的歌曲id并未返回，或者压根就没有。所以使用了案例中的ids_all.txt,并改名为pl_song_id.txt
   - 歌单id返回的歌曲id只有1个或者就没有数据，可能是因为爬虫本身的问题或者解析的结果有问题，也可能是目标网站做了反爬虫策略。因为网络上的东西都是随时在变化的。
 - 运行GetSongMess.py，根据歌曲ID获取歌曲信息，歌词保存到songs_lysics_all.txt中，歌曲信息保存到songs_mess_all.txt中，失败的信息写入error_song_ids.txt中  
 - 运行GetSingMess.py，根据歌曲ID获取歌手信息，保存到sings_mess_all.txt，错误信息保存到error_sing_ids.txt。这个文件没有运行成功，因为在爬虫的时候失败了。直接适用案例中给的数据  
@@ -126,7 +127,7 @@
 - 导入歌曲信息
   - 运行ToMySQL.py，执行song_mess_to_mysql方法，读取songs_mess_all.txt，将歌曲信息写入song表中。
   - 一共写入24343条记录。出错记录数是1609条。
-  - 如果song_publish_time是null的，将信息记录到error_songs.txt，
+  - 如果song_publish_time是null的，将信息记录到error_songs.txt，时间的空的情况，也可以采用一个默认的时间替代，然后再导入
   - 如果一行的内容长度分割后不是9，不再打印，直接记录到error_songs.txt
   - 修改song表的song_name和song_sing_id字段长度到200，同时需要修改models.py下的song类
 - 导入歌词信息
@@ -142,10 +143,13 @@
 - 导入用户信息
   - 运行ToMySQL.py，执行user_mess_to_mysql方法，读取user_mess_all.txt，将歌词信息写入user表中。
   - 错误信息写入error_users.txt中，包括生日是空或者等于null字符串、一行内容分割后长度小于14的
+  - 有部分用户的u_sign不是纯文本，导入到时候会报错：Incorrect string value，这部分用户的u_sign使用默认的语句替代
+  - 部分用户的u_sign是空的，无法导入，数组长度小于14，但u_sign不是很重要的字段，对于空的情况，完全可以使用默认的字符串替代（无签名）。这种情况在生成user_mess_all.txt时就应该处理掉
   - 一共导入643条记录，出错记录数是158条
 - 导入歌单信息
   - 运行ToMySQL.py，执行playlist_mess_to_mysql方法，读取pl_mess_all.txt，将歌词信息写入playlist表中。
   - 错误信息写入error_playlist.txt中，包括歌单创建时间是空或者等于null字符串、创建者 id不在user表中的
+  - pl_desc字段为空的时候，也采用默认值（无描述）替代，应该在生成pl_mess_all.txt时处理掉  
   - 一共导入877条记录，出错记录数是189条
 - 导入歌单和歌曲的id对应关系
   - 运行ToMySQL.py，执行playlist_sing_mess_to_mysql方法，读取ids_all.txt，将歌单和歌曲对应关系写入playlisttosongs表中。

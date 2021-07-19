@@ -15,7 +15,7 @@ import os
 class RecSing:
     def __init__(self):
         self.playlist_mess_file = '../api/data/playlist_mess/pl_mess_all.txt'
-        self.playlist_song_mess_file = '../api/data/playlist_mess/pl_sing_id.txt'
+        self.playlist_song_mess_file = '../api/data/playlist_mess/pl_song_id.txt'
         self.song_mess_file = '../api/data/song_mess/songs_mess_all.txt'
 
         self.user_singer_dict, self.singer_list = self.load_data()
@@ -47,6 +47,8 @@ class RecSing:
             playlist_id, song_ids = line.strip().split('\t')
             playlist_singer_dict.setdefault(playlist_id, list())
             for song_id in song_ids.split(','):
+                if song_id not in song_singer_dict:
+                    continue
                 if song_singer_dict[song_id].__contains__('#'):
                     for singer_one in song_singer_dict[song_id].split('#'):
                         if singer_one == '0':
@@ -119,6 +121,8 @@ class RecSing:
                 if singer in self.user_singer_dict[user].keys():
                     continue
                 score = 0.0
+                if singer not in self.sing_sim:
+                    continue
                 for singer_sim in self.sing_sim[singer].keys():
                     if singer_sim == singer or singer_sim not in self.user_singer_dict[user].keys() \
                             or singer_sim not in self.sing_sim[singer].keys():

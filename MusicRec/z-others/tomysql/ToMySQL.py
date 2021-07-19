@@ -81,6 +81,7 @@ class ToMySQL:
                 except Exception as e:
                     print(e)
                     print(song_id)
+                    odf.write_to_file(self.error_lysic_file, line.replace('\n', ''))
                     pass
             else:
                 odf.write_to_file(self.error_song_file, line.replace('\n', ''))
@@ -151,6 +152,7 @@ class ToMySQL:
                 except Exception as e:
                     print(e)
                     print(sing_id)
+                    odf.write_to_file(self.error_sing_file, line.replace('\n', ''))
                     pass
                 have_write_sing.append(sing_id)
             else:
@@ -232,6 +234,7 @@ class ToMySQL:
                 )
                 user.save()
                 print('Error:{},{}'.format(u_id, e))
+                odf.write_to_file(self.error_user_file, line.replace('\n', ''))
             i += 1
             # print(i)
         print('Over!')
@@ -301,7 +304,7 @@ class ToMySQL:
 
     def playlist_sing_mess_to_mysql(self):
         i = 0
-        for line in open('../api/data/playlist_mess/pl_sing_id.txt', 'r', encoding='utf-8'):
+        for line in open('../api/data/playlist_mess/pl_song_id.txt', 'r', encoding='utf-8'):
             pid, sids = line.strip().split('\t')
             for sid in str(sids).split(','):
                 try:
@@ -344,6 +347,7 @@ class ToMySQL:
         sing_song_dict = dict()
         if os.path.exists('data/sing_song.json'):
             sing_song_dict = json.load(open('data/sing_song.json', 'r', encoding='utf-8'))
+            print("从sing_song.json加载")
         else:
             for one in Song.objects.all().values('song_id', 'song_sing_id'):
                 if '#' in one['song_sing_id']:
@@ -352,13 +356,15 @@ class ToMySQL:
                 else:
                     sing_song_dict[one['song_sing_id']] = one['song_id']
             json.dump(sing_song_dict, open('data/sing_song.json', 'w', encoding='utf-8'))
-        print(sing_song_dict)
+        # print(sing_song_dict)
+            print("写入sing_song.json完毕！")
 
         # 2.歌曲->歌单->标签
         song_playlist_tag_dict = dict()
 
         if os.path.exists('data/song_tag.json'):
             song_playlist_tag_dict = json.load(open('data/song_tag.json', 'r', encoding='utf-8'))
+            print("从song_tag.json加载")
         else:
             for one in PlayListToSongs.objects.all():
                 pl_tags = PlayList.objects.filter(pl_id=one.pl_id).values('pl_tags')
@@ -370,7 +376,8 @@ class ToMySQL:
                     song_playlist_tag_dict[one.song_id] = pl_tags[0]["pl_tags"]
             json.dump(song_playlist_tag_dict, open('data/song_tag.json', 'w', encoding='utf-8'))
 
-        print(song_playlist_tag_dict)
+        # print(song_playlist_tag_dict)
+            print("写入song_tag.json完毕！")
 
         # 将歌曲 -> 标签信息写入数据库,直接写入数据库数据太多，写入文件，利用工具导入
         i = 0
@@ -384,6 +391,7 @@ class ToMySQL:
                     song_have_write.append(tag)
                     i += 1
                     print('%s-歌曲ID：%s' % (i, song))
+        print("songtag写入数据库完毕")
 
         fw = open("data/song_tag.txt", "a", encoding="utf-8")
         for song in song_playlist_tag_dict.keys():
@@ -395,7 +403,7 @@ class ToMySQL:
                     fw.write(song + "," + tag + "\n")
                     song_have_write.append(tag)
         fw.close()
-        print("Over !")
+        print("songtag写入文件song_tag.txt完毕 !")
 
         # 将歌手 -> 标签信息写入数据库
         i = 0
@@ -413,7 +421,7 @@ class ToMySQL:
                     i += 1
                     print('%s-歌手ID：%s' % (i, sing))
 
-        print("Over !")
+        print("singtag写入数据库完毕")
 
         fw1 = open('data/sing_tag.txt', 'a', encoding='utf-8')
         for sing in sing_song_dict.keys():
@@ -428,7 +436,7 @@ class ToMySQL:
                     fw1.write(sing + ',' + tag + '\n')
                     sing_have_write.append(tag)
         fw1.close()
-        print('Over!')
+        print("singtag写入文件sing_tag.txt完毕 !")
 
     # 将用户->标签写入数据库
     def user_tag_mess_to_mysql(self):

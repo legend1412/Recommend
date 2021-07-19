@@ -28,7 +28,7 @@ class GetSongMess:
         odf.mkfile(self.error_ids_file)
 
         # 歌单id及其包含的歌曲id的文件
-        self.pl_sing_id_all_file = 'data/playlist_mess/pl_sing_id.txt'
+        self.pl_sing_id_all_file = 'data/playlist_mess/pl_song_id.txt'
         odf.mkfile(self.pl_sing_id_all_file)
 
         # 歌词文件
