@@ -21,7 +21,7 @@ django.setup()
 from MusicRec.settings import DB_HOST, DB_PORT, DB_USER, DB_PASSWD, DB_NAME
 from playlist.models import PlayListToSongs, PlayListToTag, PlayList
 from song.models import SongLysic, Song, SongTag
-from user.models import User, UserTag
+from user.models import User, UserTag, UserPlayListRec
 from sing.models import Sing, SingTag
 
 
@@ -356,7 +356,7 @@ class ToMySQL:
                 else:
                     sing_song_dict[one['song_sing_id']] = one['song_id']
             json.dump(sing_song_dict, open('data/sing_song.json', 'w', encoding='utf-8'))
-        # print(sing_song_dict)
+            # print(sing_song_dict)
             print("写入sing_song.json完毕！")
 
         # 2.歌曲->歌单->标签
@@ -376,7 +376,7 @@ class ToMySQL:
                     song_playlist_tag_dict[one.song_id] = pl_tags[0]["pl_tags"]
             json.dump(song_playlist_tag_dict, open('data/song_tag.json', 'w', encoding='utf-8'))
 
-        # print(song_playlist_tag_dict)
+            # print(song_playlist_tag_dict)
             print("写入song_tag.json完毕！")
 
         # 将歌曲 -> 标签信息写入数据库,直接写入数据库数据太多，写入文件，利用工具导入
@@ -453,6 +453,18 @@ class ToMySQL:
                 odf.write_to_file(self.error_user_tag_file, one)
         print('Over!')
 
+    # 把用户对歌单的偏好user_playlist_prefer.txt数据写入数据库userplaylistrec
+    def user_palylist_prefer_to_mysql(self):
+        i = 0
+        for line in open('../rec/data/user_playlist_prefer.txt', 'r', encoding='utf-8'):
+            user_playlist_prefer = line.strip().split(',')
+            user_id, playlist_id, sim = user_playlist_prefer[0], user_playlist_prefer[1], user_playlist_prefer[2]
+            UserPlayListRec(user=user_id, related=playlist_id, sim=sim).save()
+            i += 1
+            print('%s-歌手ID：%s' % (i, line))
+
+        print("写入userplaylistrec表完毕 !")
+
 
 if __name__ == '__main__':
     tomysql = ToMySQL()
@@ -471,6 +483,8 @@ if __name__ == '__main__':
     # 导入歌单和歌单标签对应关系
     # tomysql.playlist_tag_mess_to_mysql()
     # 歌手和歌手标签，歌曲与歌曲标签写入数据库
-    tomysql.sing_tag_mess_to_mysql()
+    # tomysql.sing_tag_mess_to_mysql()
     # 导入用户和标签的对应关系
     # tomysql.user_tag_mess_to_mysql()
+    # 把用户对歌单的偏好写入数据库
+    tomysql.user_palylist_prefer_to_mysql()
