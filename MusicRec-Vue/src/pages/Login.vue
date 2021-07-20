@@ -44,7 +44,7 @@ import {mapActions} from 'vuex'
 import {getLogin, login} from '../assets/js/api'
 
 export default {
-  name: 'cyan',
+  name: 'zjh',
   data () {
     return {
       users: {},
@@ -92,7 +92,8 @@ export default {
         cate: 1,
         baseclick: 0
       }
-      console.log(this.boxTags)
+      console.log(this.songsTags)
+      console.log(this.singsTags)
       if (opt && opt === 'skip') {
         logininfo.sings = ''
         logininfo.songs = ''

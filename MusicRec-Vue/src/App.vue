@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import newFooter from "components/newFooter";
+import newFooter from "./components/newFooter";
 export default {
   name: 'App',
   components:{
@@ -14,7 +14,7 @@ export default {
   },
   mounted() {
     if (localStorage.getItem('newslogintime')){
-      this.deTime(localStorage.getItem('newlogintime'),new Date(),24)
+      this.deTime(localStorage.getItem('newslogintime'),new Date(),24)
     }
   }
 }

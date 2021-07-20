@@ -261,11 +261,10 @@ import {getCateMusicData, getRecommon} from '../assets/js/api'
 import newheader from '../components/newHeader.vue'
 import pagnation from '../components/pagnation'
 export default {
-  name: 'HelloWorld',
+  name: 'MusicRec',
   data () {
     return {
       isActive: '1',
-      newsData: {},
       tmptags: [],
       // playlist
       playlist: {},

@@ -30,11 +30,15 @@ export default {
   },
   computed: {
     ...mapGetters('vuexlogin', {
+      getLogin: 'getLogin',
+      getName: 'getName'
+    })
+  },
+  methods: {
+    ...mapActions('vuexlogin', {
       almuta: 'almuta',
       almuuser: 'almuuser'
     }),
-  },
-  methods: {
     emitGetNews: function (cateid) {
       this.$emit('onGetnews', {'cateid': cateid})
     },

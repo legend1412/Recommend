@@ -3,10 +3,11 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
-import 'assets/style/common.less'
-import commontool from 'assets/js/tool'
-import store from 'store'
+import './assets/style/common.less'
+import commontool from './assets/js/tool'
+import store from './store'
 import layer from 'vue-layer'
+
 Vue.prototype.$layer=layer(Vue)
 Vue.use(commontool)
 

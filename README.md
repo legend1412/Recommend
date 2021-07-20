@@ -126,18 +126,15 @@
   由于这个项目的数据量比较大，所以数据导入是分开进行的  
 - 导入歌曲信息
   - 运行ToMySQL.py，执行song_mess_to_mysql方法，读取songs_mess_all.txt，将歌曲信息写入song表中。
-  - 一共写入24343条记录。出错记录数是1609条。
   - 如果song_publish_time是null的，将信息记录到error_songs.txt，时间的空的情况，也可以采用一个默认的时间替代，然后再导入
   - 如果一行的内容长度分割后不是9，不再打印，直接记录到error_songs.txt
   - 修改song表的song_name和song_sing_id字段长度到200，同时需要修改models.py下的song类
 - 导入歌词信息
   - 运行ToMySQL.py，执行song_lysic_to_mysql方法，读取songs_lysics_all.txt，将歌词信息写入songlysic表中。
   - 错误信息写入error_lysic.txt。
-  - 一共导入25952条记录，出错记录数是0
 - 导入歌手信息
   - 运行ToMySQL.py，执行sing_mess_to_mysql方法，读取sings_mess_all.txt，将歌词信息写入sing表中。
   - 错误信息写入error_sings.txt。
-  - 一共导入11637条记录，出错记录数是23条。
   - 保存歌手信息的文件sings_mess_all.txt中有 17555条记录，但存在重复记录，程序根据歌手id判断，避免重复导入
   - 如果一行的内容长度分割后不是6，不再打印，直接记录到error_sings.txt
 - 导入用户信息
@@ -145,20 +142,18 @@
   - 错误信息写入error_users.txt中，包括生日是空或者等于null字符串、一行内容分割后长度小于14的
   - 有部分用户的u_sign不是纯文本，导入到时候会报错：Incorrect string value，这部分用户的u_sign使用默认的语句替代
   - 部分用户的u_sign是空的，无法导入，数组长度小于14，但u_sign不是很重要的字段，对于空的情况，完全可以使用默认的字符串替代（无签名）。这种情况在生成user_mess_all.txt时就应该处理掉
-  - 一共导入643条记录，出错记录数是158条
 - 导入歌单信息
   - 运行ToMySQL.py，执行playlist_mess_to_mysql方法，读取pl_mess_all.txt，将歌词信息写入playlist表中。
   - 错误信息写入error_playlist.txt中，包括歌单创建时间是空或者等于null字符串、创建者 id不在user表中的
   - pl_desc字段为空的时候，也采用默认值（无描述）替代，应该在生成pl_mess_all.txt时处理掉  
-  - 一共导入877条记录，出错记录数是189条
 - 导入歌单和歌曲的id对应关系
   - 运行ToMySQL.py，执行playlist_sing_mess_to_mysql方法，读取ids_all.txt，将歌单和歌曲对应关系写入playlisttosongs表中。
   - 错误信息写入error_playlist_sing.txt中，记录错误的歌单id和歌曲id
-  - 共计37651条记录，其中包含1066个歌单，每个歌单下包含若干歌曲，在不同的歌单下，会包含重复的歌曲
+  - 每个歌单下包含若干歌曲，在不同的歌单下，会包含重复的歌曲，导入数据量比较大
 - 导入歌单和歌单标签对应关系
   - 运行ToMySQL.py，执行playlist_tag_mess_to_mysql方法，读取pl_mess_all.txt，将歌单和歌单标签对应关系写入playlisttotag表中
   - 错误信息写入error_playlist_tag.txt中
-  - 共有1066个歌单，导入的数据量是2846，因为一个歌单存在多个标签
+  - 共有1066个歌单，导入的数据量要多余这个数，因为一个歌单存在多个标签
 - 处理歌手、歌曲以及他们的标签的对应的关系
   - 运行ToMySQL.py，执行sing_tag_mess_to_mysql方法，这个方法做事情比较多
   - 从Song表中读取song_id和song_sing_id，获取歌手和歌曲的对应关系，将其保存到sing_song.json中
@@ -171,6 +166,7 @@
   - 直接读取数据库的playlist表，然后获取用户id和tag写入usertag表中，共写入2377条数据
   - 错误信息写入error_user_tag.txt中
 - 在导入过程中，可能会因为出错，重新导入，但数据量这么大，每次导入不应该先清空数据库的数据再导入，应该支持追加导入，自动判断是否重复等
+- 导入数据需要批量的导入，如果一行一行的导入，速度会很慢
 
   #### 进行数据分析
 - 运行RecPlayList.py，统计：标签信息、用户打标信息、歌单对应标签信息，构建：歌单特征信息矩阵、用户特征标签偏好矩阵、计算用户对歌单的偏好。运行完毕后，产生两个文件：user_playlist_prefer.json和user_playlist_prefer.txt
@@ -181,7 +177,9 @@
 - 运行RecSong.py，统计：歌单和歌曲对应关系、用户和歌曲对应信息，计算：用户相似度，用户对歌曲的偏好，产生user_song_prefer.json和user_song_prefer.txt
 - 运行ToMySQL.py中的user_song_prefer_to_mysql方法，把user_song_prefer.txt中的数据导入usersongrec表中
 - 运行RecUser.py，统计：用户打标签，产生user_user_prefer.txt
-- 运行ToMySQL.py中的user_user_prefer_to_mysql方法，把user_user_prefer.txt中的数据导入useruserrec表中  
+- 运行ToMySQL.py中的user_user_prefer_to_mysql方法，把user_user_prefer.txt中的数据导入useruserrec表中
+- 导入数据需要批量的导入，如果一行一行的导入，速度会很慢 
+
   #### 计算相似度
 - 运行UserSim.py，计算用户相似度，产生user_sim.json和user_sim.txt
 - 运行ToMySQL.py中的user_sim_to_mysql方法，把user_sim.txt中的数据导入usersim表中  
@@ -189,7 +187,15 @@
 - 运行ToMySQL.py中的song_sim_to_mysql方法，把song_sim.txt中的数据导入songsim表中  
 - 运行SingSim.py，计算歌曲相似度，使用ToMySQL.py中，执行sing_tag_mess_to_mysql方法产生的sing_tag.txt文件，产生sing_sim.json和sing_sim.txt
 - 运行ToMySQL.py中的sing_sim_to_mysql方法，把sing_sim.txt中的数据导入singsim表中
+- 导入数据需要批量的导入，如果一行一行的导入，速度会很慢
 
+  #### 对数据分析和导入数据的总结
+- 在本例中，数据量已经比较大了，所以特别记录下在处理数据和导入数据过程中的部分想法
+- 在分析数据的时候，没有必要直接向数据库中写入，可以把分析结果保存成json或者txt，亦或其他格式的文件，
+- 先保存分析结果，便于查看，确保数据结果是符合预期的。如果不符合预期，可以直接删除文件再重新分析。
+- 如果直接写入数据库，就需要频繁的删除和更新操作，数据量一旦很大，这个过程可能就比较耗费资源和时间。
+- 对于符合预期结果的数据，再插入到数据库中，执行一次即可，减少了对数据库的操作
+- 这应该也是进行数据分析的一种思路
 
   
   #### 实现思路

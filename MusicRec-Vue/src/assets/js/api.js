@@ -2,7 +2,7 @@ import fetch from '../../axios/fetch'
 //主页分类数据
 export const getCateMusicData=(getdata)=>fetch('/api/indexmusic/home/',getdata,'get')
 //主页分类
-export const getCateData=()=>fetch('/api/indexmusic/getCates/','','get')
+export const getCateData=()=>fetch('/api/indexmusic/getcates/','','get')
 //推荐模块
 export const getRecommon=(recommon)=>fetch('/api/indexmusic/rec/',recommon,'get')
 //详细歌单列表模块

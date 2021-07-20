@@ -26,8 +26,7 @@ def login(request):
         songs = Song.objects.order_by('?').values('song_id', 'song_name')[:30]
         sings = Sing.objects.order_by('?').values('sing_id', 'sing_name')[:20]
 
-        request
-        JsonResponse({
+        return JsonResponse({
             'code': 1,
             'data': {
                 'users': {one['u_id']: one['u_name'] for one in users},
@@ -57,9 +56,9 @@ def login(request):
 def switchuser(request):
     if 'usrname' in request.session.keys():
         uname = request.session['username']
-        # 删除新闻浏览表中的记录
+        # 删除用户浏览表中的记录
         UserBrowse.objects.filter(user_name=uname).delete()
-        print('删除用户%s的新闻浏览记录。。。' % uname)
+        print('删除用户%s的浏览记录。。。' % uname)
         del request.session['username']  # 删除session
         del request.session['sings']  # 删除session
         del request.session['songs']  # 删除session

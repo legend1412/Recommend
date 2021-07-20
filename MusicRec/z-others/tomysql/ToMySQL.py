@@ -456,96 +456,161 @@ class ToMySQL:
     # 把用户对歌单的偏好user_playlist_prefer.txt数据写入数据库userplaylistrec
     def user_palylist_prefer_to_mysql(self):
         i = 0
+        user_playlist_prefer = []
         for line in open('../rec/data/user_playlist_prefer.txt', 'r', encoding='utf-8'):
-            user_playlist_prefer = line.strip().split(',')
-            user_id, playlist_id, sim = user_playlist_prefer[0], user_playlist_prefer[1], user_playlist_prefer[2]
-            UserPlayListRec(user=user_id, related=playlist_id, sim=sim).save()
             i += 1
-            if i % 2000 == 0:
-                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+            try:
+                user_id = line[0: line.find(',')]
+                playlist_id = line[line.find(',') + 1:line.rfind(',')]
+                sim = line[line.rfind(',') + 1:]
+                user_playlist_rec = UserPlayListRec(user=user_id, related=playlist_id, sim=float(sim))
+                user_playlist_prefer.append(user_playlist_rec)
+                if i % 2000 == 0:  # 每2000条数据提交一次数据库
+                    UserPlayListRec.objects.bulk_create(user_playlist_prefer)
+                    print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+                    user_playlist_prefer = []
+            except Exception as e:
+                print(e)
+                odf.write_to_file('error.txt', line.replace('\n', ''))
 
+        UserPlayListRec.objects.bulk_create(user_playlist_prefer)
         print("写入userplaylistrec表完毕 !")
 
     # 把用户对歌手的偏好user_singer_prefer.txt数据写入数据库usersingrec
     def user_sing_prefer_to_mysql(self):
         i = 0
+        user_singer_prefer = []
         for line in open('../rec/data/user_singer_prefer.txt', 'r', encoding='utf-8'):
+            i += 1
             try:
-                user_sing_prefer = line.strip().split(',')
-                user_id, sing_id, sim = user_sing_prefer[0], user_sing_prefer[1], user_sing_prefer[2]
-                UserSingRec(user=user_id, related=sing_id, sim=sim).save()
+                user_id = line[0: line.find(',')]
+                singer = line[line.find(',') + 1:line.rfind(',')]
+                sim = line[line.rfind(',') + 1:]
+                user_sing_rec = UserSingRec(user=user_id, related=singer, sim=float(sim))
+                user_singer_prefer.append(user_sing_rec)
+                if i % 2000 == 0:  # 每2000条数据提交一次数据库
+                    UserSingRec.objects.bulk_create(user_singer_prefer)
+                    print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+                    user_singer_prefer = []
             except Exception as e:
                 print(e)
-                odf.write_to_file('error.txt', line)
-            i += 1
-            if i % 2000 == 0:
-                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
-
+                odf.write_to_file('error.txt', line.replace('\n', ''))
+        # 如果数据量不能整除2000，则需要把剩下的写入数据库
+        UserSingRec.objects.bulk_create(user_singer_prefer)
         print("写入usersingrec表完毕 !")
 
     # 把用户对歌曲的偏好user_song_prefer.txt数据写入数据库usersongrec
     def user_song_prefer_to_mysql(self):
         i = 0
+        user_song_prefer = []
         for line in open('../rec/data/user_song_prefer.txt', 'r', encoding='utf-8'):
-            user_song_prefer = line.strip().split(',')
-            user_id, song_id, sim = user_song_prefer[0], user_song_prefer[1], user_song_prefer[2]
-            UserSongRec(user=user_id, related=song_id, sim=sim).save()
             i += 1
-            if i % 2000 == 0:
-                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
-
+            try:
+                user_id = line[0:line.find(',')]
+                song_id = line[line.find(',') + 1:line.rfind(',')]
+                sim = line[line.rfind(',') + 1:]
+                user_song_rec = UserSongRec(user=user_id, related=song_id, sim=float(sim))
+                user_song_prefer.append(user_song_rec)
+                if i % 2000 == 0:  # 每2000条数据提交一次数据库
+                    UserSongRec.objects.bulk_create(user_song_prefer)
+                    print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+                    user_song_prefer = []
+            except Exception as e:
+                print(e)
+                odf.write_to_file('error.txt', line.replace('\n', ''))
+        UserSongRec.objects.bulk_create(user_song_prefer)
         print("写入usersongrec表完毕 !")
 
     # 把用户对用户的偏好user_user_prefer.txt数据写入数据库useruserrec
     def user_user_prefer_to_mysql(self):
         i = 0
+        user_user_prefer = []
         for line in open('../rec/data/user_user_prefer.txt', 'r', encoding='utf-8'):
-            user_user_prefer = line.strip().split(',')
-            user_id1, user_id2, sim = user_user_prefer[0], user_user_prefer[1], user_user_prefer[2]
-            UserUserRec(user=user_id1, related=user_id2, sim=sim).save()
             i += 1
-            if i % 2000 == 0:
-                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+            try:
+                user_id1 = line[0:line.find(',')]
+                user_id2 = line[line.find(',') + 1:line.rfind(',')]
+                sim = line[line.rfind(',') + 1:]
+                user_user_rec = UserUserRec(user=user_id1, related=user_id2, sim=float(sim))
+                user_user_prefer.append(user_user_rec)
+                if i % 2000 == 0:
+                    UserUserRec.objects.bulk_create(user_user_prefer)
+                    print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+                    user_user_prefer = []
+            except Exception as e:
+                print(e)
+                odf.write_to_file('error.txt', line.replace('\n', ''))
 
+        UserUserRec.objects.bulk_create(user_user_prefer)
         print("写入useruserrec表完毕 !")
 
     # 把歌手与歌手的相似度sing_sim.txt数据写入数据库singsim
     def sing_sim_to_mysql(self):
         i = 0
+        sing_sim_list = []
         for line in open('../tools/data/sing_sim.txt', 'r', encoding='utf-8'):
-            sing_sim = line.strip().split(',')
-            sing_id, sim_sing_id, sim = sing_sim[0], sing_sim[1], sing_sim[2]
-            SingSim(sing_id=sing_id, sim_sing_id=sim_sing_id, sim=sim).save()
             i += 1
-            if i % 2000 == 0:
-                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+            try:
+                sing_id = line[0:line.find(',')]
+                sim_sing_id = line[line.find(',') + 1:line.rfind(',')]
+                sim = line[line.rfind(',') + 1:]
+                sing_sim = SingSim(sing_id=sing_id, sim_sing_id=sim_sing_id, sim=float(sim))
+                sing_sim_list.append(sing_sim)
+                if i % 2000 == 0:
+                    SingSim.objects.bulk_create(sing_sim_list)
+                    print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+                    sing_sim_list = []
+            except Exception as e:
+                print(e)
+                odf.write_to_file('error.txt', line.replace('\n', ''))
 
+        SingSim.objects.bulk_create(sing_sim_list)
         print("写入singsim表完毕 !")
 
     # 把歌曲与歌曲的相似度song_sim.txt数据写入数据库songsim
     def song_sim_to_mysql(self):
         i = 0
+        song_sim_list = []
         for line in open('../tools/data/song_sim.txt', 'r', encoding='utf-8'):
-            song_sim = line.strip().split(',')
-            song_id, sim_song_id, sim = song_sim[0], song_sim[1], song_sim[2]
-            SongSim(song_id=song_id, sim_song_id=sim_song_id, sim=sim).save()
             i += 1
-            if i % 2000 == 0:
-                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+            try:
+                song_id = line[0:line.find(',')]
+                sim_song_id = line[line.find(',') + 1:line.rfind(',')]
+                sim = line[line.rfind(',') + 1:]
+                song_sim = SongSim(song_id=song_id, sim_song_id=sim_song_id, sim=float(sim))
+                song_sim_list.append(song_sim)
+                if i % 2000 == 0:
+                    SongSim.objects.bulk_create(song_sim_list)
+                    print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+                    song_sim_list = []
+            except Exception as e:
+                print(e)
+                odf.write_to_file('error.txt', line.replace('\n', ''))
 
+        SongSim.objects.bulk_create(song_sim_list)
         print("写入songsim表完毕 !")
 
     # 把用户与用户的相似度 user_sim.txt数据写入数据库usersim
     def user_sim_to_mysql(self):
         i = 0
+        user_sim_list = []
         for line in open('../tools/data/user_sim.txt', 'r', encoding='utf-8'):
-            user_sim = line.strip().split(',')
-            user_id, sim_user_id, sim = user_sim[0], user_sim[1], user_sim[2]
-            UserSim(user_id=user_id, sim_user_id=sim_user_id, sim=sim).save()
             i += 1
-            if i % 2000 == 0:
-                print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+            try:
+                user_id = line[0:line.find(',')]
+                sim_user_id = line[line.find(',') + 1:line.rfind(',')]
+                sim = line[line.rfind(',') + 1:]
+                user_sim = UserSim(user_id=user_id, sim_user_id=sim_user_id, sim=float(sim))
+                user_sim_list.append(user_sim)
+                if i % 2000 == 0:
+                    UserSim.objects.bulk_create(user_sim_list)
+                    print('%s-当前数据：%s' % (i, line.replace('\n', '')))
+                    user_sim_list = []
+            except Exception as e:
+                print(e)
+                odf.write_to_file('error.txt', line.replace('\n', ''))
 
+        UserSim.objects.bulk_create(user_sim_list)
         print("写入usersim表完毕 !")
 
 
@@ -558,7 +623,7 @@ if __name__ == '__main__':
     # 歌手信息
     # tomysql.sing_mess_to_mysql()
     # 用户信息
-    # tomysql.user_mess_to_mysql()
+    tomysql.user_mess_to_mysql()
     # 导入歌单信息
     # tomysql.playlist_mess_to_mysql()
     # 导入歌单和歌曲id的对应关系
@@ -583,4 +648,3 @@ if __name__ == '__main__':
     # tomysql.song_sim_to_mysql()
     # 把用户与用户相似度写入数据库
     # tomysql.user_sim_to_mysql()
-
