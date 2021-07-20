@@ -26,7 +26,7 @@ def get_rec_tags(request, base_click):
         'data': {
             'playlist': {'cateid': 2, 'tags': list(pl_tags)},
             'song': {'cateid': 3, 'tags': list(songs_tags)},
-            'sing:': {'cateid': 4, 'tags': list(sings_tags)}
+            'sing': {'cateid': 4, 'tags': list(sings_tags)}
         }
     }
 

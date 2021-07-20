@@ -15,11 +15,11 @@
 
 <script>
 import {mapGetters, mapActions} from 'vuex'
-import {getCateData, layout} from "../assets/js/api";
-import {serverUrl} from "../assets/js/linkBase";
+import {getCateData, layout} from '../assets/js/api'
+import {serverUrl} from '../assets/js/linkBase'
 
 export default {
-  data() {
+  data () {
     return {
       datas: [],
       serverlink: ''
@@ -50,17 +50,17 @@ export default {
     },
     layout: function () {
       layout().then((res) => {
-          if (res.code) {
-            localStorage.removeItem('newlogintime')
-            localStorage.removeItem('username', '')
-            localStorage.removeItem('islogin', false)
-            this.almuta(localStorage.getItem('islogin'))
-            this.almuuser(localStorage.getItem('username'))
-            this.$router.push('/login')
-          }
-        }, (err) => {
-          console.log(err)
+        if (res.code) {
+          localStorage.removeItem('newlogintime')
+          localStorage.removeItem('username', '')
+          localStorage.removeItem('islogin', false)
+          this.almuta(localStorage.getItem('islogin'))
+          this.almuuser(localStorage.getItem('username'))
+          this.$router.push('/login')
         }
+      }, (err) => {
+        console.log(err)
+      }
       )
     },
     getCates: function () {
@@ -77,9 +77,79 @@ export default {
       })
     }
   },
-  mounted() {
+  mounted () {
     this.serverlink = serverUrl + '/admin/'
     this.getCates()
   }
 }
 </script>
+<style lang="less" scoped>
+    @baseColor:red;
+    #ellies(@n){
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        -webkit-line-clamp: @n;
+        -webkit-box-orient: vertical;
+    }
+    .reHeader{
+        .headTop{
+          .userbtn{
+            display: inline-block;
+            float: right;
+            line-height: 80px;
+            margin-right: 5%;
+            .layouticon{
+              padding: 3px;
+              border: 1px solid #eee;
+              text-align: center;
+              border-radius: 3px;
+              background: #eee;
+              margin-left: 10px;
+              cursor: pointer;
+              &:hover{
+                background: #ddd;
+              }
+            }
+          }
+        }
+        .headNav{
+            display:flex;
+            justify-content:flex-start;
+            align-items: center;
+            background: #ddd;
+            height:40px;
+        li{
+            display: inline-block;
+            width:120px;
+            padding:5px 15px;
+            box-sizing: border-box;
+            position: relative;
+            text-align: center;
+            cursor: pointer;
+            color: #555;
+            .adminlink{
+              text-decoration: none;
+              color: #555;
+              &:hover{
+                color:#000
+              }
+            }
+            &:hover{
+              color:#000
+            }
+        }
+        .navActive::after{
+            content: " ";
+            display: block;
+            position: absolute;
+            bottom: -6px;
+            width: 30%;
+            left: 50%;
+            border-bottom: 2px solid @baseColor;
+            margin-left: -15%;
+            color:#000;
+        }
+        }
+    }
+</style>

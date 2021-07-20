@@ -22,7 +22,7 @@ def get_play_list_all(request):
     _list = list()
     for one in plists[(_page_id - 1) * 30:_page_id * 30]:
         _list.append(
-            {'pl_id': one.pl_id, 'pl_creator': one.pl_creator, 'pl_name': one.pl_name, 'pl_img_url': one.pl_img_url})
+            {'pl_id': one.pl_id, 'pl_creator': one.pl_creator.u_name, 'pl_name': one.pl_name, 'pl_img_url': one.pl_img_url})
     return {'code': 1, 'data': {'total': total, 'playlist': _list, 'tags': get_play_list_tags()}}
 
 

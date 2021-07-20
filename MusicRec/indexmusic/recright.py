@@ -11,13 +11,17 @@ def rec_right_playlist(request):
     rec_all = UserPlayListRec.objects.filter(user=u_id).order_by('-sim')[:12]
     _list = list()
     for rec in rec_all:
-        one = PlayList.objects.filter(pl_id=rec.related)[0]
-        _list.append({
-            'pl_id': one.pl_id,
-            'pl_creator': one.pl_creator.u_name,
-            'pl_name': one.pl_name,
-            'pl_img_url': one.pl_img_url
-        })
+        pl = PlayList.objects.filter(pl_id=rec.related)
+        if pl.__len__() == 0:
+            continue
+        else:
+            one = pl[0]
+            _list.append({
+                'pl_id': one.pl_id,
+                'pl_creator': one.pl_creator.u_name,
+                'pl_name': one.pl_name,
+                'pl_img_url': one.pl_img_url
+            })
     return {
         'code': 1,
         'data': {

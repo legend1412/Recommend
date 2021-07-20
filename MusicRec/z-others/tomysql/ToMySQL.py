@@ -623,7 +623,7 @@ if __name__ == '__main__':
     # 歌手信息
     # tomysql.sing_mess_to_mysql()
     # 用户信息
-    tomysql.user_mess_to_mysql()
+    # tomysql.user_mess_to_mysql()
     # 导入歌单信息
     # tomysql.playlist_mess_to_mysql()
     # 导入歌单和歌曲id的对应关系
@@ -639,12 +639,12 @@ if __name__ == '__main__':
     # 把用户对歌手的偏好写入数据库
     # tomysql.user_sing_prefer_to_mysql()
     # 把用户对歌曲的偏好写入数据库
-    # tomysql.user_song_prefer_to_mysql()
+    tomysql.user_song_prefer_to_mysql()
     # 把用户对用户的偏好写入数据库
-    # tomysql.user_user_prefer_to_mysql()
+    tomysql.user_user_prefer_to_mysql()
     # 把歌手与歌手相似度写入数据库
-    # tomysql.sing_sim_to_mysql()
+    tomysql.sing_sim_to_mysql()
     # 把歌曲与歌曲相似度写入数据库
-    # tomysql.song_sim_to_mysql()
+    tomysql.song_sim_to_mysql()
     # 把用户与用户相似度写入数据库
-    # tomysql.user_sim_to_mysql()
+    tomysql.user_sim_to_mysql()

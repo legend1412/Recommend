@@ -155,5 +155,4 @@ def rec(request):
         result = recright.rec_right_user(request)
         return JsonResponse(result)
     else:  # 其他
-        request
-        JsonResponse({'code': 1, 'data': {}})
+        return JsonResponse({'code': 1, 'data': {}})
