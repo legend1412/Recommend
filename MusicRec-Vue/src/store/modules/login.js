@@ -33,7 +33,7 @@ const mutations = {
     }
     state.isLogin = loginState
   },
-  alterUsr(state, newName) {
+  alterUser(state, newName) {
     if (newName) {
       localStorage.setItem('username', newName)
     } else {

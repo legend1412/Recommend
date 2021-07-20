@@ -92,8 +92,8 @@ export default {
         cate: 1,
         baseclick: 0
       }
-      console.log(this.songsTags)
-      console.log(this.singsTags)
+      // console.log(this.songsTags)
+      // console.log(this.singsTags)
       if (opt && opt === 'skip') {
         logininfo.sings = ''
         logininfo.songs = ''
