@@ -19,7 +19,7 @@ exports.install = function (Vue, options) {
     var result = {}
     tmpArr.forEach(item => {
       let tempar = item.split('=')
-      result[tmppar[0]] = tempar[1]
+      result[tempar[0]] = tempar[1]
     })
     return result
   }

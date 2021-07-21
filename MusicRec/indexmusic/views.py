@@ -22,6 +22,7 @@ from indexmusic import recright
 def login(request):
     if request.method == 'GET':
         # 返回选择的用户、歌手、歌曲
+        userbrowse = UserBrowse.objects.order_by('?')
         users = User.objects.order_by('?').values('u_id', 'u_name')[:30]
         songs = Song.objects.order_by('?').values('song_id', 'song_name')[:30]
         sings = Sing.objects.order_by('?').values('sing_id', 'sing_name')[:20]
@@ -85,7 +86,7 @@ def home(request):
     _cate = request.GET.get('cateid')
     if 'username' not in request.session.keys():  # 如果用户未登录
         return JsonResponse({'code': 0, 'data': {}})
-    if _cate == '1':  # 为你图鉴 返回歌单、歌手、歌曲的tags
+    if _cate == '1':  # 为你推荐 返回歌单、歌手、歌曲的tags
         result = get_rec_tags(request, request.GET.get('base_click'))
         return JsonResponse(result)
     elif _cate == '6':  # 排行版

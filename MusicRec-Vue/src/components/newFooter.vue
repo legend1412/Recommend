@@ -4,7 +4,7 @@
         <div class="footItem1">
           <h3>座右铭：</h3>
           <ul>
-            <li>坚持，</li>
+            <li>坚持</li>
             <li>时间</li>
             <li>无论怎样的苦难喜甜，</li>
             <li>终将逝为云烟</li>

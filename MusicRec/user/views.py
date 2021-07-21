@@ -30,7 +30,7 @@ def get_user_all(request):
                 continue
             _list.append({'u_id': one.u_id, 'u_name': one.u_name, 'u_img_url': one.u_img_url})
     total = slists.__len__()
-    return {'cose': 1, 'data': {'total': total, 'sings': _list, 'tags': get_all_user_tags()}}
+    return {'code': 1, 'data': {'total': total, 'users': _list, 'tags': get_all_user_tags()}}
 
 
 # 获取所有用户标签
@@ -66,7 +66,7 @@ def get_rec_based_one(u_id):
     result = list()
     sim_users = UserSim.objects.filter(user_id=u_id).order_by('-sim').values('sim_user_id')[:10]
     for user in sim_users:
-        one = User.objects.fiter(u_id=user['sim_user_id'])[0]
+        one = User.objects.filter(u_id=user['sim_user_id'])[0]
         result.append({
             'id': one.u_id,
             'name': one.u_name,

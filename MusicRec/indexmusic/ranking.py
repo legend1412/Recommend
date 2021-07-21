@@ -6,15 +6,17 @@ from user.models import UserPlayListRec, UserSingRec, UserSongRec, User
 
 
 def rank_result(request):
-    user = request.GET.get('username')
-    u_id = UserSingRec.objects.filter(u_name=user)[0].u_id
-    result = dict()
-    result['code'] = 1
-    result['data'] = dict()
-    result['data']['playlist'] = rank_play_list(u_id)
-    result['data']['song'] = rank_song(u_id)
-    result['data']['sing'] = rank_singer(u_id)
-    return result
+    uname = request.GET.get('username')
+    user = User.objects.filter(u_name=uname)
+    if user.__len__() != 0:
+        u_id = user[0].u_id
+        result = dict()
+        result['code'] = 1
+        result['data'] = dict()
+        result['data']['playlist'] = rank_play_list(u_id)
+        result['data']['song'] = rank_song(u_id)
+        result['data']['sing'] = rank_singer(u_id)
+        return result
 
 
 # 歌单排行榜
@@ -42,7 +44,7 @@ def rank_play_list(u_id):
 def rank_song(u_id):
     result_song = list()
     songs = UserSongRec.objects.filter(user=u_id).order_by('-sim')[12:]
-    print(songs)
+    # print(songs)
     for song in songs:
         one = Song.objects.filter(song_id=song.related)
         if one.__len__() == 0:
@@ -50,16 +52,22 @@ def rank_song(u_id):
         else:
             one = one[0]
         s_id = one.song_sing_id.split('#')[0] if one.song_sing_id.__contains__('#') else one.song_sing_id
-        if s_id == '0': continue
-        singer = Sing.objects.filter(sing_id=s_id)[0]
-        result_song.append({
-            'song_id': one.song_id,
-            'song_name': one.song_name,
-            'song_singer_name': singer.sing_name,
-            'song_publist_tiem': one.song_publist_time,
-            'score': '%.2f' % song.sim
-        })
-    print(result_song)
+        if s_id == '0':
+            continue
+        else:
+            s = Sing.objects.filter(sing_id=s_id)
+            if s.__len__() == 0:
+                continue
+            else:
+                singer = s[0]
+                result_song.append({
+                    'song_id': one.song_id,
+                    'song_name': one.song_name,
+                    'song_singer_name': singer.sing_name,
+                    'song_publish_time': one.song_publish_time,
+                    'score': '%.2f' % song.sim
+                })
+    # print(result_song)
     return result_song
 
 

@@ -64,23 +64,29 @@ def get_play_list_one(request):
 
 # 获取单个歌单包含的歌曲
 def get_include_song(pl_id):
+    sing_name = ''
     result = list()
     song_ids = PlayListToSongs.objects.filter(pl_id=pl_id).values('song_id')
     for song in song_ids:
-        one = Song.objects.filter(song_id=song['song_id'])[0]
-        if '#' in one.song_sing_id.split('#'):
-            sing_name = ''
-            for sid in one.song_sing_id.split('#'):
-                if sid == '0':
-                    sing_name += ',' + ''
-                else:
-                    sing_name += ',' + Sing.objects.filter(sing_id=sid)[0].sing_name
-        elif one.song_sing_id == '0':
-            sing_name = ''
+        s = Song.objects.filter(song_id=song['song_id'])
+        if s.__len__() == 0:
+            continue
         else:
-            sing_name = Sing.objects.fiter(sing_id=one.song_sing_id)[0].sing_name
-        result.append({'song_id': one.song_id, 'song_name': one.song_name, 'song_sing_name': one.sing_name,
-                       'song_url': one.song_url})
+            one = s[0]
+            if '#' in one.song_sing_id.split('#'):
+                sing_name = ''
+                for sid in one.song_sing_id.split('#'):
+                    if sid == '0':
+                        sing_name += ',' + ''
+                    else:
+                        sing_name += ',' + Sing.objects.filter(sing_id=sid)[0].sing_name
+            elif one.song_sing_id == '0':
+                sing_name = ''
+            else:
+                s1 = Sing.objects.filter(sing_id=one.song_sing_id)
+                if s1.__len__() != 0:
+                    sing_name = s1[0].sing_name
+            result.append({'song_id': one.song_id, 'song_name': one.song_name, 'song_sing_name': sing_name, 'song_url': one.song_url})
     return result
 
 
@@ -88,7 +94,7 @@ def get_include_song(pl_id):
 def get_rec_based_one(pl_id):
     pl_tags = PlayList.objects.filter(pl_id=pl_id).values('pl_tags')[0]['pl_tags']
     pl_tags_list = pl_tags.replace(' ', '').split(',')
-    print(pl_tags_list)
+    # print(pl_tags_list)
     results = list(PlayList.objects.filter(pl_tags=pl_tags).filter(~Q(pl_id=pl_id)))
     if results.__len__() < 10:
         for tag in pl_tags_list:
@@ -107,4 +113,4 @@ def get_rec_based_one(pl_id):
         rec_pl_list.append(
             {'id': one.pl_id, 'name': one.pl_name, 'creator': one.pl_creator.u_name, 'img_url': one.pl_img_url,
              'cate': '2'})
-    return results
+    return rec_pl_list

@@ -15,7 +15,7 @@ export default {
   },
   mounted() {
     if (localStorage.getItem('newslogintime')) {
-      this.deTime(localStorage.getItem('newslogintime'), new Date(), 1)
+      this.deTime(localStorage.getItem('newslogintime'), new Date(), 24)
     }
   }
 }

@@ -14,7 +14,7 @@ def get_sing_all(request):
     _list = list()
     # 全部歌手
     if tag == 'all':
-        sing_tags_list = Sing.obejcts.all().values('sing_id', 'sing_name', 'sing_url').order_by('-sing_id')
+        sing_tags_list = Sing.objects.all().values('sing_id', 'sing_name', 'sing_url').order_by('-sing_id')
         # 拼接歌曲信息
         for one in sing_tags_list[(_page_id - 1) * 30:_page_id * 30]:
             _list.append({'sing_id': one['sing_id'], 'sing_name': one['sing_name'], 'sing_url': one['sing_url']})

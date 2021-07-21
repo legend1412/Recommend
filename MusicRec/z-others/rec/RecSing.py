@@ -31,7 +31,7 @@ class RecSing:
         song_singer_dict = dict()
         for line in open(self.song_mess_file, 'r', encoding='utf-8'):
             one_mess_list = line.strip().split(' |+| ')
-            song_id, singer_id = one_mess_list[0], one_mess_list[1]
+            song_id, singer_id = one_mess_list[0], one_mess_list[4]
             song_singer_dict[song_id] = singer_id
             for one in singer_id.split('#'):
                 if one not in singers_list and one != '0':

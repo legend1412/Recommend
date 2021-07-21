@@ -411,7 +411,7 @@ export default {
                 this.sings = res.data.sings
                 this.total = res.data.total
               } else if (getdata.cateid === '5') {
-                this.users = res.data.sings
+                this.users = res.data.users
                 this.total = res.data.total
               } else if (getdata.cateid === '6') {
                 this.total = 1

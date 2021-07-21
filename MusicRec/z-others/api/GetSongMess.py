@@ -63,7 +63,7 @@ class GetSongMess:
         for song_id in self.song_ids:
             try:
                 print('%s-歌曲ID：%s' % (i, song_id))
-                # deatil => id,name,专辑id[al]，出版时间[publishTime],歌手信息[ar]
+                # detail => id,name,专辑id[al]，出版时间[publishTime],歌手信息[ar]
                 url_1 = self.detail_url + str(song_id)
                 res_1_json = requests.get(url_1).json()['songs'][0]
                 url_1_list = [
